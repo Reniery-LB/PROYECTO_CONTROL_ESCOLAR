@@ -6,7 +6,6 @@ import views.AuthView;
 
 public class AuthController {
 	
-	private JPanel mipanel;
 	private AuthView vista;
 	
 	public AuthController() {
@@ -15,8 +14,7 @@ public class AuthController {
 	}
 	
 	public void login() {
-		
-		vista.login(mipanel);
+
 	}
 
 }
