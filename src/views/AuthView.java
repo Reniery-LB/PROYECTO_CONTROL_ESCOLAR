@@ -90,9 +90,7 @@ public class AuthView {
 	}
 
 	public void login(Consumer<JComponent> addScaled) {
-		mipanel.removeAll();
-		mipanel.revalidate();
-		mipanel.repaint();
+		remover();
 		
 		JLabel logo = new JLabel();
 		logo.setBackground(Color.decode("#EEF1FF"));
@@ -131,6 +129,13 @@ public class AuthView {
 		addScaled.accept(contra_label);
 		
 		JButton acceder_btn = new JButton("Acceder");
+		acceder_btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AuthView.this.administrador(addScaled);
+			}
+		});
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -172,9 +177,7 @@ public class AuthView {
 	}
 	
 	public void registro(Consumer<JComponent> addScaled) {
-		mipanel.removeAll();
-		mipanel.revalidate();
-		mipanel.repaint();
+		remover();
 		
 		JLabel logo = new JLabel();
 		logo.setBackground(Color.decode("#EEF1FF"));
@@ -212,6 +215,13 @@ public class AuthView {
 		addScaled.accept(contra_label);
 		
 		JButton acceder_btn = new JButton("Acceder");
+		acceder_btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AuthView.this.administrador(addScaled);
+			}
+		});
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 650, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -279,6 +289,96 @@ public class AuthView {
 		fondo_registro.setOpaque(true);
 		addScaled.accept(fondo_registro);
 		
+	}
+	
+	public void administrador(Consumer<JComponent> addScaled) {
+		remover();
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 0, 101, 102);
+		addScaled.accept(logo);
+		
+		JLabel fondo_barra = new JLabel("Administrador");
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		
+		JLabel fondo_barra_2 = new JLabel("Seleccione sus opciones");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(0, 101, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		
+		JButton btn_asignaturas = new JButton();
+		btn_asignaturas.setOpaque(true);
+		btn_asignaturas.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas.png")));
+		btn_asignaturas.setBackground(new Color(170, 196, 255));
+		btn_asignaturas.setBounds(1137, 246, 263, 312);
+		addScaled.accept(btn_asignaturas);
+		
+		JButton btn_asignaturas_label = new JButton("Asignaturas");
+		btn_asignaturas_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_asignaturas_label.setBackground(Color.decode("#EEF1FF"));
+		btn_asignaturas_label.setBounds(1137, 556, 263, 58);
+		addScaled.accept(btn_asignaturas_label);
+		
+		JButton btn_docentes = new JButton();
+		btn_docentes.setOpaque(true);
+		btn_docentes.setIcon(new ImageIcon(getClass().getResource("/img/docentes.png")));
+		btn_docentes.setBackground(new Color(170, 196, 255));
+		btn_docentes.setBounds(800, 246, 263, 312);
+		addScaled.accept(btn_docentes);
+		
+		JButton btn_docentes_label = new JButton("Docentes");
+		btn_docentes_label.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_docentes_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_docentes_label.setBackground(Color.decode("#EEF1FF"));
+		btn_docentes_label.setBounds(800, 556, 263, 58);
+		addScaled.accept(btn_docentes_label);
+		
+		JButton btn_alumnos = new JButton();
+		btn_alumnos.setOpaque(true);
+		btn_alumnos.setIcon(new ImageIcon(getClass().getResource("/img/alumnos.png")));
+		btn_alumnos.setBackground(new Color(170, 196, 255));
+		btn_alumnos.setBounds(463, 246, 263, 312);
+		addScaled.accept(btn_alumnos);
+		
+		JButton btn_alumnos_label = new JButton("Alumnos");
+		btn_alumnos_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_alumnos_label.setBackground(Color.decode("#EEF1FF"));
+		btn_alumnos_label.setBounds(463, 556, 263, 58);
+		addScaled.accept(btn_alumnos_label);
+		
+		JButton btn_grupo = new JButton();
+		btn_grupo.setOpaque(true);
+		btn_grupo.setIcon(new ImageIcon(getClass().getResource("/img/grupos.png")));
+		btn_grupo.setBackground(new Color(170, 196, 255));
+		btn_grupo.setBounds(127, 246, 263, 312);
+		addScaled.accept(btn_grupo);
+		
+		JButton btn_grupo_label = new JButton("Grupos");
+		btn_grupo_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_grupo_label.setBackground(Color.decode("#EEF1FF"));
+		btn_grupo_label.setBounds(127, 556, 263, 58);
+		addScaled.accept(btn_grupo_label);
+	}
+	
+	public void remover() {
+		mipanel.removeAll();
+		mipanel.revalidate();
+		mipanel.repaint();
 	}
 
 }

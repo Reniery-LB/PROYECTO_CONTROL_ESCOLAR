@@ -20,5 +20,9 @@ public class AuthController {
 	public void registro() {
 		
 	}
+	
+	public void administrador() {
+		
+	}
 
 }
