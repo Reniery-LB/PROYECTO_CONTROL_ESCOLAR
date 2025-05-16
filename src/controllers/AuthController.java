@@ -24,5 +24,9 @@ public class AuthController {
 	public void administrador() {
 		
 	}
+	
+	public void grupos() {
+		
+	}
 
 }
