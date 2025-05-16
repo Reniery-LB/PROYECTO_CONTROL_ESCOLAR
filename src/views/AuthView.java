@@ -93,7 +93,9 @@ public class AuthView {
 		login(addScaled);
 		ventana.setVisible(true);
 	}
-
+	
+	//===========================================================================================================================
+	
 	public void login(Consumer<JComponent> addScaled) {
 		remover();
 		
@@ -180,6 +182,8 @@ public class AuthView {
 		fondo_login.setOpaque(true);
 		addScaled.accept(fondo_login);
 	}
+	
+	//===========================================================================================================================
 	
 	public void registro(Consumer<JComponent> addScaled) {
 		remover();
@@ -296,6 +300,8 @@ public class AuthView {
 		
 	}
 	
+	//===========================================================================================================================
+	
 	public void administrador(Consumer<JComponent> addScaled) {
 		remover();
 		
@@ -398,9 +404,11 @@ public class AuthView {
 		addScaled.accept(btn_grupo_label);
 	}
 	
+	//===========================================================================================================================
+	
 	public void grupos(Consumer<JComponent> addScaled) {
 		remover();
-		mipanel.add(opciones_panel);
+		addScaled.accept(opciones_panel);
 		
 		JLabel logo = new JLabel();
 		logo.setBackground(Color.decode("#EEF1FF"));
@@ -460,6 +468,14 @@ public class AuthView {
 		addScaled.accept(btn_detalles_label);
 		
 		JButton btn_registros = new JButton();
+		btn_registros.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AuthView.this.grupos_registros(addScaled);
+				
+			}
+		});
 		btn_registros.setOpaque(true);
 		btn_registros.setIcon(new ImageIcon(getClass().getResource("/img/registros.png")));
 		btn_registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -468,6 +484,14 @@ public class AuthView {
 		addScaled.accept(btn_registros);
 		
 		JButton btn_registros_label = new JButton("Registros");
+		btn_registros_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AuthView.this.grupos_registros(addScaled);
+				
+			}
+		});
 		btn_registros_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_registros_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_registros_label.setBackground(Color.decode("#EEF1FF"));
@@ -488,8 +512,8 @@ public class AuthView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				opciones_panel.setSize(263, 200);
-				opciones_panel.setLocation(372, 101);
+				opciones_panel.setSize(266, 200);
+				opciones_panel.setLocation(376, 101);
 				
 				boolean visible = !opciones_panel.isVisible();
 				opciones_panel.setVisible(visible);
@@ -501,36 +525,36 @@ public class AuthView {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							System.out.println("registro de grupos");
-							
+							opciones_panel.setVisible(false);
+							AuthView.this.grupos_registros(addScaled);		
 						}
 						
 					});
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -555,7 +579,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(633, 101, 263, 200);		
+				opciones_panel.setBounds(640, 101, 266, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -575,28 +599,28 @@ public class AuthView {
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -620,7 +644,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(894, 101, 263, 200);		
+				opciones_panel.setBounds(905, 101, 266, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -640,28 +664,28 @@ public class AuthView {
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -684,7 +708,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(1154, 101, 386, 200);		
+				opciones_panel.setBounds(1168, 101, 386, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -735,7 +759,6 @@ public class AuthView {
 			}
 		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
-//		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
@@ -769,8 +792,11 @@ public class AuthView {
 	
 	}
 	
-	public void grupos_frame1(Consumer<JComponent> addScaled) {
+	//===========================================================================================================================
+	
+	public void grupos_registros(Consumer<JComponent> addScaled) {
 		remover();
+		addScaled.accept(opciones_panel);
 		
 		JLabel logo = new JLabel();
 		logo.setBackground(Color.decode("#EEF1FF"));
@@ -802,8 +828,8 @@ public class AuthView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				opciones_panel.setSize(263, 200);
-				opciones_panel.setLocation(372, 101);
+				opciones_panel.setSize(266, 200);
+				opciones_panel.setLocation(376, 101);
 				
 				boolean visible = !opciones_panel.isVisible();
 				opciones_panel.setVisible(visible);
@@ -815,35 +841,36 @@ public class AuthView {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							
+							opciones_panel.setVisible(false);
+							AuthView.this.grupos_registros(addScaled);		
 						}
 						
 					});
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -868,7 +895,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(633, 101, 263, 200);		
+				opciones_panel.setBounds(640, 101, 266, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -888,28 +915,28 @@ public class AuthView {
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -925,7 +952,7 @@ public class AuthView {
 		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
-		mipanel.add(alumnos_barraLabel);
+		addScaled.accept(alumnos_barraLabel);
 		
 		JButton docentes_barraLabel = new JButton(" Docentes");
 		docentes_barraLabel.addActionListener(new ActionListener() {
@@ -933,7 +960,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(894, 101, 263, 200);		
+				opciones_panel.setBounds(905, 101, 266, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -953,28 +980,28 @@ public class AuthView {
 					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					registros.setBackground(Color.decode("#EEF1FF"));
 					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 263, 50);
+					registros.setBounds(0, 0, 266, 50);
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 263, 50);
+					detalles.setBounds(0, 50, 266, 50);
 					opciones_panel.add(detalles);
 					
 					JButton crear = new JButton("Crear");
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					crear.setBackground(Color.decode("#EEF1FF"));
 					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 263, 50);
+					crear.setBounds(0, 100, 266, 50);
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 263, 50);
+					editar.setBounds(0, 150, 266, 50);
 					opciones_panel.add(editar);
 					
 					opciones_panel.revalidate();
@@ -989,7 +1016,7 @@ public class AuthView {
 		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		docentes_barraLabel.setBackground(new Color(238, 241, 255));
 		docentes_barraLabel.setBounds(894, 0, 263, 102);
-		mipanel.add(docentes_barraLabel);
+		addScaled.accept(docentes_barraLabel);
 		
 		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
 		asignaturas_barraLabel.addActionListener(new ActionListener() {
@@ -997,7 +1024,7 @@ public class AuthView {
 				opciones_panel.removeAll();
 				opciones_panel.revalidate();
 				opciones_panel.repaint();
-				opciones_panel.setBounds(1154, 101, 386, 200);		
+				opciones_panel.setBounds(1168, 101, 386, 200);		
 				boolean visible = !opciones_panel.isVisible();
 		
 				opciones_panel.setVisible(visible);
@@ -1048,12 +1075,11 @@ public class AuthView {
 			}
 		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
-//		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
-		mipanel.add(asignaturas_barraLabel);
+		addScaled.accept(asignaturas_barraLabel);
 		
 		JLabel fondo_barra = new JLabel();
 		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
@@ -1062,7 +1088,7 @@ public class AuthView {
 		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		fondo_barra.setBounds(0, 0, 1540, 102);
 		fondo_barra.setOpaque(true);
-		mipanel.add(fondo_barra);
+		addScaled.accept(fondo_barra);
 		
 		JButton btn_volver = new JButton("Volver");
 		btn_volver.addActionListener(new ActionListener() {
@@ -1081,28 +1107,28 @@ public class AuthView {
 		btn_volver.setBackground(new Color(238, 241, 255));
 		btn_volver.setBounds(10, 716, 263, 58);
 		btn_volver.setOpaque(false);
-		mipanel.add(btn_volver);
+		addScaled.accept(btn_volver);
 		
 		JButton btn_itc = new JButton("ITC");
 		btn_itc.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_itc.setBounds(93, 274, 1348, 117);
 		btn_itc.setBackground(Color.decode("#AAC4FF"));
 		btn_itc.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		mipanel.add(btn_itc);
+		addScaled.accept(btn_itc);
 		
 		JButton btn_ids = new JButton("IDS");
 		btn_ids.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_ids.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_ids.setBackground(new Color(170, 196, 255));
 		btn_ids.setBounds(93, 387, 1348, 117);
-		mipanel.add(btn_ids);
+		addScaled.accept(btn_ids);
 		
 		JButton btn_ciber = new JButton("Ciberseguridad");
 		btn_ciber.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_ciber.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_ciber.setBackground(new Color(170, 196, 255));
 		btn_ciber.setBounds(93, 502, 1348, 117);
-		mipanel.add(btn_ciber);
+		addScaled.accept(btn_ciber);
 	}
 	
 	public void remover() {
