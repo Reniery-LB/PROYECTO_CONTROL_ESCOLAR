@@ -24,6 +24,7 @@ public class Main {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Consumer<JComponent> addScaled = ScalableUtils.createScaler(screenSize.width, screenSize.height);	
 		app.login(addScaled);
+		
 	}
 
 }
