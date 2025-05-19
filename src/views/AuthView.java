@@ -78,6 +78,7 @@ public class AuthView {
 	
 	//===========================================================================================================================
 	
+	
 	public void login(Consumer<JComponent> addScaled) {
 		remover();
 		
@@ -140,6 +141,7 @@ public class AuthView {
 		mipanel.add(acceder_btn);
 		
 		JPasswordField contra_field = new JPasswordField();
+		contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		contra_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		contra_field.setBounds(277, 473, 299, 46);
 		addScaled.accept(contra_field);
@@ -177,6 +179,7 @@ public class AuthView {
 	}
 	
 	//===========================================================================================================================
+	
 	
 	public void registro(Consumer<JComponent> addScaled) {
 		remover();
@@ -239,6 +242,7 @@ public class AuthView {
 		mipanel.add(acceder_btn);
 		
 		JPasswordField contra_field = new JPasswordField();
+		contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		contra_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		contra_field.setBounds(277, 427, 299, 46);
 		addScaled.accept(contra_field);
@@ -288,6 +292,7 @@ public class AuthView {
 		mipanel.add(confirmar_label);
 		
 		JPasswordField confirmar_field = new JPasswordField();
+		confirmar_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		confirmar_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		confirmar_field.setBounds(277, 528, 299, 46);
 		addScaled.accept(confirmar_field);
@@ -310,6 +315,7 @@ public class AuthView {
 	}
 	
 	//===========================================================================================================================
+	
 	
 	public void administrador(Consumer<JComponent> addScaled) {
 		remover();
@@ -427,13 +433,6 @@ public class AuthView {
 		addScaled.accept(btn_grupo_label);
 		mipanel.add(btn_grupo_label);
 	}
-	
-	//===========================================================================================================================
-	
-	
-	//===========================================================================================================================
-	
-	
 	
 	public void remover() {
 		mipanel.removeAll();
