@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.function.Consumer;
+
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import views.AuthView;
@@ -13,20 +16,16 @@ public class AuthController {
 		vista = new AuthView();
 	}
 	
-	public void login() {
-
+	public void login(Consumer<JComponent> addScaled) {
+		vista.login(addScaled);
 	}
 	
-	public void registro() {
-		
+	public void registro(Consumer<JComponent> addScaled) {
+		vista.registro(addScaled);
 	}
 	
-	public void administrador() {
-		
-	}
-	
-	public void grupos() {
-		
+	public void administrador(Consumer<JComponent> addScaled) {
+		vista.administrador(addScaled);
 	}
 
 }
