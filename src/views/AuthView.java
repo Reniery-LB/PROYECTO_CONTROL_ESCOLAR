@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import aplication.ScalableUtils;
+import controllers.AuthController;
 import controllers.GruposController;
 
 public class AuthView {
@@ -432,6 +433,24 @@ public class AuthView {
 		btn_grupo_label.setBounds(127, 556, 263, 58);
 		addScaled.accept(btn_grupo_label);
 		mipanel.add(btn_grupo_label);
+		
+		JButton btn_cerrarSesion = new JButton("Cerrar Sesión");
+		btn_cerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AuthView.this.login(addScaled);
+			}
+		});
+		btn_cerrarSesion.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_cerrarSesion.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_cerrarSesion.setHorizontalAlignment(JLabel.LEFT);
+		btn_cerrarSesion.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_cerrarSesion.setForeground(Color.WHITE);
+		btn_cerrarSesion.setBackground(new Color(238, 241, 255));
+		btn_cerrarSesion.setBounds(10, 716, 263, 58);
+		btn_cerrarSesion.setOpaque(false);
+		addScaled.accept(btn_cerrarSesion);
+		mipanel.add(btn_cerrarSesion);
 	}
 	
 	public void remover() {
