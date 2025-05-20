@@ -1631,6 +1631,7 @@ public class GruposView {
 		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_guardar.setBackground(new Color(170, 196, 255));
 		btn_guardar.setBounds(688, 716, 192, 40);
+		addScaled.accept(btn_guardar);
 		mipanel.add(btn_guardar);
 		
 		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "ID"};
@@ -2000,6 +2001,34 @@ public class GruposView {
 		btn_eliminar3.setBounds(28, 463, 192, 40);
 		addScaled.accept(btn_eliminar3);
 		mipanel.add(btn_eliminar3);
+		
+		JButton btn_añadir4 = new JButton("Añadir");
+		btn_añadir4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.eliminar_alumno(addScaled);
+			}
+		});
+		btn_añadir4.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_añadir4.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_añadir4.setBackground(new Color(170, 196, 255));
+		btn_añadir4.setBounds(28, 546, 192, 40);
+		addScaled.accept(btn_añadir4);
+		mipanel.add(btn_añadir4);
+		
+		JButton btn_añadir5 = new JButton("Añadir");
+		btn_añadir5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.eliminar_alumno(addScaled);
+			}
+		});
+		btn_añadir5.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_añadir5.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_añadir5.setBackground(new Color(170, 196, 255));
+		btn_añadir5.setBounds(28, 625, 192, 40);
+		addScaled.accept(btn_añadir5);
+		mipanel.add(btn_añadir5);
 	}
 	
 	
