@@ -13,7 +13,7 @@ public class ConnectionModel {
 		Statement stmt = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl", "freedb_DiegoNuñez", "C6*d7eA76At?aFz");
+			conn = DriverManager.getConnection("jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl", "freedb_Renie", "$Cxr85wsg#sP87T");
 			stmt = conn.createStatement();
 			
 		} catch (Exception e) {
@@ -24,6 +24,11 @@ public class ConnectionModel {
 				conn.close();
 			} catch (Exception e) {}
 		}
+	}
+
+	public static Connection getConnection() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
