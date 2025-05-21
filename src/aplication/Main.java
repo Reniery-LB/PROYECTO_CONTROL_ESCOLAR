@@ -25,7 +25,8 @@ public class Main {
         Consumer<JComponent> addScaled = ScalableUtils.createScaler(screenSize.width, screenSize.height);	
 		app.login(addScaled);
 		
-		//NOTA: AÑADIR ADDSCALED A AÑADIR Y ELIMINAR ALUMNO Y A ALERTA_LETRA Y ARREGLAR LA BARRA DE NAVEGACION
+		//NOTA: IMPLEMENTAR FUNCION AL BTN BASURA Y COORDINAR LOS BTN VOLVER W
+		//Y COLOCAR IMG LETRA EN EDITAR GRUPO
 	}
 
 }
