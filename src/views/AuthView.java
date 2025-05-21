@@ -1,6 +1,12 @@
 package views;
 
 import java.awt.BorderLayout;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -35,6 +42,7 @@ public class AuthView {
 	private JFrame ventana;
 	private JPanel mipanel;
 	private JPanel opciones_panel;
+	protected String id;
 	
 	public AuthView() {
 		inicializar();
@@ -226,52 +234,6 @@ public class AuthView {
 		addScaled.accept(contra_label);
 		mipanel.add(contra_label);
 		
-		JButton acceder_btn = new JButton("Acceder");
-		acceder_btn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AuthView.this.administrador(addScaled);
-			}
-		});
-		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		acceder_btn.setBounds(277, 650, 299, 56);
-		acceder_btn.setBackground(Color.decode("#AAC4FF"));
-		acceder_btn.setOpaque(true);
-		acceder_btn.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
-		addScaled.accept(acceder_btn);
-		mipanel.add(acceder_btn);
-		
-		JPasswordField contra_field = new JPasswordField();
-		contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-		contra_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		contra_field.setBounds(277, 427, 299, 46);
-		addScaled.accept(contra_field);
-		mipanel.add(contra_field);
-		
-		JLabel subrayado = new JLabel("_________________");
-		subrayado.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		subrayado.setBounds(371, 743, 123, 13);
-		addScaled.accept(subrayado);
-		mipanel.add(subrayado);
-		
-		JButton iniciar_sesion_btn = new JButton("Iniciar sesión");
-		iniciar_sesion_btn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AuthView.this.login(addScaled);
-			}
-		});
-		iniciar_sesion_btn.setOpaque(true);
-		iniciar_sesion_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		iniciar_sesion_btn.setBorder(BorderFactory.createLineBorder(Color.decode("#EEF1FF"),1));
-		iniciar_sesion_btn.setBackground(new Color(170, 196, 255));
-		iniciar_sesion_btn.setBounds(277, 716, 299, 56);
-		iniciar_sesion_btn.setBackground(Color.decode("#EEF1FF"));
-		addScaled.accept(iniciar_sesion_btn);
-		mipanel.add(iniciar_sesion_btn);
-		
 		JLabel correo_label = new JLabel("Correo:");
 		correo_label.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		correo_label.setBounds(277, 281, 124, 46);
@@ -313,7 +275,133 @@ public class AuthView {
 		addScaled.accept(fondo_registro);
 		mipanel.add(fondo_registro);
 		
+		JPasswordField contra_field = new JPasswordField();
+		contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		contra_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		contra_field.setBounds(277, 427, 299, 46);
+		addScaled.accept(contra_field);
+		mipanel.add(contra_field);
+		
+		JLabel subrayado = new JLabel("_________________");
+		subrayado.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		subrayado.setBounds(371, 743, 123, 13);
+		addScaled.accept(subrayado);
+		mipanel.add(subrayado);
+		
+		
+		
+		JButton acceder_btn = new JButton("Acceder");
+		acceder_btn.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        String usuario = usuario_field.getText().trim();
+		        String correo = correo_field.getText().trim();
+		        String contrasena = new String(contra_field.getPassword());
+		        String confirmar = new String(confirmar_field.getPassword());
+
+		        // Validaciones
+		        if (usuario.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmar.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+		            return;
+		        }
+
+		        if (!contrasena.equals(confirmar)) {
+		            JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden.");
+		            return;
+		        }
+
+		        if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+		            JOptionPane.showMessageDialog(null, "Correo no válido.");
+		            return;
+		        }
+
+		        if (!terminos.isSelected()) {
+		            JOptionPane.showMessageDialog(null, "Debes aceptar los términos y condiciones.");
+		            return;
+		        }
+
+		        String hash = hashPassword(contrasena);
+
+		        try {
+		            Connection conn = DriverManager.getConnection(
+		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
+		                "freedb_DiegoNuñez",
+		                "C6*d7eA76At?aFz"
+		            );
+
+		            int x = 0;
+		            PreparedStatement stmt = conn.prepareStatement(
+		                "INSERT INTO Usuario (id,usuario, correo, contrasena) VALUES (x+1,?, ?, ?)"
+		            );
+		            stmt.setString(1, id);
+		            stmt.setString(2, usuario);
+		            stmt.setString(3, correo);
+		            stmt.setString(4, hash);
+
+		            stmt.executeUpdate();
+		            stmt.close();
+		            conn.close();
+
+		            JOptionPane.showMessageDialog(null, "Registro exitoso.");
+		            AuthView.this.login(addScaled); 
+
+		        } catch (SQLException ex) {
+		            JOptionPane.showMessageDialog(null, "Error al registrar: " + ex.getMessage());
+		        }
+		    }
+		});
+
+		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		acceder_btn.setBounds(277, 650, 299, 56);
+		acceder_btn.setBackground(Color.decode("#AAC4FF"));
+		acceder_btn.setOpaque(true);
+		acceder_btn.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+		mipanel.add(acceder_btn);
+		addScaled.accept(acceder_btn);
+	
+		
+		
+		JButton iniciar_sesion_btn = new JButton("Iniciar sesión");
+		iniciar_sesion_btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AuthView.this.login(addScaled);
+			}
+		});
+		iniciar_sesion_btn.setOpaque(true);
+		iniciar_sesion_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		iniciar_sesion_btn.setBorder(BorderFactory.createLineBorder(Color.decode("#EEF1FF"),1));
+		iniciar_sesion_btn.setBackground(new Color(170, 196, 255));
+		iniciar_sesion_btn.setBounds(277, 716, 299, 56);
+		iniciar_sesion_btn.setBackground(Color.decode("#EEF1FF"));
+		mipanel.add(iniciar_sesion_btn);
+		addScaled.accept(iniciar_sesion_btn);
+		
+		
+		
+		
 	}
+	
+	private String hashPassword(String password) {
+	    try {
+	        MessageDigest md = MessageDigest.getInstance("SHA-256");
+	        byte[] hash = md.digest(password.getBytes());
+	        StringBuilder hexString = new StringBuilder();
+
+	        for (byte b : hash) {
+	            String hex = Integer.toHexString(0xff & b);
+	            if (hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+
+	    } catch (NoSuchAlgorithmException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+
 	
 	//===========================================================================================================================
 	
