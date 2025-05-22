@@ -350,8 +350,7 @@ public class AuthView {
 		        }
 
 		        String hash = hashPassword(contrasena);
-
-		        try {
+		       try {
 		            Connection conn = DriverManager.getConnection(
 		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
 		                "freedb_Renie",

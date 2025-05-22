@@ -8,7 +8,6 @@ import java.sql.Statement;
 public class ConnectionModel {
 
 	public ConnectionModel() {
-		String query = "select * from Usuario";
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -26,9 +25,6 @@ public class ConnectionModel {
 		}
 	}
 
-	public static Connection getConnection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }
