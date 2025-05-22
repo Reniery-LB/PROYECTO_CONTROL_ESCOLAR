@@ -158,8 +158,8 @@ public class AuthView {
 		        try {
 		            Connection conn = DriverManager.getConnection(
 		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
-		                "freedb_Renie",
-		                "$Cxr85wsg#sP87T"
+		                "freedb_nunez",
+		                "v6HvxE44y8f8?Ba"
 		            );
 					
 					String query = "SELECT * FROM Usuario WHERE usuario = ? AND contrasena = ?";
@@ -353,8 +353,8 @@ public class AuthView {
 		       try {
 		            Connection conn = DriverManager.getConnection(
 		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
-		                "freedb_Renie",
-		                "$Cxr85wsg#sP87T"
+		                "freedb_nunez",
+		                "v6HvxE44y8f8?Ba"
 		            );
 
 		            PreparedStatement stmt = conn.prepareStatement(
@@ -404,8 +404,8 @@ public class AuthView {
 		        try {
 		            Connection conn = DriverManager.getConnection(
 		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
-		                "freedb_Renie",
-		                "$Cxr85wsg#sP87T"
+		                "freedb_nunez",
+		                "v6HvxE44y8f8?Ba"
 		            );
 
 		            PreparedStatement stmt = conn.prepareStatement(
