@@ -102,7 +102,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.editar_grupo(addScaled);
+				GruposView.this.editar_grupo(addScaled, null);
 			}
 		});
 		btn_editar.setOpaque(true);
@@ -119,7 +119,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.editar_grupo(addScaled);
+				GruposView.this.editar_grupo(addScaled, null);
 			}
 		});
 		btn_editar_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -135,7 +135,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.crear_grupo(addScaled);	
+				GruposView.this.crear_grupo(addScaled, null);	
 			}
 		});
 		btn_crear.setOpaque(true);
@@ -150,7 +150,7 @@ public class GruposView {
 		btn_crear_label.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.crear_grupo(addScaled);
+				GruposView.this.crear_grupo(addScaled, null);
 			}
 		});
 		btn_crear_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -161,6 +161,14 @@ public class GruposView {
 		mipanel.add(btn_crear_label);
 		
 		JButton btn_detalles = new JButton();
+		btn_detalles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.grupos_registros(addScaled);
+			}
+		});
 		btn_detalles.setOpaque(true);
 		btn_detalles.setIcon(new ImageIcon(getClass().getResource("/img/detalles.png")));
 		btn_detalles.setBackground(new Color(170, 196, 255));
@@ -171,6 +179,14 @@ public class GruposView {
 		mipanel.add(btn_detalles);
 		
 		JButton btn_detalles_label = new JButton("Detalles de \r\ngrupos");
+		btn_detalles_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.grupos_registros(addScaled);	
+			}
+		});
 		btn_detalles_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_detalles_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_detalles_label.setBackground(Color.decode("#EEF1FF"));
@@ -249,6 +265,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -261,7 +285,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -276,7 +300,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -429,6 +453,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -441,7 +473,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -456,7 +488,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -542,6 +574,14 @@ public class GruposView {
 		mipanel.add(btn_volver);
 		
 		JButton btn_itc = new JButton("ITC");
+		btn_itc.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.ITC(addScaled);
+			}
+		});
 		btn_itc.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_itc.setBounds(93, 274, 1348, 117);
 		btn_itc.setBackground(Color.decode("#AAC4FF"));
@@ -566,6 +606,14 @@ public class GruposView {
 		mipanel.add(btn_ids);
 		
 		JButton btn_ciber = new JButton("Ciberseguridad");
+		btn_ciber.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.Ciberseguridad(addScaled);
+			}
+		});
 		btn_ciber.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_ciber.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_ciber.setBackground(new Color(170, 196, 255));
@@ -578,7 +626,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void crear_grupo(Consumer<JComponent> addScaled) {
+	public void crear_grupo(Consumer<JComponent> addScaled, String letraSeleccionada) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -641,6 +689,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -653,7 +709,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -668,7 +724,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -721,6 +777,14 @@ public class GruposView {
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
 		mipanel.add(asignaturas_barraLabel);
+		
+		if(letraSeleccionada != null) {
+	        JLabel iconoLetra = new JLabel();
+	        iconoLetra.setIcon(new ImageIcon(getClass().getResource("/img/icono_letra" + letraSeleccionada + ".png")));
+	        iconoLetra.setBounds(1268, 258, 111, 110);
+	        addScaled.accept(iconoLetra);
+	        mipanel.add(iconoLetra);
+	    }
 		
 		JLabel fondo_barra = new JLabel();
 		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
@@ -809,7 +873,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_alumno(addScaled);
+				GruposView.this.añadir_alumno(addScaled, "crear_grupo");
 			}
 		});
 		btn_añadir_alumnos.setText("Haz clic aquí");
@@ -826,14 +890,14 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.letra_grupos(addScaled);
+				GruposView.this.letra_grupos(addScaled, "crear_grupo");
 			}
 		});
 		btn_añadir_letra.setText("Añadir letra");
 		btn_añadir_letra.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_añadir_letra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_añadir_letra.setBackground(new Color(170, 196, 255));
-		btn_añadir_letra.setBounds(1220, 534, 192, 40);
+		btn_añadir_letra.setBounds(1221, 421, 192, 40);
 		addScaled.accept(btn_añadir_letra);
 		mipanel.add(btn_añadir_letra);
 		
@@ -861,6 +925,14 @@ public class GruposView {
 		mipanel.add(fondo_grupo);
 		
 		JButton btn_crear = new JButton();
+		btn_crear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.confirmar_grupoCreado(addScaled);
+			}
+		});
 		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -874,7 +946,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void letra_grupos(Consumer<JComponent> addScaled) {
+	public void letra_grupos(Consumer<JComponent> addScaled, String origen) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -937,6 +1009,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -949,7 +1029,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -964,7 +1044,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1034,7 +1114,13 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.crear_grupo(addScaled);
+	            if ("crear_grupo".equals(origen)) {
+	                GruposView.this.crear_grupo(addScaled, null);
+	            } else if ("editar_grupo".equals(origen)) {
+	                GruposView.this.editar_grupo(addScaled, null);
+	            } else {
+	                GruposView.this.grupos(addScaled);
+	            }
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -1052,7 +1138,7 @@ public class GruposView {
 		btn_letraA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.alerta_letra("A", addScaled);
+				GruposView.this.alerta_letra("A", addScaled, origen);
 			}
 		});
 		btn_letraA.setOpaque(true);
@@ -1067,7 +1153,7 @@ public class GruposView {
 		btn_letraB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.alerta_letra("B", addScaled);
+				GruposView.this.alerta_letra("B", addScaled, origen);
 			}
 		});
 		btn_letraB.setOpaque(true);
@@ -1082,7 +1168,7 @@ public class GruposView {
 		btn_letraC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.alerta_letra("C", addScaled);
+				GruposView.this.alerta_letra("C", addScaled, origen);
 			}
 		});
 		btn_letraC.setOpaque(true);
@@ -1097,7 +1183,7 @@ public class GruposView {
 		btn_letraD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.alerta_letra("D", addScaled);
+				GruposView.this.alerta_letra("D", addScaled, origen);
 			}
 		});
 		btn_letraD.setIcon(new ImageIcon(getClass().getResource("/img/letra_d.png")));
@@ -1174,6 +1260,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1186,7 +1280,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1201,7 +1295,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1286,6 +1380,14 @@ public class GruposView {
 		mipanel.add(btn_volver);
 		
 		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.editar_grupo(addScaled, null);
+			}
+		});
 		btn_editar.setText("Editar");
 		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1406,6 +1508,603 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
+	public void ITC(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				opciones_panel.setSize(266, 200);
+				opciones_panel.setLocation(376, 101);
+				
+				boolean visible = !opciones_panel.isVisible();
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					opciones_panel.removeAll();
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);		
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.crear_grupo(addScaled, null);	
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.editar_grupo(addScaled, null);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JLabel alumnos_barraLabel = new JLabel("    Alumnos");
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.grupos_registros(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+		
+		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.editar_grupo(addScaled, null);
+			}
+		});
+		btn_editar.setText("Editar");
+		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar.setBackground(new Color(170, 196, 255));
+		btn_editar.setBounds(688, 716, 192, 40);
+		addScaled.accept(btn_editar);
+		mipanel.add(btn_editar);
+		
+		JLabel titulo_itc = new JLabel("ITC");
+		titulo_itc.setFont(new Font("SansSerif", Font.PLAIN, 24));
+		titulo_itc.setBounds(759, 146, 47, 65);
+		addScaled.accept(titulo_itc);
+		mipanel.add(titulo_itc);
+		
+		JLabel docenteLabel = new JLabel("Docente a cargo: Jhonathan Giovanni Soto");
+		docenteLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docenteLabel.setBounds(111, 229, 499, 29);
+		addScaled.accept(docenteLabel);
+		mipanel.add(docenteLabel);
+		
+		JLabel idLabel = new JLabel("ID del docente: 12");
+		idLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		idLabel.setBounds(130, 279, 499, 29);
+		addScaled.accept(idLabel);
+		mipanel.add(idLabel);
+		
+		JLabel listaLabel = new JLabel("Lista de estudiantes:");
+		listaLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		listaLabel.setBounds(76, 333, 499, 29);
+		addScaled.accept(listaLabel);
+		mipanel.add(listaLabel);
+		
+		JLabel turnoLabel = new JLabel("Turno: Vespertino");
+		turnoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		turnoLabel.setBounds(885, 333, 499, 29);
+		addScaled.accept(turnoLabel);
+		mipanel.add(turnoLabel);
+		
+		String titles []= {"Apellido paterno", "Apellido materno", "Nombre", "No. Control"};
+		
+		String data [][]= {
+							{"Diaz"   , "Barrera"  , "Zahir Fernando"  , "28"},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "}
+		};
+		
+		JTable table = new JTable(data,titles) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+		
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.GRAY); 
+		header.setForeground(Color.BLACK);
+		header.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+		header.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		header.setPreferredSize(new Dimension(header.getWidth(), 50));
+		
+		table.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		table.setRowHeight(40);
+		table.setShowGrid(true);
+		table.setBackground(Color.decode("#D9D9D9"));
+		table.setGridColor(Color.BLACK);
+		table.setFillsViewportHeight(true);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		for (int i = 0; i < table.getColumnCount(); i++) {
+		    table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+		
+		JScrollPane scroll = new JScrollPane(table);
+		scroll.setFont(new Font("SansSerif", Font.PLAIN, 24));
+		scroll.setBounds(76, 372, 1396, 234);
+		addScaled.accept(scroll);
+		mipanel.add(scroll);
+		
+		JButton btn_descargar = new JButton();
+		btn_descargar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.alerta_btnDescargar(addScaled);
+			}
+		});
+		btn_descargar.setText("Descargar");
+		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_descargar.setBackground(new Color(170, 196, 255));
+		btn_descargar.setBounds(1202, 616, 192, 40);
+		addScaled.accept(btn_descargar);
+		mipanel.add(btn_descargar);
+		
+		JLabel letra_img = new JLabel();
+		letra_img.setIcon(new ImageIcon(getClass().getResource("/img/icono_letraA.png")));
+		letra_img.setBounds(1371, 146, 101, 222);
+		addScaled.accept(letra_img);
+		mipanel.add(letra_img);
+		
+		JLabel fondo_grupo = new JLabel();
+		fondo_grupo.setBackground(new Color(255, 255, 255));
+		fondo_grupo.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		fondo_grupo.setOpaque(true);
+		fondo_grupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_grupo.setBounds(58, 146, 1435, 537);
+		addScaled.accept(fondo_grupo);
+		mipanel.add(fondo_grupo);
+	}
+	
+	public void Ciberseguridad(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				opciones_panel.setSize(266, 200);
+				opciones_panel.setLocation(376, 101);
+				
+				boolean visible = !opciones_panel.isVisible();
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					opciones_panel.removeAll();
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);		
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.crear_grupo(addScaled, null);	
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.editar_grupo(addScaled, null);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JLabel alumnos_barraLabel = new JLabel("    Alumnos");
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.grupos_registros(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+		
+		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.editar_grupo(addScaled, null);
+			}
+		});
+		btn_editar.setText("Editar");
+		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar.setBackground(new Color(170, 196, 255));
+		btn_editar.setBounds(688, 716, 192, 40);
+		addScaled.accept(btn_editar);
+		mipanel.add(btn_editar);
+		
+		JLabel titulo = new JLabel("Ciberseguridad");
+		titulo.setFont(new Font("SansSerif", Font.PLAIN, 24));
+		titulo.setBounds(689, 146, 207, 65);
+		addScaled.accept(titulo);
+		mipanel.add(titulo);
+		
+		JLabel docenteLabel = new JLabel("Docente a cargo: Jhonathan Giovanni Soto");
+		docenteLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docenteLabel.setBounds(111, 229, 499, 29);
+		addScaled.accept(docenteLabel);
+		mipanel.add(docenteLabel);
+		
+		JLabel idLabel = new JLabel("ID del docente: 12");
+		idLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		idLabel.setBounds(130, 279, 499, 29);
+		addScaled.accept(idLabel);
+		mipanel.add(idLabel);
+		
+		JLabel listaLabel = new JLabel("Lista de estudiantes:");
+		listaLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		listaLabel.setBounds(76, 333, 499, 29);
+		addScaled.accept(listaLabel);
+		mipanel.add(listaLabel);
+		
+		JLabel turnoLabel = new JLabel("Turno: Vespertino");
+		turnoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		turnoLabel.setBounds(885, 333, 499, 29);
+		addScaled.accept(turnoLabel);
+		mipanel.add(turnoLabel);
+		
+		String titles []= {"Apellido paterno", "Apellido materno", "Nombre", "No. Control"};
+		
+		String data [][]= {
+							{"Diaz"   , "Barrera"  , "Zahir Fernando"  , "28"},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "},
+							{" " , " ", " ", " "}
+		};
+		
+		JTable table = new JTable(data,titles) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+		
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.GRAY); 
+		header.setForeground(Color.BLACK);
+		header.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+		header.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		header.setPreferredSize(new Dimension(header.getWidth(), 50));
+		
+		table.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		table.setRowHeight(40);
+		table.setShowGrid(true);
+		table.setBackground(Color.decode("#D9D9D9"));
+		table.setGridColor(Color.BLACK);
+		table.setFillsViewportHeight(true);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		for (int i = 0; i < table.getColumnCount(); i++) {
+		    table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+		
+		JScrollPane scroll = new JScrollPane(table);
+		scroll.setFont(new Font("SansSerif", Font.PLAIN, 24));
+		scroll.setBounds(76, 372, 1396, 234);
+		addScaled.accept(scroll);
+		mipanel.add(scroll);
+		
+		JButton btn_descargar = new JButton();
+		btn_descargar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.alerta_btnDescargar(addScaled);
+			}
+		});
+		btn_descargar.setText("Descargar");
+		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_descargar.setBackground(new Color(170, 196, 255));
+		btn_descargar.setBounds(1202, 616, 192, 40);
+		addScaled.accept(btn_descargar);
+		mipanel.add(btn_descargar);
+		
+		JLabel letra_img = new JLabel();
+		letra_img.setIcon(new ImageIcon(getClass().getResource("/img/icono_letraA.png")));
+		letra_img.setBounds(1371, 146, 101, 222);
+		addScaled.accept(letra_img);
+		mipanel.add(letra_img);
+		
+		JLabel fondo_grupo = new JLabel();
+		fondo_grupo.setBackground(new Color(255, 255, 255));
+		fondo_grupo.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		fondo_grupo.setOpaque(true);
+		fondo_grupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_grupo.setBounds(58, 146, 1435, 537);
+		addScaled.accept(fondo_grupo);
+		mipanel.add(fondo_grupo);
+	}
+	
+	//===========================================================================================================================
+	
+	
 	public void alerta_btnDescargar(Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Confirmación", true);
 	    dialogo.setLayout(null);
@@ -1441,7 +2140,6 @@ public class GruposView {
 		alerta_panel.add(btn_aceptar);
 		
 		JButton btn_no = new JButton();
-		
 		btn_no.setText("No, volver");
 		btn_no.addActionListener(new ActionListener() {
 			
@@ -1515,7 +2213,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void añadir_alumno(Consumer<JComponent> addScaled) {
+	public void añadir_alumno(Consumer<JComponent> addScaled, String origen) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1568,6 +2266,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1580,7 +2286,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1595,7 +2301,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1675,7 +2381,13 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.crear_grupo(addScaled);
+				if ("crear_grupo".equals(origen)) {
+					GruposView.this.crear_grupo(addScaled, null);					
+				} else if ("editar_grupo".equals(origen)) {
+					GruposView.this.editar_grupo(addScaled, null);	
+				} else {
+					GruposView.this.grupos(addScaled);
+				}
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -1877,6 +2589,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1889,7 +2609,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1904,7 +2624,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1984,7 +2704,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_alumno(addScaled);
+				GruposView.this.añadir_alumno(addScaled, "editar_grupo");
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -2065,7 +2785,9 @@ public class GruposView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        model.removeRow(0);
+		        if(model.getRowCount() > 0) {
+		        	 model.removeRow(0);
+		        }
 			}
 		});
 		btn_eliminar1.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2080,7 +2802,9 @@ public class GruposView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        model.removeRow(1);
+		        if(model.getRowCount() > 1) {
+		        	 model.removeRow(1);
+		        }
 			}
 		});
 		btn_eliminar2.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2097,7 +2821,9 @@ public class GruposView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        model.removeRow(2);
+		        if(model.getRowCount() > 2) {
+		        	 model.removeRow(2);
+		        }
 			}
 		});
 		btn_eliminar3.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2140,7 +2866,7 @@ public class GruposView {
 	//===========================================================================================================================
 
 	
-	public void alerta_letra(String letraSeleccionada, Consumer<JComponent> addScaled) {
+	public void alerta_letra(String letraSeleccionada, Consumer<JComponent> addScaled, String origen) {
 	    JDialog dialogo = new JDialog(ventana, "Confirmación", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -2159,6 +2885,13 @@ public class GruposView {
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_seleccionar = new JButton();
+		btn_seleccionar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
 		btn_seleccionar.setText("Seleccionar otra");
 		btn_seleccionar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_seleccionar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -2167,6 +2900,23 @@ public class GruposView {
 		alerta_panel.add(btn_seleccionar);
 		
 		JButton btn_confirmar = new JButton();
+		btn_confirmar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				switch(origen) {
+					case "crear_grupo":
+						GruposView.this.crear_grupo(addScaled, letraSeleccionada);
+						break;
+					case "editar_grupo":
+						GruposView.this.editar_grupo(addScaled, letraSeleccionada);
+						break;
+					default:
+						GruposView.this.grupos(addScaled);
+				}
+			}
+		});
 		btn_confirmar.setText("Confirmar");
 		btn_confirmar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_confirmar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -2240,7 +2990,7 @@ public class GruposView {
 	//===========================================================================================================================
 
 	
-	public void editar_grupo(Consumer<JComponent> addScaled) {
+	public void editar_grupo(Consumer<JComponent> addScaled, String letraSeleccionada) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -2303,6 +3053,14 @@ public class GruposView {
 					opciones_panel.add(registros);
 					
 					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							GruposView.this.grupos_registros(addScaled);
+						}
+					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					detalles.setBackground(Color.decode("#EEF1FF"));
 					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -2315,7 +3073,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.crear_grupo(addScaled);	
+							GruposView.this.crear_grupo(addScaled, null);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2330,7 +3088,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.editar_grupo(addScaled);
+							GruposView.this.editar_grupo(addScaled, letraSeleccionada);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2474,7 +3232,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_alumno(addScaled);
+				GruposView.this.añadir_alumno(addScaled, "editar_grupo");
 			}
 		});
 		btn_añadir_alumnos.setText("Haz clic aquí");
@@ -2489,7 +3247,7 @@ public class GruposView {
 		btn_añadir_letra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.letra_grupos(addScaled);
+				GruposView.this.letra_grupos(addScaled, "editar_grupo");
 			}
 		});
 		btn_añadir_letra.setText("Añadir letra");
@@ -2515,6 +3273,14 @@ public class GruposView {
 		addScaled.accept(turno_comboBox);
 		mipanel.add(turno_comboBox);
 		
+		if(letraSeleccionada != null) {
+	        JLabel iconoLetra = new JLabel();
+	        iconoLetra.setIcon(new ImageIcon(getClass().getResource("/img/icono_letra" + letraSeleccionada + ".png")));
+	        iconoLetra.setBounds(1268, 258, 111, 110);
+	        addScaled.accept(iconoLetra);
+	        mipanel.add(iconoLetra);
+	    }
+		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
 		fondo_grupo.setOpaque(true);
@@ -2526,6 +3292,8 @@ public class GruposView {
 		JButton btn_guardar = new JButton();
 		btn_guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.confirmar_grupoCreado(addScaled);
 			}
 		});
 		btn_guardar.setText("Guardar");
@@ -2537,6 +3305,14 @@ public class GruposView {
 		mipanel.add(btn_guardar);
 		
 		JButton btn_basura = new JButton();
+		btn_basura.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				GruposView.this.alerta_eliminar(addScaled);
+			}
+		});
 		btn_basura.setOpaque(false);
 		btn_basura.setIcon(new ImageIcon(getClass().getResource("/img/basura.png")));
 		btn_basura.setHorizontalAlignment(SwingConstants.LEFT);
@@ -2545,9 +3321,171 @@ public class GruposView {
 		btn_basura.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
 		btn_basura.setBackground(new Color(238, 241, 255));
 		btn_basura.setBounds(1447, 700, 65, 74);
+		addScaled.accept(btn_basura);
 		mipanel.add(btn_basura);
 	}
 	
+	
+	//===========================================================================================================================
+
+	
+	public void alerta_eliminar(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea eliminar este grupo?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(229, 10, 290, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_si = new JButton();
+		btn_si.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();	
+				GruposView.this.confirmar_grupoEliminado(addScaled);
+			}
+		});
+		btn_si.setForeground(new Color(255, 255, 255));
+		btn_si.setText("Si");
+		btn_si.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_si.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_si.setBackground(Color.decode("#02A115"));
+		btn_si.setBounds(410, 250, 123, 40);
+		alerta_panel.add(btn_si);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/alerta.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();	
+			}
+		});
+		btn_no.setText("No");
+		btn_no.setForeground(Color.WHITE);
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(255, 0, 0));
+		btn_no.setBounds(215, 250, 123, 40);
+		alerta_panel.add(btn_no);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+	public void confirmar_grupoEliminado(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Grupo eliminado con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(231, 43, 324, 51);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				GruposView.this.grupos(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel de administrador");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
+		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		mensajeLabel_1.setBounds(256, 63, 230, 65);
+		alerta_panel.add(mensajeLabel_1);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	public void confirmar_grupoCreado(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Grupo creado con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(245, 58, 259, 51);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				GruposView.this.grupos(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel de administrador");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(333, 133, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+
 	public void remover() {
 		mipanel.removeAll();
 		mipanel.revalidate();

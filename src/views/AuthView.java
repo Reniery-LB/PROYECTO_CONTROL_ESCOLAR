@@ -25,7 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import aplication.ScalableUtils;
+import controllers.AlumnosController;
+import controllers.AsignaturasController;
 import controllers.AuthController;
+import controllers.DocentesController;
 import controllers.GruposController;
 
 public class AuthView {
@@ -349,6 +352,15 @@ public class AuthView {
 		mipanel.add(fondo_barra_2);
 		
 		JButton btn_asignaturas = new JButton();
+		btn_asignaturas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AsignaturasController ac = new AsignaturasController();
+				ac.asignaturas(addScaled);		
+			}
+		});
 		btn_asignaturas.setOpaque(true);
 		btn_asignaturas.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas.png")));
 		btn_asignaturas.setBackground(new Color(170, 196, 255));
@@ -358,6 +370,15 @@ public class AuthView {
 		mipanel.add(btn_asignaturas);
 		
 		JButton btn_asignaturas_label = new JButton("Asignaturas");
+		btn_asignaturas_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AsignaturasController ac = new AsignaturasController();
+				ac.asignaturas(addScaled);		
+			}
+		});
 		btn_asignaturas_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_asignaturas_label.setBackground(Color.decode("#EEF1FF"));
 		btn_asignaturas_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -366,6 +387,15 @@ public class AuthView {
 		mipanel.add(btn_asignaturas_label);
 		
 		JButton btn_docentes = new JButton();
+		btn_docentes.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				DocentesController dc = new DocentesController();
+				dc.docentes(addScaled);	
+			}
+		});
 		btn_docentes.setOpaque(true);
 		btn_docentes.setIcon(new ImageIcon(getClass().getResource("/img/docentes.png")));
 		btn_docentes.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -377,6 +407,9 @@ public class AuthView {
 		JButton btn_docentes_label = new JButton("Docentes");
 		btn_docentes_label.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				DocentesController dc = new DocentesController();
+				dc.docentes(addScaled);	
 			}
 		});
 		btn_docentes_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -387,6 +420,15 @@ public class AuthView {
 		mipanel.add(btn_docentes_label);
 		
 		JButton btn_alumnos = new JButton();
+		btn_alumnos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AlumnosController ac = new AlumnosController();
+				ac.alumnos(addScaled);	
+			}
+		});
 		btn_alumnos.setOpaque(true);
 		btn_alumnos.setIcon(new ImageIcon(getClass().getResource("/img/alumnos.png")));
 		btn_alumnos.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -396,6 +438,15 @@ public class AuthView {
 		mipanel.add(btn_alumnos);
 		
 		JButton btn_alumnos_label = new JButton("Alumnos");
+		btn_alumnos_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AlumnosController ac = new AlumnosController();
+				ac.alumnos(addScaled);	
+			}
+		});
 		btn_alumnos_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_alumnos_label.setBackground(Color.decode("#EEF1FF"));
 		btn_alumnos_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
