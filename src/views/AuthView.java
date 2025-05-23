@@ -147,45 +147,45 @@ public class AuthView {
 		JButton acceder_btn = new JButton("Acceder");
 		acceder_btn.addActionListener(new ActionListener() {
 
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AuthView.this.administrador(addScaled);
+//			}
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AuthView.this.administrador(addScaled);
+				String usuario = usuario_field.getText().trim();
+				String contrasena = new String(contra_field.getPassword());
+
+				if (usuario.isEmpty() || contrasena.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+		        String hash = hashPassword(contrasena);
+
+		        try {
+		            Connection conn = DriverManager.getConnection(
+		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
+		                "freedb_nunez",
+		                "v6HvxE44y8f8?Ba"
+		            );
+					
+					String query = "SELECT * FROM Usuario WHERE usuario = ? AND contrasena = ?";
+					PreparedStatement stmt = conn.prepareStatement(query);
+					stmt.setString(1, usuario);
+					stmt.setString(2, hash); 
+					ResultSet rs = stmt.executeQuery();
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+						AuthView.this.administrador(addScaled);
+					} else {
+						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
+					}
+
+				} catch (SQLException ex) {
+				}
 			}
-			
-			//@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String usuario = usuario_field.getText().trim();
-//				String contrasena = new String(contra_field.getPassword());
-//
-//				if (usuario.isEmpty() || contrasena.isEmpty()) {
-//					JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-//					return;
-//				}
-//		        String hash = hashPassword(contrasena);
-//
-//		        try {
-//		            Connection conn = DriverManager.getConnection(
-//		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
-//		                "freedb_nunez",
-//		                "v6HvxE44y8f8?Ba"
-//		            );
-//					
-//					String query = "SELECT * FROM Usuario WHERE usuario = ? AND contrasena = ?";
-//					PreparedStatement stmt = conn.prepareStatement(query);
-//					stmt.setString(1, usuario);
-//					stmt.setString(2, hash); 
-//					ResultSet rs = stmt.executeQuery();
-//					if (rs.next()) {
-//						JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-//						AuthView.this.administrador(addScaled);
-//					} else {
-//						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
-//					}
-//
-//				} catch (SQLException ex) {
-//				}
-//			}
 		});
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
