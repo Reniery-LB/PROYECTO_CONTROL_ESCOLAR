@@ -155,6 +155,8 @@ public class AuthView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
+				
 				String usuario = usuario_field.getText().trim();
 				String contrasena = new String(contra_field.getPassword());
 
