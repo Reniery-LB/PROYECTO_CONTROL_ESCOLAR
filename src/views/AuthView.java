@@ -147,48 +147,52 @@ public class AuthView {
 		JButton acceder_btn = new JButton("Acceder");
 		acceder_btn.addActionListener(new ActionListener() {
 
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AuthView.this.administrador(addScaled);
-//			}
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
-				
-				String usuario = usuario_field.getText().trim();
-				String contrasena = new String(contra_field.getPassword());
-
-				if (usuario.isEmpty() || contrasena.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-		        String hash = hashPassword(contrasena);
-
-		        try {
-		            Connection conn = DriverManager.getConnection(
-		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
-		                "freedb_nunez",
-		                "v6HvxE44y8f8?Ba"
-		            );
-					
-					String query = "SELECT * FROM Usuario WHERE usuario = ? AND contrasena = ?";
-					PreparedStatement stmt = conn.prepareStatement(query);
-					stmt.setString(1, usuario);
-					stmt.setString(2, hash); 
-					ResultSet rs = stmt.executeQuery();
-					if (rs.next()) {
-						JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-						AuthView.this.administrador(addScaled);
-					} else {
-						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
-					}
-
-				} catch (SQLException ex) {
-				}
+				opciones_panel.setVisible(false);
+				AuthView.this.administrador(addScaled);
 			}
-		});
+			
+			
+			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
+//				
+//				String usuario = usuario_field.getText().trim();
+//				String contrasena = new String(contra_field.getPassword());
+//
+//				if (usuario.isEmpty() || contrasena.isEmpty()) {
+//					JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+//					return;
+//				}
+//
+//		        try {
+//		            Connection conn = DriverManager.getConnection(
+//		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
+//		                "freedb_nunez",
+//		                "v6HvxE44y8f8?Ba"
+//		            );
+//					
+//					String query = "SELECT * FROM Usuario WHERE usuario = ? AND contrasena = ?";
+//					PreparedStatement stmt = conn.prepareStatement(query);
+//					stmt.setString(1, usuario);
+//					stmt.setString(2, contrasena); 
+//					ResultSet rs = stmt.executeQuery();
+//					if (rs.next()) {
+//						JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+//						AuthView.this.administrador(addScaled);
+//					} else {
+//						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
+//					}
+//
+//				} catch (SQLException ex) {
+//				}
+//			}
+});
+		
+		
+		
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -359,7 +363,6 @@ public class AuthView {
 		            return;
 		        }
 
-		        String hash = hashPassword(contrasena);
 		       try {
 		            Connection conn = DriverManager.getConnection(
 		                "jdbc:mysql://sql.freedb.tech:3306/freedb_ProyectoControl",
@@ -372,7 +375,7 @@ public class AuthView {
 		            );
 		            stmt.setString(1, usuario);
 		            stmt.setString(2, correo);
-		            stmt.setString(3, hash);
+		            stmt.setString(3, contrasena);
 
 		            stmt.executeUpdate();
 		            stmt.close();
@@ -409,7 +412,6 @@ public class AuthView {
 		            return;
 		        }
 
-		        String hashedPassword = hashPassword(contrasena);
 
 		        try {
 		            Connection conn = DriverManager.getConnection(
@@ -427,7 +429,7 @@ public class AuthView {
 		            if (rs.next()) {
 		                String storedPassword = rs.getString("contrasena");
 
-		                if (storedPassword.equals(hashedPassword)) {
+		                if (storedPassword.equals(contrasena)) {
 		                    JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.");
 		                    AuthView.this.administrador(addScaled);
 		                } else {
@@ -461,24 +463,7 @@ public class AuthView {
 		
 	}
 	
-	private String hashPassword(String password) {
-	    try {
-	        MessageDigest md = MessageDigest.getInstance("SHA-256");
-	        byte[] hash = md.digest(password.getBytes());
-	        StringBuilder hexString = new StringBuilder();
-
-	        for (byte b : hash) {
-	            String hex = Integer.toHexString(0xff & b);
-	            if (hex.length() == 1) hexString.append('0');
-	            hexString.append(hex);
-	        }
-
-	        return hexString.toString();
-
-	    } catch (NoSuchAlgorithmException e) {
-	        throw new RuntimeException(e);
-	    }
-	}
+	
 
 	
 	//===========================================================================================================================
