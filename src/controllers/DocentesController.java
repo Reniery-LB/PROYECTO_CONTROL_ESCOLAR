@@ -15,7 +15,7 @@ public class DocentesController {
 	}
 	
 	public void docentes(Consumer<JComponent> addScaled) {
-		vista.docentes(addScaled);
+		vista.panel_docente(addScaled);
 	}
 
 }

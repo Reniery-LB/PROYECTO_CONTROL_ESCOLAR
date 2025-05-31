@@ -202,6 +202,7 @@ public class GruposView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
 				GruposView.this.grupos_registros(addScaled);	
 			}
 		});
@@ -218,6 +219,7 @@ public class GruposView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
 				GruposView.this.grupos_registros(addScaled);
 			}
 		});
@@ -410,7 +412,6 @@ public class GruposView {
 		btn_volver.setOpaque(false);
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
-	
 	}
 	
 	
@@ -3434,7 +3435,7 @@ public class GruposView {
 		JTextField nombre_grupoField = new JTextField();
 		nombre_grupoField.setText("Ingles");
 		nombre_grupoField.setBackground(Color.decode("#D9D9D9"));
-		nombre_grupoField.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		nombre_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		nombre_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		nombre_grupoField.setBounds(313, 239, 386, 40);
 		nombre_grupoField.setColumns(10);
@@ -3451,7 +3452,7 @@ public class GruposView {
 		docente_grupoField.setText("Reniery Lucero Beltran");
 		docente_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		docente_grupoField.setColumns(10);
-		docente_grupoField.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		docente_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		docente_grupoField.setBackground(new Color(217, 217, 217));
 		docente_grupoField.setBounds(313, 297, 386, 40);
 		addScaled.accept(docente_grupoField);
@@ -3467,7 +3468,7 @@ public class GruposView {
 		ID_grupoField.setText("40");
 		ID_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		ID_grupoField.setColumns(10);
-		ID_grupoField.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		ID_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		ID_grupoField.setBackground(new Color(217, 217, 217));
 		ID_grupoField.setBounds(313, 358, 386, 40);
 		addScaled.accept(ID_grupoField);
@@ -3670,7 +3671,9 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				GruposView.this.grupos(addScaled);
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
@@ -3707,7 +3710,7 @@ public class GruposView {
 		alerta_panel.setOpaque(true);
 		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		
-		JLabel mensajeLabel = new JLabel("¡Grupo creado con éxito!");
+		JLabel mensajeLabel = new JLabel("¡Grupo editado con éxito!");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		mensajeLabel.setBounds(245, 58, 259, 51);
 		alerta_panel.add(mensajeLabel);
@@ -3718,7 +3721,9 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				GruposView.this.grupos(addScaled);
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));

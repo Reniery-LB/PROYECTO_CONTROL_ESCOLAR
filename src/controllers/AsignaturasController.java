@@ -15,7 +15,7 @@ public class AsignaturasController {
 	}
 	
 	public void asignaturas(Consumer<JComponent> addScaled) {
-		vista.asignaturas(addScaled);
+		vista.panel_asignaturas(addScaled);
 	}
 
 }

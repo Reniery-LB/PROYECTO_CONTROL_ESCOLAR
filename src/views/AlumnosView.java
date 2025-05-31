@@ -81,6 +81,337 @@ public class AlumnosView {
 		alumnos(addScaled);
 		ventana.setVisible(true);
 	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void panel_alumno(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.editar_alumno(addScaled);
+			}
+		});
+		btn_editar.setOpaque(true);
+		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar.setIcon(new ImageIcon(getClass().getResource("/img/editar.png")));
+		btn_editar.setBackground(new Color(170, 196, 255));
+		btn_editar.setBounds(1137, 246, 263, 312);
+		addScaled.accept(btn_editar);
+		mipanel.add(btn_editar);
+		
+		JButton btn_editar_label = new JButton("Editar\r\n");
+		btn_editar_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.editar_alumno(addScaled);
+			}
+		});
+		btn_editar_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_editar_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar_label.setBackground(Color.decode("#EEF1FF"));
+		btn_editar_label.setBounds(1137, 556, 263, 58);
+		addScaled.accept(btn_editar_label);
+		mipanel.add(btn_editar_label);
+		
+		JButton btn_crear = new JButton();
+		btn_crear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_alumno(addScaled);	
+			}
+		});
+		btn_crear.setOpaque(true);
+		btn_crear.setIcon(new ImageIcon(getClass().getResource("/img/crear.png")));
+		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear.setBackground(new Color(170, 196, 255));
+		btn_crear.setBounds(800, 246, 263, 312);
+		addScaled.accept(btn_crear);
+		mipanel.add(btn_crear);
+		
+		JButton btn_crear_label = new JButton("Crear");
+		btn_crear_label.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_alumno(addScaled);	
+			}
+		});
+		btn_crear_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_crear_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear_label.setBackground(Color.decode("#EEF1FF"));
+		btn_crear_label.setBounds(800, 556, 263, 58);
+		addScaled.accept(btn_crear_label);
+		mipanel.add(btn_crear_label);
+		
+		JButton btn_detalles = new JButton();
+		btn_detalles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.numero_control(addScaled);
+			}
+		});
+		btn_detalles.setOpaque(true);
+		btn_detalles.setIcon(new ImageIcon(getClass().getResource("/img/detalles.png")));
+		btn_detalles.setBackground(new Color(170, 196, 255));
+		btn_detalles.setHorizontalAlignment(JLabel.CENTER);
+		btn_detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_detalles.setBounds(463, 246, 263, 312);
+		addScaled.accept(btn_detalles);
+		mipanel.add(btn_detalles);
+		
+		JButton btn_detalles_label = new JButton("Detalles de \r\nalumnos");
+		btn_detalles_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.numero_control(addScaled);
+			}
+		});
+		btn_detalles_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_detalles_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_detalles_label.setBackground(Color.decode("#EEF1FF"));
+		btn_detalles_label.setBounds(463, 556, 263, 58);
+		addScaled.accept(btn_detalles_label);
+		mipanel.add(btn_detalles_label);
+		
+		JButton btn_registros = new JButton();
+		btn_registros.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AlumnosView.this.alumnos(addScaled);	
+			}
+		});
+		btn_registros.setOpaque(true);
+		btn_registros.setIcon(new ImageIcon(getClass().getResource("/img/registros.png")));
+		btn_registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_registros.setBackground(new Color(170, 196, 255));
+		btn_registros.setBounds(127, 246, 263, 312);
+		addScaled.accept(btn_registros);
+		mipanel.add(btn_registros);
+		
+		JButton btn_registros_label = new JButton("Registros");
+		btn_registros_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AlumnosView.this.alumnos(addScaled);
+			}
+		});
+		btn_registros_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_registros_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_registros_label.setBackground(Color.decode("#EEF1FF"));
+		btn_registros_label.setBounds(127, 556, 263, 58);
+		addScaled.accept(btn_registros_label);
+		mipanel.add(btn_registros_label);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(640, 101, 266, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.alumnos(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.numero_control(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.añadir_alumno(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+			
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+	}
 	
 	
 	//===========================================================================================================================
@@ -294,9 +625,8 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				opciones_panel.setVisible(false);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -567,7 +897,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alumnos(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -893,7 +1223,7 @@ public class AlumnosView {
 		btn_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
+				AlumnosView.this.editar_alumno(addScaled);
 			}
 		});
 		btn_editar.setText("Editar");
@@ -1151,7 +1481,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.informacion_alumno(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -2985,7 +3315,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));

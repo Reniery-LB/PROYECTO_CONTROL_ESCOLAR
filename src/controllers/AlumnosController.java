@@ -15,7 +15,7 @@ public class AlumnosController {
 	}
 	
 	public void alumnos(Consumer<JComponent> addScaled) {
-		vista.alumnos(addScaled);
+		vista.panel_alumno(addScaled);
 	}
 
 }
