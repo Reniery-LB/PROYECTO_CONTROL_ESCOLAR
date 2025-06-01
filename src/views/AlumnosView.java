@@ -27,10 +27,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import aplication.ScalableUtils;
+import controllers.AlumnosController;
+import controllers.AsignaturasController;
 import controllers.AuthController;
+import controllers.DocentesController;
+import controllers.GruposController;
 
 public class AlumnosView {
-
+	
+	private String origenCredencial;
 	private static final int BASE_ANCHO = 1024;
 	private static final int BASE_ALTURA = 768;
 	private JFrame ventana;
@@ -38,6 +43,7 @@ public class AlumnosView {
 	private JPanel opciones_panel;
 	
 	public AlumnosView() {
+		origenCredencial = "añadir";
 		inicializar();
 	}
 	
@@ -75,12 +81,12 @@ public class AlumnosView {
 		alumnos(addScaled);
 		ventana.setVisible(true);
 	}
-	
+
 	
 	//===========================================================================================================================
 	
 	
-	public void alumnos(Consumer<JComponent> addScaled) {
+	public void panel_alumno(Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -93,15 +99,134 @@ public class AlumnosView {
 		addScaled.accept(logo);
 		mipanel.add(logo);
 		
-		JLabel fondo_barra_2 = new JLabel("Registro alumnos");
-		fondo_barra_2.setOpaque(true);
-		fondo_barra_2.setForeground(Color.WHITE);
-		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
-		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
-		fondo_barra_2.setBackground(Color.decode("#27548A"));
-		fondo_barra_2.setBounds(0, 101, 1540, 102);
-		addScaled.accept(fondo_barra_2);
-		mipanel.add(fondo_barra_2);
+		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.editar_alumno(addScaled);
+			}
+		});
+		btn_editar.setOpaque(true);
+		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar.setIcon(new ImageIcon(getClass().getResource("/img/editar.png")));
+		btn_editar.setBackground(new Color(170, 196, 255));
+		btn_editar.setBounds(1137, 246, 263, 312);
+		addScaled.accept(btn_editar);
+		mipanel.add(btn_editar);
+		
+		JButton btn_editar_label = new JButton("Editar\r\n");
+		btn_editar_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.editar_alumno(addScaled);
+			}
+		});
+		btn_editar_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_editar_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar_label.setBackground(Color.decode("#EEF1FF"));
+		btn_editar_label.setBounds(1137, 556, 263, 58);
+		addScaled.accept(btn_editar_label);
+		mipanel.add(btn_editar_label);
+		
+		JButton btn_crear = new JButton();
+		btn_crear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_alumno(addScaled);	
+			}
+		});
+		btn_crear.setOpaque(true);
+		btn_crear.setIcon(new ImageIcon(getClass().getResource("/img/crear.png")));
+		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear.setBackground(new Color(170, 196, 255));
+		btn_crear.setBounds(800, 246, 263, 312);
+		addScaled.accept(btn_crear);
+		mipanel.add(btn_crear);
+		
+		JButton btn_crear_label = new JButton("Crear");
+		btn_crear_label.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_alumno(addScaled);	
+			}
+		});
+		btn_crear_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_crear_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear_label.setBackground(Color.decode("#EEF1FF"));
+		btn_crear_label.setBounds(800, 556, 263, 58);
+		addScaled.accept(btn_crear_label);
+		mipanel.add(btn_crear_label);
+		
+		JButton btn_detalles = new JButton();
+		btn_detalles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.numero_control(addScaled);
+			}
+		});
+		btn_detalles.setOpaque(true);
+		btn_detalles.setIcon(new ImageIcon(getClass().getResource("/img/detalles.png")));
+		btn_detalles.setBackground(new Color(170, 196, 255));
+		btn_detalles.setHorizontalAlignment(JLabel.CENTER);
+		btn_detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_detalles.setBounds(463, 246, 263, 312);
+		addScaled.accept(btn_detalles);
+		mipanel.add(btn_detalles);
+		
+		JButton btn_detalles_label = new JButton("Detalles de \r\nalumnos");
+		btn_detalles_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.numero_control(addScaled);
+			}
+		});
+		btn_detalles_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_detalles_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_detalles_label.setBackground(Color.decode("#EEF1FF"));
+		btn_detalles_label.setBounds(463, 556, 263, 58);
+		addScaled.accept(btn_detalles_label);
+		mipanel.add(btn_detalles_label);
+		
+		JButton btn_registros = new JButton();
+		btn_registros.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AlumnosView.this.alumnos(addScaled);	
+			}
+		});
+		btn_registros.setOpaque(true);
+		btn_registros.setIcon(new ImageIcon(getClass().getResource("/img/registros.png")));
+		btn_registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_registros.setBackground(new Color(170, 196, 255));
+		btn_registros.setBounds(127, 246, 263, 312);
+		addScaled.accept(btn_registros);
+		mipanel.add(btn_registros);
+		
+		JButton btn_registros_label = new JButton("Registros");
+		btn_registros_label.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AlumnosView.this.alumnos(addScaled);
+			}
+		});
+		btn_registros_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_registros_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_registros_label.setBackground(Color.decode("#EEF1FF"));
+		btn_registros_label.setBounds(127, 556, 263, 58);
+		addScaled.accept(btn_registros_label);
+		mipanel.add(btn_registros_label);
 		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -112,7 +237,15 @@ public class AlumnosView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -189,7 +322,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.editar(addScaled);
+							AlumnosView.this.editar_alumno(addScaled);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -208,13 +341,21 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -224,7 +365,227 @@ public class AlumnosView {
 		addScaled.accept(docentes_barraLabel);
 		mipanel.add(docentes_barraLabel);
 		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+	}
+	
+	
+	//===========================================================================================================================
+	
+	
+	public void alumnos(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel fondo_barra_2 = new JLabel("Registro alumnos");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(0, 101, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		mipanel.add(fondo_barra_2);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(640, 101, 266, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.alumnos(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.numero_control(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.añadir_alumno(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+			
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -264,9 +625,8 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				opciones_panel.setVisible(false);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -375,7 +735,15 @@ public class AlumnosView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -452,7 +820,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.editar(addScaled);
+							AlumnosView.this.editar_alumno(addScaled);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -471,13 +839,21 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -487,7 +863,15 @@ public class AlumnosView {
 		addScaled.accept(docentes_barraLabel);
 		mipanel.add(docentes_barraLabel);
 		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -513,7 +897,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alumnos(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -612,7 +996,15 @@ public class AlumnosView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -684,6 +1076,14 @@ public class AlumnosView {
 					opciones_panel.add(crear);
 					
 					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
 					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -700,13 +1100,21 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -716,7 +1124,15 @@ public class AlumnosView {
 		addScaled.accept(docentes_barraLabel);
 		mipanel.add(docentes_barraLabel);
 		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -786,7 +1202,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
+				AlumnosView.this.credencial_alumno(addScaled);
 			}
 		});
 		btn_credencial.setText("Credencial");
@@ -807,7 +1223,7 @@ public class AlumnosView {
 		btn_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
+				AlumnosView.this.editar_alumno(addScaled);
 			}
 		});
 		btn_editar.setText("Editar");
@@ -903,7 +1319,15 @@ public class AlumnosView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -980,7 +1404,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.editar(addScaled);
+							AlumnosView.this.editar_alumno(addScaled);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -999,13 +1423,21 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1015,7 +1447,15 @@ public class AlumnosView {
 		addScaled.accept(docentes_barraLabel);
 		mipanel.add(docentes_barraLabel);
 		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1041,7 +1481,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.informacion_alumno(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -1084,8 +1524,9 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				origenCredencial = "añadir";
 				opciones_panel.setVisible(false);
-				AlumnosView.this.selecciona_img(addScaled);
+				AlumnosView.this.añadir_credencial(addScaled);
 			}
 		});
 		btn_AñadirCredencial.setText("Añadir credenciales");
@@ -1106,7 +1547,7 @@ public class AlumnosView {
 		btn_crear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.informacion_alumno(addScaled);
+				AlumnosView.this.editar_alumno(addScaled);
 			}
 		});
 		btn_crear.setText("Crear");
@@ -1275,207 +1716,6 @@ public class AlumnosView {
 	//===========================================================================================================================
 	
 	
-	public void editar(Consumer<JComponent> addScaled) {
-		remover();
-		addScaled.accept(opciones_panel);
-		mipanel.add(opciones_panel);
-		
-		JLabel logo = new JLabel();
-		logo.setBackground(Color.decode("#EEF1FF"));
-		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
-		logo.setOpaque(true);
-		logo.setBounds(0, 10, 101, 85);
-		addScaled.accept(logo);
-		mipanel.add(logo);
-		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
-		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
-		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
-		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
-		addScaled.accept(c_escolar_barraLabel);
-		mipanel.add(c_escolar_barraLabel);
-		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
-		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
-		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
-		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		grupos_barraLabel.setBounds(372, 0, 263, 102);
-		addScaled.accept(grupos_barraLabel);
-		mipanel.add(grupos_barraLabel);
-		
-		JButton btn_registro = new JButton();
-		btn_registro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.alumnos(addScaled);
-			}
-		});
-		btn_registro.setText("Registro");
-		btn_registro.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_registro.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_registro.setBackground(new Color(170, 196, 255));
-		btn_registro.setBounds(688, 716, 192, 40);
-		addScaled.accept(btn_registro);
-		mipanel.add(btn_registro);
-		
-		JButton alumnos_barraLabel = new JButton("    Alumnos");
-		alumnos_barraLabel.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.removeAll();
-				opciones_panel.revalidate();
-				opciones_panel.repaint();
-				opciones_panel.setBounds(640, 101, 266, 200);		
-				boolean visible = !opciones_panel.isVisible();
-		
-				opciones_panel.setVisible(visible);
-				
-				if(visible) {
-					
-					JButton registros = new JButton("Registros");
-					registros.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							AlumnosView.this.alumnos(addScaled);
-						}
-						
-					});
-					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					registros.setBackground(Color.decode("#EEF1FF"));
-					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 266, 50);
-					opciones_panel.add(registros);
-					
-					JButton detalles = new JButton("Detalles");
-					detalles.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
-						}
-					});
-					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					detalles.setBackground(Color.decode("#EEF1FF"));
-					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 266, 50);
-					opciones_panel.add(detalles);
-					
-					JButton crear = new JButton("Crear");
-					crear.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							AlumnosView.this.añadir_alumno(addScaled);
-						}
-					});
-					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					crear.setBackground(Color.decode("#EEF1FF"));
-					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 266, 50);
-					opciones_panel.add(crear);
-					
-					JButton editar = new JButton("Editar");
-					editar.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							AlumnosView.this.editar(addScaled);
-						}
-					});
-					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					editar.setBackground(Color.decode("#EEF1FF"));
-					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 266, 50);
-					opciones_panel.add(editar);
-					
-					opciones_panel.revalidate();
-					opciones_panel.repaint();
-				}
-				
-			}
-			
-		});
-		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
-		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
-		alumnos_barraLabel.setBounds(633, 0, 263, 102);
-		addScaled.accept(alumnos_barraLabel);
-		mipanel.add(alumnos_barraLabel);
-		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
-		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
-		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		docentes_barraLabel.setBackground(new Color(238, 241, 255));
-		docentes_barraLabel.setBounds(894, 0, 263, 102);
-		addScaled.accept(docentes_barraLabel);
-		mipanel.add(docentes_barraLabel);
-		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
-		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
-		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
-		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
-		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
-		addScaled.accept(asignaturas_barraLabel);
-		mipanel.add(asignaturas_barraLabel);
-		
-		JLabel fondo_barra = new JLabel();
-		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
-		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
-		fondo_barra.setBackground(Color.decode("#EEF1FF"));
-		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		fondo_barra.setBounds(0, 0, 1540, 102);
-		fondo_barra.setOpaque(true);
-		addScaled.accept(fondo_barra);
-		mipanel.add(fondo_barra);
-		
-		JButton btn_volver = new JButton("Volver");
-		btn_volver.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.alumnos(addScaled);
-			}
-		});
-		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
-		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_volver.setHorizontalAlignment(JLabel.LEFT);
-		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
-		btn_volver.setForeground(Color.WHITE);
-		btn_volver.setBackground(new Color(238, 241, 255));
-		btn_volver.setBounds(10, 716, 263, 58);
-		btn_volver.setOpaque(false);
-		addScaled.accept(btn_volver);
-		mipanel.add(btn_volver);
-		
-		JLabel titulo = new JLabel("EDITAR");
-		titulo.setHorizontalAlignment(JLabel.CENTER);
-		titulo.setFont(new Font("SansSerif", Font.PLAIN, 98));
-		titulo.setBounds(476, 272, 590, 387);
-		addScaled.accept(titulo);
-		mipanel.add(titulo);
-	}
-
-	
-	//===========================================================================================================================
-	
-	
 	public void alerta_DescargarCredencial(Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
 	    dialogo.setLayout(null);
@@ -1564,7 +1804,6 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
 			}
 		});
 		btn_volver.setText("Volver");
@@ -1609,7 +1848,15 @@ public class AlumnosView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -1686,7 +1933,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.editar(addScaled);
+							AlumnosView.this.editar_alumno(addScaled);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1705,13 +1952,21 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1721,7 +1976,15 @@ public class AlumnosView {
 		addScaled.accept(docentes_barraLabel);
 		mipanel.add(docentes_barraLabel);
 		
-		JLabel asignaturas_barraLabel = new JLabel(" Asignaturas");
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1747,7 +2010,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_alumno(addScaled);
+				AlumnosView.this.añadir_credencial(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -1883,6 +2146,10 @@ public class AlumnosView {
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
 	}
+
+	
+	//===========================================================================================================================
+	
 	
 	public void confirmar_imgColocada(Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
@@ -1922,6 +2189,1543 @@ public class AlumnosView {
 		JLabel alerta_img = new JLabel();
 		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
 		alerta_img.setBounds(339, 97, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void credencial_alumno(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel fondo_barra_2 = new JLabel("Credencial del Alumno");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(0, 101, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		mipanel.add(fondo_barra_2);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(640, 101, 266, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.alumnos(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.numero_control(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.añadir_alumno(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+			
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.informacion_alumno(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+		
+		JLabel credencial = new JLabel("CREDENCIAL ESTUDIANTIL");
+		credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		credencial.setBounds(635, 222, 296, 29);
+		addScaled.accept(credencial);
+		mipanel.add(credencial);
+		
+		JLabel alumno = new JLabel("Alumno:    Zahir Fernando Diaz Barrera");
+		alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumno.setBounds(812, 323, 396, 29);
+		addScaled.accept(alumno);
+		mipanel.add(alumno);
+		
+		JButton btn_credencial = new JButton();
+		btn_credencial.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+			}
+		});
+		btn_credencial.setText("Descargar credencial");
+		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_credencial.setBackground(new Color(170, 196, 255));
+		btn_credencial.setBounds(1230, 641, 238, 40);
+		addScaled.accept(btn_credencial);
+		mipanel.add(btn_credencial);
+		
+		JButton btn_editar = new JButton();
+		btn_editar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_credencial(addScaled);
+			}
+		});
+		btn_editar.setText("Editar");
+		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_editar.setBackground(new Color(170, 196, 255));
+		btn_editar.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_editar);
+		mipanel.add(btn_editar);
+		
+		JLabel numero_control = new JLabel("Número de control:    28");
+		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_control.setBounds(705, 370, 263, 29);
+		addScaled.accept(numero_control);
+		mipanel.add(numero_control);
+		
+		JLabel carrera = new JLabel("Carrera:    Ingeniería en desarrollo de software");
+		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		carrera.setBounds(810, 471, 467, 29);
+		addScaled.accept(carrera);
+		mipanel.add(carrera);
+		
+		JLabel grado_alumno = new JLabel("Grado del alumno:    5to Semestre\r\n");
+		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grado_alumno.setBounds(714, 421, 417, 29);
+		addScaled.accept(grado_alumno);
+		mipanel.add(grado_alumno);
+		
+		JLabel numero_telefono = new JLabel("Número de teléfono:    55-555-5555");
+		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_telefono.setBounds(693, 530, 366, 29);
+		addScaled.accept(numero_telefono);
+		mipanel.add(numero_telefono);
+		
+		JLabel ingeniero = new JLabel("Ingeniero");
+		ingeniero.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		ingeniero.setBounds(152, 510, 101, 29);
+		addScaled.accept(ingeniero);
+		mipanel.add(ingeniero);
+		
+		JLabel img_alumno = new JLabel();
+		img_alumno.setOpaque(true);
+		img_alumno.setBackground(new Color(192, 192, 192));
+		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
+		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		img_alumno.setHorizontalAlignment(JLabel.CENTER);
+		img_alumno.setBounds(116, 323, 157, 177);
+		addScaled.accept(img_alumno);
+		mipanel.add(img_alumno);
+		
+		
+		JLabel logo_credencial = new JLabel();
+		logo_credencial.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo_credencial.setBounds(1390, 199, 91, 115);
+		addScaled.accept(logo_credencial);
+		mipanel.add(logo_credencial);
+		
+		JLabel fondo_grupo = new JLabel();
+		fondo_grupo.setBackground(new Color(255, 255, 255));
+		fondo_grupo.setOpaque(true);
+		fondo_grupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_grupo.setBounds(56, 210, 1435, 480);
+		addScaled.accept(fondo_grupo);
+		mipanel.add(fondo_grupo);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+	public void alerta_IrGrupos(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea dirigirse a la sección \"Grupos\"?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(170, 10, 414, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_aceptar = new JButton();
+		btn_aceptar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				ventana.dispose();
+				GruposController ac = new GruposController();
+				ac.grupos(addScaled);
+			}
+		});
+		btn_aceptar.setText("Aceptar");
+		btn_aceptar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_aceptar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_aceptar.setBackground(new Color(170, 196, 255));
+		btn_aceptar.setBounds(435, 250, 192, 40);
+		alerta_panel.add(btn_aceptar);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_no.setText("No, volver");
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(170, 196, 255));
+		btn_no.setBounds(125, 250, 192, 40);
+		alerta_panel.add(btn_no);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+	public void alerta_IrDocentes(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea dirigirse a la sección \"Docentes\"?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(167, 10, 414, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_aceptar = new JButton();
+		btn_aceptar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				ventana.dispose();
+				DocentesController dc = new DocentesController();
+				dc.docentes(addScaled);
+			}
+		});
+		btn_aceptar.setText("Aceptar");
+		btn_aceptar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_aceptar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_aceptar.setBackground(new Color(170, 196, 255));
+		btn_aceptar.setBounds(435, 250, 192, 40);
+		alerta_panel.add(btn_aceptar);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_no.setText("No, volver");
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(170, 196, 255));
+		btn_no.setBounds(125, 250, 192, 40);
+		alerta_panel.add(btn_no);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+	public void alerta_IrAsignaturas(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea dirigirse a la sección \"Asignaturas\"?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(167, 10, 440, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_aceptar = new JButton();
+		btn_aceptar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				ventana.dispose();
+				AsignaturasController ac = new AsignaturasController();
+				ac.asignaturas(addScaled);
+			}
+		});
+		btn_aceptar.setText("Aceptar");
+		btn_aceptar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_aceptar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_aceptar.setBackground(new Color(170, 196, 255));
+		btn_aceptar.setBounds(435, 250, 192, 40);
+		alerta_panel.add(btn_aceptar);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_no.setText("No, volver");
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(170, 196, 255));
+		btn_no.setBounds(125, 250, 192, 40);
+		alerta_panel.add(btn_no);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void añadir_credencial(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel fondo_barra_2 = new JLabel("Credencial del Alumno");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(0, 101, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		mipanel.add(fondo_barra_2);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(640, 101, 266, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.alumnos(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.numero_control(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.añadir_alumno(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+			
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				if(origenCredencial.equals("añadir")) {
+					AlumnosView.this.añadir_alumno(addScaled);					
+				} else {
+					AlumnosView.this.editar_alumno(addScaled);
+				}
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+		
+		JLabel credencial = new JLabel("CREDENCIAL ESTUDIANTIL");
+		credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		credencial.setBounds(635, 222, 296, 29);
+		addScaled.accept(credencial);
+		mipanel.add(credencial);
+		
+		JLabel alumno = new JLabel("Alumno:");
+		alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumno.setBounds(812, 323, 83, 29);
+		addScaled.accept(alumno);
+		mipanel.add(alumno);
+		
+		JButton btn_imagen = new JButton();
+		btn_imagen.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.selecciona_img(addScaled);
+			}
+		});
+		btn_imagen.setText("Imagen");
+		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_imagen.setBackground(new Color(170, 196, 255));
+		btn_imagen.setBounds(116, 273, 157, 40);
+		addScaled.accept(btn_imagen);
+		mipanel.add(btn_imagen);
+		
+		JButton btn_añadir = new JButton();
+		btn_añadir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_añadir.setText("Añadir");
+		btn_añadir.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_añadir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_añadir.setBackground(new Color(170, 196, 255));
+		btn_añadir.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_añadir);
+		mipanel.add(btn_añadir);
+		
+		JLabel numero_control = new JLabel("Número de control:");
+		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_control.setBounds(705, 370, 192, 29);
+		addScaled.accept(numero_control);
+		mipanel.add(numero_control);
+		
+		JLabel carrera = new JLabel("Carrera:");
+		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		carrera.setBounds(810, 471, 86, 29);
+		addScaled.accept(carrera);
+		mipanel.add(carrera);
+		
+		JLabel grado_alumno = new JLabel("Grado del alumno:");
+		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grado_alumno.setBounds(714, 421, 184, 29);
+		addScaled.accept(grado_alumno);
+		mipanel.add(grado_alumno);
+		
+		JLabel numero_telefono = new JLabel("Número de teléfono:");
+		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_telefono.setBounds(693, 530, 201, 29);
+		addScaled.accept(numero_telefono);
+		mipanel.add(numero_telefono);
+		
+		JLabel profesion = new JLabel("Profesión:");
+		profesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		profesion.setBounds(152, 510, 101, 29);
+		addScaled.accept(profesion);
+		mipanel.add(profesion);
+		
+		JLabel img_alumno = new JLabel();
+		img_alumno.setOpaque(true);
+		img_alumno.setBackground(new Color(192, 192, 192));
+		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
+		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		img_alumno.setHorizontalAlignment(JLabel.CENTER);
+		img_alumno.setBounds(116, 323, 157, 177);
+		addScaled.accept(img_alumno);
+		mipanel.add(img_alumno);
+		
+		JLabel logo_credencial = new JLabel();
+		logo_credencial.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo_credencial.setBounds(1390, 199, 91, 115);
+		addScaled.accept(logo_credencial);
+		mipanel.add(logo_credencial);
+		
+		JTextField profesionField = new JTextField();
+		profesionField.setBackground(Color.decode("#D9D9D9"));
+		profesionField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		profesionField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		profesionField.setBounds(116, 549, 157, 40);
+		profesionField.setColumns(10);
+		addScaled.accept(profesionField);
+		mipanel.add(profesionField);
+		
+		JTextField alumnoField = new JTextField();
+		alumnoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		alumnoField.setColumns(10);
+		alumnoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		alumnoField.setBackground(new Color(217, 217, 217));
+		alumnoField.setBounds(905, 319, 417, 40);
+		addScaled.accept(alumnoField);
+		mipanel.add(alumnoField);
+		
+		JTextField n_controlField = new JTextField();
+		n_controlField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		n_controlField.setColumns(10);
+		n_controlField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		n_controlField.setBackground(new Color(217, 217, 217));
+		n_controlField.setBounds(905, 366, 417, 40);
+		addScaled.accept(n_controlField);
+		mipanel.add(n_controlField);
+		
+		JTextField gradoField = new JTextField();
+		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		gradoField.setColumns(10);
+		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		gradoField.setBackground(new Color(217, 217, 217));
+		gradoField.setBounds(905, 417, 417, 40);
+		addScaled.accept(gradoField);
+		mipanel.add(gradoField);
+		
+		JTextField carreraField = new JTextField();
+		carreraField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		carreraField.setColumns(10);
+		carreraField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		carreraField.setBackground(new Color(217, 217, 217));
+		carreraField.setBounds(905, 467, 417, 40);
+		addScaled.accept(carreraField);
+		mipanel.add(carreraField);
+		
+		JTextField n_telefonoField = new JTextField();
+		n_telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		n_telefonoField.setColumns(10);
+		n_telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		n_telefonoField.setBackground(new Color(217, 217, 217));
+		n_telefonoField.setBounds(905, 519, 417, 40);
+		addScaled.accept(n_telefonoField);
+		mipanel.add(n_telefonoField);
+		
+		JLabel fondo_grupo = new JLabel();
+		fondo_grupo.setBackground(new Color(255, 255, 255));
+		fondo_grupo.setOpaque(true);
+		fondo_grupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_grupo.setBounds(56, 210, 1435, 480);
+		addScaled.accept(fondo_grupo);
+		mipanel.add(fondo_grupo);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void alerta_añadirAlumno(Consumer<JComponent> addScaled) {
+	   JDialog dialogo = new JDialog(ventana, "Éxito", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Alumno añadido con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(232, 10, 272, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel administrador\r\n");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(334, 113, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void editar_alumno(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel fondo_barra_2 = new JLabel("Editar Alumno");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(0, 101, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		mipanel.add(fondo_barra_2);
+		
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(640, 101, 266, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.alumnos(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 266, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.numero_control(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 266, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.añadir_alumno(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 266, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AlumnosView.this.editar_alumno(addScaled);
+						}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 266, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+			
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrDocentes(addScaled);
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_IrAsignaturas(addScaled);
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.panel_alumno(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+		
+		JLabel numero_control = new JLabel("Número de control: \r\n");
+		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_control.setBounds(111, 243, 218, 29);
+		addScaled.accept(numero_control);
+		mipanel.add(numero_control);
+		
+		JLabel apellido_paterno = new JLabel("Apellido paterno: ");
+		apellido_paterno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		apellido_paterno.setBounds(133, 290, 196, 29);
+		addScaled.accept(apellido_paterno);
+		mipanel.add(apellido_paterno);
+		
+		JLabel nombres = new JLabel("Nombres: ");
+		nombres.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		nombres.setBounds(200, 386, 129, 29);
+		addScaled.accept(nombres);
+		mipanel.add(nombres);
+		
+		JLabel correo_electronico = new JLabel("Correo electrónico: ");
+		correo_electronico.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		correo_electronico.setBounds(111, 482, 218, 29);
+		addScaled.accept(correo_electronico);
+		mipanel.add(correo_electronico);
+		
+		JButton btn_AñadirCredencial = new JButton();
+		btn_AñadirCredencial.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				origenCredencial = "editar";
+				opciones_panel.setVisible(false);
+				AlumnosView.this.añadir_credencial(addScaled);
+			}
+		});
+		btn_AñadirCredencial.setText("Añadir credenciales");
+		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
+		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
+		addScaled.accept(btn_AñadirCredencial);
+		mipanel.add(btn_AñadirCredencial);
+		
+		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
+		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		fecha_nacimiento.setBounds(90, 434, 239, 29);
+		addScaled.accept(fecha_nacimiento);
+		mipanel.add(fecha_nacimiento);
+		
+		JButton btn_guardar = new JButton();
+		btn_guardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.confirmar_crearAlumno(addScaled);
+			}
+		});
+		btn_guardar.setText("Guardar");
+		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_guardar.setBackground(new Color(170, 196, 255));
+		btn_guardar.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_guardar);
+		mipanel.add(btn_guardar);
+		
+		JLabel apellido_materno = new JLabel("Apellido materno: \r\n");
+		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		apellido_materno.setBounds(127, 338, 202, 29);
+		addScaled.accept(apellido_materno);
+		mipanel.add(apellido_materno);
+		
+		JLabel carrera = new JLabel("Carrera: ");
+		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		carrera.setBounds(216, 530, 113, 29);
+		addScaled.accept(carrera);
+		mipanel.add(carrera);
+		
+		JLabel grado_alumno = new JLabel("Grado del alumno: \r\n");
+		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grado_alumno.setBounds(119, 578, 210, 29);
+		addScaled.accept(grado_alumno);
+		mipanel.add(grado_alumno);
+		
+		JLabel numero_telefono = new JLabel("Número de teléfono: ");
+		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		numero_telefono.setBounds(99, 626, 218, 29);
+		addScaled.accept(numero_telefono);
+		mipanel.add(numero_telefono);
+		
+		JLabel perfil_alumno = new JLabel("Perfil Alumno");
+		perfil_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		perfil_alumno.setBounds(1247, 495, 143, 29);
+		addScaled.accept(perfil_alumno);
+		mipanel.add(perfil_alumno);
+		
+		JLabel img_alumno = new JLabel();
+		img_alumno.setOpaque(true);
+		img_alumno.setBackground(new Color(192, 192, 192));
+		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
+		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		img_alumno.setHorizontalAlignment(JLabel.CENTER);
+		img_alumno.setBounds(1236, 292, 157, 177);
+		addScaled.accept(img_alumno);
+		mipanel.add(img_alumno);
+		
+		JTextField numero_controlField = new JTextField();
+		numero_controlField.setBackground(Color.decode("#D9D9D9"));
+		numero_controlField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		numero_controlField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		numero_controlField.setBounds(311, 239, 453, 40);
+		numero_controlField.setColumns(10);
+		addScaled.accept(numero_controlField);
+		mipanel.add(numero_controlField);
+		
+		JTextField apField = new JTextField();
+		apField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		apField.setColumns(10);
+		apField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		apField.setBackground(new Color(217, 217, 217));
+		apField.setBounds(311, 287, 453, 40);
+		addScaled.accept(apField);
+		mipanel.add(apField);
+		
+		JTextField amField = new JTextField();
+		amField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		amField.setColumns(10);
+		amField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		amField.setBackground(new Color(217, 217, 217));
+		amField.setBounds(311, 335, 453, 40);
+		addScaled.accept(amField);
+		mipanel.add(amField);
+		
+		JTextField nombresField = new JTextField();
+		nombresField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		nombresField.setColumns(10);
+		nombresField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		nombresField.setBackground(new Color(217, 217, 217));
+		nombresField.setBounds(311, 383, 453, 40);
+		addScaled.accept(nombresField);
+		mipanel.add(nombresField);
+		
+		JTextField carreraField = new JTextField();
+		carreraField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		carreraField.setColumns(10);
+		carreraField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		carreraField.setBackground(new Color(217, 217, 217));
+		carreraField.setBounds(311, 527, 453, 40);
+		addScaled.accept(carreraField);
+		mipanel.add(carreraField);
+		
+		JTextField correoField = new JTextField();
+		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		correoField.setColumns(10);
+		correoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		correoField.setBackground(new Color(217, 217, 217));
+		correoField.setBounds(311, 479, 453, 40);
+		addScaled.accept(correoField);
+		mipanel.add(correoField);
+		
+		JComboBox dia = new JComboBox(new Object[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"});
+		dia.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		dia.setBounds(311, 434, 59, 32);
+		addScaled.accept(dia);
+		mipanel.add(dia);
+		
+		JComboBox mes = new JComboBox(new Object[]{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"});
+		mes.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		mes.setBounds(380, 434, 59, 32);
+		addScaled.accept(mes);
+		mipanel.add(mes);
+		
+		JComboBox año = new JComboBox(new Object[]{"2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997"});
+		año.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		año.setBounds(449, 434, 85, 32);
+		addScaled.accept(año);
+		mipanel.add(año);
+		
+		JTextField gradoField = new JTextField();
+		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		gradoField.setColumns(10);
+		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		gradoField.setBackground(new Color(217, 217, 217));
+		gradoField.setBounds(311, 575, 453, 40);
+		addScaled.accept(gradoField);
+		mipanel.add(gradoField);
+		
+		JTextField telefonoField = new JTextField();
+		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		telefonoField.setColumns(10);
+		telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		telefonoField.setBackground(new Color(217, 217, 217));
+		telefonoField.setBounds(311, 623, 453, 40);
+		addScaled.accept(telefonoField);
+		mipanel.add(telefonoField);
+		
+		JButton btn_DescargarCredencial = new JButton();
+		btn_DescargarCredencial.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+			}
+		});
+		btn_DescargarCredencial.setText("Descargar credenciales");
+		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
+		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
+		addScaled.accept(btn_DescargarCredencial);
+		mipanel.add(btn_DescargarCredencial);
+		
+		JButton btn_basura = new JButton();
+		btn_basura.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.alerta_eliminar(addScaled);
+			}
+		});
+		btn_basura.setOpaque(false);
+		btn_basura.setIcon(new ImageIcon(getClass().getResource("/img/basura.png")));
+		btn_basura.setHorizontalAlignment(SwingConstants.LEFT);
+		btn_basura.setForeground(Color.WHITE);
+		btn_basura.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_basura.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_basura.setBackground(new Color(238, 241, 255));
+		btn_basura.setBounds(1447, 700, 65, 74);
+		addScaled.accept(btn_basura);
+		mipanel.add(btn_basura);
+		
+		JLabel fondo_grupo = new JLabel();
+		fondo_grupo.setBackground(new Color(255, 255, 255));
+		fondo_grupo.setOpaque(true);
+		fondo_grupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_grupo.setBounds(56, 210, 1435, 480);
+		addScaled.accept(fondo_grupo);
+		mipanel.add(fondo_grupo);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void alerta_eliminar(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea eliminar este alumno?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(227, 10, 320, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_si = new JButton();
+		btn_si.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();	
+				AlumnosView.this.confirmar_eliminarAlumno(addScaled);
+			}
+		});
+		btn_si.setForeground(new Color(255, 255, 255));
+		btn_si.setText("Si");
+		btn_si.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_si.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_si.setBackground(Color.decode("#02A115"));
+		btn_si.setBounds(410, 250, 123, 40);
+		alerta_panel.add(btn_si);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/alerta.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();	
+			}
+		});
+		btn_no.setText("No");
+		btn_no.setForeground(Color.WHITE);
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(255, 0, 0));
+		btn_no.setBounds(215, 250, 123, 40);
+		alerta_panel.add(btn_no);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	
+	//===========================================================================================================================
+
+	
+	public void confirmar_eliminarAlumno(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Alumno eliminado con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(231, 43, 324, 51);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel de administrador");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
+		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		mensajeLabel_1.setBounds(256, 63, 230, 65);
+		alerta_panel.add(mensajeLabel_1);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void confirmar_crearAlumno(Consumer<JComponent> addScaled) {
+	   JDialog dialogo = new JDialog(ventana, "Éxito", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Alumno editado con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(232, 10, 272, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel administrador\r\n");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(334, 113, 70, 84);
 		alerta_panel.add(alerta_img);
 		
 		dialogo.add(alerta_panel);
