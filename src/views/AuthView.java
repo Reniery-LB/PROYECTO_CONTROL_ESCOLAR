@@ -146,15 +146,15 @@ public class AuthView {
 
 		JButton acceder_btn = new JButton("Acceder");
 		acceder_btn.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AuthView.this.administrador(addScaled);
-//			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AuthView.this.administrador(addScaled);
+			}
 			
 			
-			
+			/*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
@@ -188,7 +188,7 @@ public class AuthView {
 
 				} catch (SQLException ex) {
 				}
-		}
+		}*/
 });
 		
 		
@@ -341,7 +341,7 @@ public class AuthView {
 		acceder_btn.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        String usuario = usuario_field.getText().trim();
+		       String usuario = usuario_field.getText().trim();
 		        String correo = correo_field.getText().trim();
 		        String contrasena = new String(contra_field.getPassword());
 		        String confirmar = new String(confirmar_field.getPassword());
