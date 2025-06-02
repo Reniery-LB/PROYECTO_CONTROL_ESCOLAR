@@ -1197,6 +1197,7 @@ public class AlumnosView {
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(111, 243, 222, 29);
 		addScaled.accept(numero_control);
+		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
 		JLabel apellido_paterno = new JLabel("Apellido paterno: " +alumno.getPrimer_apellido());
@@ -1223,7 +1224,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.credencial_alumno(addScaled);
+				AlumnosView.this.credencial_alumno(alumno ,addScaled);
 			}
 		});
 		btn_credencial.setText("Credencial");
@@ -1737,7 +1738,7 @@ public class AlumnosView {
 				 String nombre = nombresField.getText();
 				 String primer_apellido = apField.getText();
 				 String segundo_apellido = amField.getText();
-				 Date fecha_nacimiento = fechaNacimiento1.valueOf(fechaNacimientoStr);
+				 Date fecha_nacimiento = Date.valueOf(fechaNacimientoStr);
 				 String correo_electronico = correoField.getText();
 				 String grado_alumno = gradoField.getText();
 				 String no_telefono = telefonoField.getText();
@@ -2245,7 +2246,7 @@ public class AlumnosView {
 	//===========================================================================================================================
 	
 	
-	public void credencial_alumno(Consumer<JComponent> addScaled) {
+	public void credencial_alumno(Alumno alumno, Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);

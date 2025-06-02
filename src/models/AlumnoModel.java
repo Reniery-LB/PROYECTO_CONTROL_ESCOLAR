@@ -48,7 +48,7 @@ public class AlumnoModel {
 				 
 				System.out.println(""); 
 				
-				alumnos.add(new Alumno(id,nombre,primer_apellido,segundo_apellido,fecha,correo,grado,no_telefono,carrera));
+				alumnos.add(new Alumno(id,no_control,nombre,primer_apellido,segundo_apellido,fecha,correo,grado,no_telefono,carrera));
 			}
 			
 			rs.close();
@@ -164,12 +164,14 @@ public class AlumnoModel {
 		         PreparedStatement stmt = conn.prepareStatement(query)) {
 
 		        stmt.setInt(1, noControl);
+		        System.out.println("Buscando alumno con no_control = " + noControl);
+
 		        ResultSet rs = stmt.executeQuery();
 
 		        if (rs.next()) {
 		            alumno = new Alumno(
+		                rs.getInt("idAlumno"),
 		                rs.getInt("no_control"),
-		            
 		                rs.getString("nombre"),
 		                rs.getString("primer_apellido"),
 		                rs.getString("segundo_apellido"),
