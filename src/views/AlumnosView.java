@@ -968,7 +968,7 @@ public class AlumnosView {
 			            if (alumno != null) {
 			            	
 			            	if(origen.equals("editar")) {
-			            		editar_alumno(addScaled);
+			            		editar_alumno(alumno,addScaled);
 			            	} else {
 			            		informacion_alumno(alumno, addScaled); 			            		
 			            	}
@@ -1770,7 +1770,7 @@ public class AlumnosView {
 				 String no_telefono = telefonoField.getText();
 				 String carrera = carreraField.getText();
 				 
-				 am.insert(no_control, nombre, primer_apellido, nombre, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
+				 am.insert(no_control, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
 				AlumnosView.this.confirmar_alumnoCreado(addScaled);
 			}
 		});
@@ -2537,7 +2537,7 @@ public class AlumnosView {
 		addScaled.accept(credencial);
 		mipanel.add(credencial);
 		
-		JLabel alumnoLabel = new JLabel("Alumno:    Zahir Fernando Diaz Barrera");
+		JLabel alumnoLabel = new JLabel("Alumno: " + alumno.getNombre() + " " + alumno.getPrimer_apellido() + " " + alumno.getSegundo_apellido());
 		alumnoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		alumnoLabel.setBounds(812, 323, 396, 29);
 		addScaled.accept(alumnoLabel);
@@ -2575,25 +2575,25 @@ public class AlumnosView {
 		addScaled.accept(btn_editar);
 		mipanel.add(btn_editar);
 		
-		JLabel numero_control = new JLabel("Número de control:    28");
+		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(705, 370, 263, 29);
 		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
-		JLabel carrera = new JLabel("Carrera:    Ingeniería en desarrollo de software");
+		JLabel carrera = new JLabel("Carrera: "+ alumno.getCarrera());
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(810, 471, 467, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
-		JLabel grado_alumno = new JLabel("Grado del alumno:    5to Semestre\r\n");
+		JLabel grado_alumno = new JLabel("Grado del alumno:  " + alumno.getGrado_alumno() + " Semestre");
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		grado_alumno.setBounds(714, 421, 417, 29);
 		addScaled.accept(grado_alumno);
 		mipanel.add(grado_alumno);
 		
-		JLabel numero_telefono = new JLabel("Número de teléfono:    55-555-5555");
+		JLabel numero_telefono = new JLabel("Número de teléfono:  " + alumno.getNo_telefono());
 		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_telefono.setBounds(693, 530, 366, 29);
 		addScaled.accept(numero_telefono);
@@ -3246,7 +3246,7 @@ public class AlumnosView {
 	//===========================================================================================================================
 	
 	
-	public void editar_alumno(Consumer<JComponent> addScaled) {
+	public void editar_alumno(Alumno alumno, Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -3455,7 +3455,7 @@ public class AlumnosView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JLabel numero_control = new JLabel("Número de control: \r\n");
+		JLabel numero_control = new JLabel("Número de control: ");
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(111, 243, 218, 29);
 		addScaled.accept(numero_control);
@@ -3467,13 +3467,13 @@ public class AlumnosView {
 		addScaled.accept(apellido_paterno);
 		mipanel.add(apellido_paterno);
 		
-		JLabel nombres = new JLabel("Nombres: ");
+		JLabel nombres = new JLabel("Nombres: " );
 		nombres.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		nombres.setBounds(200, 386, 129, 29);
 		addScaled.accept(nombres);
 		mipanel.add(nombres);
 		
-		JLabel correo_electronico = new JLabel("Correo electrónico: ");
+		JLabel correo_electronico = new JLabel("Correo electrónico: " );
 		correo_electronico.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		correo_electronico.setBounds(111, 482, 218, 29);
 		addScaled.accept(correo_electronico);
@@ -3497,7 +3497,7 @@ public class AlumnosView {
 		addScaled.accept(btn_AñadirCredencial);
 		mipanel.add(btn_AñadirCredencial);
 		
-		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
+		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: " );
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		fecha_nacimiento.setBounds(90, 434, 239, 29);
 		addScaled.accept(fecha_nacimiento);
@@ -3518,19 +3518,19 @@ public class AlumnosView {
 		addScaled.accept(btn_guardar);
 		mipanel.add(btn_guardar);
 		
-		JLabel apellido_materno = new JLabel("Apellido materno: \r\n");
+		JLabel apellido_materno = new JLabel("Apellido materno: " );
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		apellido_materno.setBounds(127, 338, 202, 29);
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Carrera: ");
+		JLabel carrera = new JLabel("Carrera: " );
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 530, 113, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
-		JLabel grado_alumno = new JLabel("Grado del alumno: \r\n");
+		JLabel grado_alumno = new JLabel("Grado del alumno: ");
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		grado_alumno.setBounds(119, 578, 210, 29);
 		addScaled.accept(grado_alumno);
@@ -3558,7 +3558,9 @@ public class AlumnosView {
 		addScaled.accept(img_alumno);
 		mipanel.add(img_alumno);
 		
-		JTextField numero_controlField = new JTextField();
+		int telefono = alumno.getNo_control();
+		
+		JTextField numero_controlField = new JTextField(String.valueOf(telefono));
 		numero_controlField.setBackground(Color.decode("#D9D9D9"));
 		numero_controlField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		numero_controlField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3568,7 +3570,7 @@ public class AlumnosView {
 		addScaled.accept(numero_controlField);
 		mipanel.add(numero_controlField);
 		
-		JTextField apField = new JTextField();
+		JTextField apField = new JTextField(alumno.getPrimer_apellido());
 		apField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		apField.setColumns(10);
 		apField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3578,7 +3580,7 @@ public class AlumnosView {
 		addScaled.accept(apField);
 		mipanel.add(apField);
 		
-		JTextField amField = new JTextField();
+		JTextField amField = new JTextField(alumno.getSegundo_apellido());
 		amField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		amField.setColumns(10);
 		amField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3588,7 +3590,7 @@ public class AlumnosView {
 		addScaled.accept(amField);
 		mipanel.add(amField);
 		
-		JTextField nombresField = new JTextField();
+		JTextField nombresField = new JTextField(alumno.getNombre());
 		nombresField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		nombresField.setColumns(10);
 		nombresField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3598,7 +3600,7 @@ public class AlumnosView {
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
-		JTextField carreraField = new JTextField();
+		JTextField carreraField = new JTextField(alumno.getCarrera());
 		carreraField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		carreraField.setColumns(10);
 		carreraField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3607,7 +3609,7 @@ public class AlumnosView {
 		addScaled.accept(carreraField);
 		mipanel.add(carreraField);
 		
-		JTextField correoField = new JTextField();
+		JTextField correoField = new JTextField(alumno.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		correoField.setColumns(10);
 		correoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3634,7 +3636,7 @@ public class AlumnosView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
-		JTextField gradoField = new JTextField();
+		JTextField gradoField = new JTextField(alumno.getGrado_alumno());
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		gradoField.setColumns(10);
 		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -3644,7 +3646,10 @@ public class AlumnosView {
 		addScaled.accept(gradoField);
 		mipanel.add(gradoField);
 		
-		JTextField telefonoField = new JTextField();
+		Long numero = alumno.getNo_telefono();
+		
+		
+		JTextField telefonoField = new JTextField(String.valueOf(numero));
 		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		telefonoField.setColumns(10);
 		telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));

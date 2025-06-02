@@ -114,9 +114,9 @@ public class AlumnoModel {
 			  ps = conn.prepareStatement(query);
 			
 			  ps.setString(1, no_control);
-			  ps.setString(2, nombres);
-			  ps.setString(3, apellido_paterno);
-			  ps.setString(4, apellido_materno);
+			  ps.setString(2, apellido_paterno);
+			  ps.setString(3, apellido_materno);
+			  ps.setString(4, nombres);
 			  ps.setDate(5, new java.sql.Date(fecha_nacimiento.getTime()));
 			  ps.setString(6, correo);
 			  ps.setString(7, grado);
