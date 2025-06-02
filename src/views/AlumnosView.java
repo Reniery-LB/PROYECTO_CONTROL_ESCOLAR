@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -928,22 +929,6 @@ public class AlumnosView {
 		addScaled.accept(titulo);
 		mipanel.add(titulo);
 		
-		JButton btn_acceder = new JButton();
-		btn_acceder.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.informacion_alumno(addScaled);
-			}
-		});
-		btn_acceder.setText("Acceder");
-		btn_acceder.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_acceder.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_acceder.setBackground(new Color(170, 196, 255));
-		btn_acceder.setBounds(688, 601, 192, 40);
-		addScaled.accept(btn_acceder);
-		mipanel.add(btn_acceder);
 		
 		JLabel numero_control = new JLabel("Ingrese el número de control");
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -961,6 +946,33 @@ public class AlumnosView {
 		addScaled.accept(ncField);
 		mipanel.add(ncField);
 		
+		JButton btn_acceder = new JButton();
+		btn_acceder.addActionListener(new ActionListener() {
+			
+			 public void actionPerformed(ActionEvent e) {
+			        try {
+			        	int noControl = Integer.parseInt(ncField.getText());
+			            Alumno alumno = AlumnoModel.busca_alumno(noControl); 
+			          
+
+			            if (alumno != null) {
+			                informacion_alumno(alumno, addScaled); 
+			            } else {
+			                JOptionPane.showMessageDialog(null, "Alumno no encontrado.");
+			            }
+			        } catch (NumberFormatException ex) {
+			            JOptionPane.showMessageDialog(null, "Número de control inválido.");
+			        }
+			    }
+		});
+		btn_acceder.setText("Acceder");
+		btn_acceder.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_acceder.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_acceder.setBackground(new Color(170, 196, 255));
+		btn_acceder.setBounds(688, 601, 192, 40);
+		addScaled.accept(btn_acceder);
+		mipanel.add(btn_acceder);
+		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
 		fondo_grupo.setOpaque(true);
@@ -973,7 +985,7 @@ public class AlumnosView {
 	
 	//===========================================================================================================================
 	
-	public void informacion_alumno(Consumer<JComponent> addScaled) {
+	public void informacion_alumno(Alumno alumno, Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1181,25 +1193,25 @@ public class AlumnosView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JLabel numero_control = new JLabel("Número de control: 28");
+		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(111, 243, 222, 29);
 		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
-		JLabel apellido_paterno = new JLabel("Apellido paterno: Diaz");
+		JLabel apellido_paterno = new JLabel("Apellido paterno: " +alumno.getPrimer_apellido());
 		apellido_paterno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		apellido_paterno.setBounds(133, 282, 247, 29);
 		addScaled.accept(apellido_paterno);
 		mipanel.add(apellido_paterno);
 		
-		JLabel nombres = new JLabel("Nombres: Zahir Fernando");
+		JLabel nombres = new JLabel("Nombres: " + alumno.getNombre());
 		nombres.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		nombres.setBounds(200, 362, 263, 29);
 		addScaled.accept(nombres);
 		mipanel.add(nombres);
 		
-		JLabel correo_electronico = new JLabel("Correo electrónico: 23_zdiaz@school.mx");
+		JLabel correo_electronico = new JLabel("Correo electrónico: "+ alumno.getCorreo_electronico());
 		correo_electronico.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		correo_electronico.setBounds(111, 440, 417, 29);
 		addScaled.accept(correo_electronico);
@@ -1222,7 +1234,7 @@ public class AlumnosView {
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
 		
-		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: 03/11/2005");
+		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: "+ alumno.getFecha_nacimiento());
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		fecha_nacimiento.setBounds(90, 401, 335, 29);
 		addScaled.accept(fecha_nacimiento);
@@ -1243,25 +1255,25 @@ public class AlumnosView {
 		addScaled.accept(btn_editar);
 		mipanel.add(btn_editar);
 		
-		JLabel apellido_materno = new JLabel("Apellido materno: Barrera\r\n");
+		JLabel apellido_materno = new JLabel("Apellido materno: "+ alumno.getSegundo_apellido());
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		apellido_materno.setBounds(127, 323, 263, 29);
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Carrera: Ingeniería en desarrollo de software");
+		JLabel carrera = new JLabel("Carrera: "+ alumno.getCarrera());
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 475, 443, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
-		JLabel grado_alumno = new JLabel("Grado del alumno: 5to Semestre\r\n");
+		JLabel grado_alumno = new JLabel("Grado del alumno: " + alumno.getGrado_alumno());
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		grado_alumno.setBounds(119, 507, 417, 29);
 		addScaled.accept(grado_alumno);
 		mipanel.add(grado_alumno);
 		
-		JLabel numero_telefono = new JLabel("Número de teléfono: 55-555-5555");
+		JLabel numero_telefono = new JLabel("Número de teléfono: "+ alumno.getNo_telefono());
 		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_telefono.setBounds(111, 545, 337, 29);
 		addScaled.accept(numero_telefono);

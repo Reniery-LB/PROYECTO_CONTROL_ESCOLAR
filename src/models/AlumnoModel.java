@@ -48,7 +48,7 @@ public class AlumnoModel {
 				 
 				System.out.println(""); 
 				
-				alumnos.add(new Alumno(id,no_control,nombre,primer_apellido,segundo_apellido,fecha,correo,grado,no_telefono,carrera));
+				alumnos.add(new Alumno(id,nombre,primer_apellido,segundo_apellido,fecha,correo,grado,no_telefono,carrera));
 			}
 			
 			rs.close();
@@ -139,6 +139,60 @@ public class AlumnoModel {
 			
 			return false;
 			}
+
+		public boolean existeNoControl(String no_control) {
+		    String query = "SELECT COUNT(*) FROM Alumno WHERE no_control = ?";
+		    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+		         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+		        stmt.setString(1, no_control);
+		        ResultSet rs = stmt.executeQuery();
+		        if (rs.next()) {
+		            return rs.getInt(1) > 0;
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return false;
+		}
+		
+		public static Alumno busca_alumno(int noControl) {
+		    String query = "SELECT * FROM Alumno WHERE no_control = ?";
+		    Alumno alumno = null;
+
+		    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+		         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+		        stmt.setInt(1, noControl);
+		        ResultSet rs = stmt.executeQuery();
+
+		        if (rs.next()) {
+		            alumno = new Alumno(
+		                rs.getInt("no_control"),
+		            
+		                rs.getString("nombre"),
+		                rs.getString("primer_apellido"),
+		                rs.getString("segundo_apellido"),
+		                rs.getDate("fecha_nacimiento"),
+		                rs.getString("correo_electronico"),
+		                rs.getString("grado_alumno"),
+		                rs.getLong("no_telefono"),
+		                rs.getString("carrera")
+		            );
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+
+		    return alumno;
+		}
+
+		
+
+		
+		
+
 
 		
 		
