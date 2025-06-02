@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -24,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import aplication.ScalableUtils;
@@ -32,6 +35,8 @@ import controllers.AsignaturasController;
 import controllers.AuthController;
 import controllers.DocentesController;
 import controllers.GruposController;
+import models.Alumno;
+import models.AlumnoModel;
 
 public class AlumnosView {
 	
@@ -640,22 +645,26 @@ public class AlumnosView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "No. de cotrol"};
-		
-		String data [][]= {
-							{"Grijalva"   , "Ochoa"         , "Keyra Yariely"      , "90"},
-							{"Diaz"       , "Barrera"       , "Zahir Fernando"     , "28"},
-							{"Nuñez"      , "Cota"          , "Diego Emiliano"     , "12"},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-		};
-		
-		JTable table = new JTable(data,titles) {
+		List<Alumno> alumnos = new AlumnoModel().getAll();
+
+		String[] titles = {"Apellido paterno", "Apellido materno", "Nombres", "No. de control"};
+		String[][] data = new String[alumnos.size()][4];
+
+		for (int i = 0; i < alumnos.size(); i++) {
+		    Alumno a = alumnos.get(i);
+		    data[i][0] = a.getPrimer_apellido();
+		    data[i][1] = a.getSegundo_apellido();
+		    data[i][2] = a.getNombre();
+		    data[i][3] = String.valueOf(a.getNo_control());
+		}
+
+		JTable table = new JTable(data, titles) {
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
 		        return false;
 		    }
 		};
+
 		
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE); 
@@ -708,6 +717,8 @@ public class AlumnosView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo); 
 	}
+	
+
 	
 	
 	//===========================================================================================================================
@@ -961,8 +972,6 @@ public class AlumnosView {
 	
 	
 	//===========================================================================================================================
-	
-	
 	
 	public void informacion_alumno(Consumer<JComponent> addScaled) {
 		remover();
@@ -1543,20 +1552,6 @@ public class AlumnosView {
 		addScaled.accept(fecha_nacimiento);
 		mipanel.add(fecha_nacimiento);
 		
-		JButton btn_crear = new JButton();
-		btn_crear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.editar_alumno(addScaled);
-			}
-		});
-		btn_crear.setText("Crear");
-		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_crear.setBackground(new Color(170, 196, 255));
-		btn_crear.setBounds(678, 716, 192, 40);
-		addScaled.accept(btn_crear);
-		mipanel.add(btn_crear);
 		
 		JLabel apellido_materno = new JLabel("Apellido materno: \r\n");
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1670,6 +1665,15 @@ public class AlumnosView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
+		String diaSeleccionado = dia.getSelectedItem().toString();
+		String mesSeleccionado = mes.getSelectedItem().toString();
+		String añoSeleccionado = año.getSelectedItem().toString();
+
+		String fechaNacimientoStr = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
+
+		java.sql.Date fechaNacimiento1 = java.sql.Date.valueOf(fechaNacimientoStr);
+
+		
 		JTextField gradoField = new JTextField();
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		gradoField.setColumns(10);
@@ -1710,6 +1714,36 @@ public class AlumnosView {
 		fondo_grupo.setBounds(56, 210, 1435, 480);
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
+		
+		
+		JButton btn_crear = new JButton();
+		btn_crear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AlumnoModel am = new AlumnoModel();
+				
+				 String no_control = numero_controlField.getText();
+				 String nombre = nombresField.getText();
+				 String primer_apellido = apField.getText();
+				 String segundo_apellido = amField.getText();
+				 Date fecha_nacimiento = fechaNacimiento1.valueOf(fechaNacimientoStr);
+				 String correo_electronico = correoField.getText();
+				 String grado_alumno = gradoField.getText();
+				 String no_telefono = telefonoField.getText();
+				 String carrera = carreraField.getText();
+				 
+				 am.insert(no_control, nombre, primer_apellido, nombre, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
+				opciones_panel.setVisible(false);
+				AlumnosView.this.editar_alumno(addScaled);
+			}
+		});
+		btn_crear.setText("Crear");
+		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear.setBackground(new Color(170, 196, 255));
+		btn_crear.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_crear);
+		mipanel.add(btn_crear);
+		
 	}
 	
 	
