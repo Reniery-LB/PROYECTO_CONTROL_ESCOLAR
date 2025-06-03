@@ -1211,14 +1211,14 @@ public class AlumnosView {
 		
 		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_control.setBounds(111, 243, 400, 29);
+		numero_control.setBounds(111, 243, 700, 29);
 		addScaled.accept(numero_control);
 		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
 		JLabel apellido_paterno = new JLabel("Apellido paterno: " +alumno.getPrimer_apellido());
 		apellido_paterno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		apellido_paterno.setBounds(133, 282, 400, 29);
+		apellido_paterno.setBounds(133, 282, 700, 29);
 		addScaled.accept(apellido_paterno);
 		mipanel.add(apellido_paterno);
 		
@@ -1230,7 +1230,7 @@ public class AlumnosView {
 		
 		JLabel correo_electronico = new JLabel("Correo electrónico: "+ alumno.getCorreo_electronico());
 		correo_electronico.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		correo_electronico.setBounds(111, 440, 500, 29);
+		correo_electronico.setBounds(111, 440, 700, 29);
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
@@ -1253,7 +1253,7 @@ public class AlumnosView {
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: "+ alumno.getFecha_nacimiento());
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		fecha_nacimiento.setBounds(90, 401, 335, 29);
+		fecha_nacimiento.setBounds(90, 401, 700, 29);
 		addScaled.accept(fecha_nacimiento);
 		mipanel.add(fecha_nacimiento);
 		
@@ -1275,25 +1275,25 @@ public class AlumnosView {
 		
 		JLabel apellido_materno = new JLabel("Apellido materno: "+ alumno.getSegundo_apellido());
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		apellido_materno.setBounds(127, 323, 263, 29);
+		apellido_materno.setBounds(127, 323, 700, 29);
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
 		JLabel carrera = new JLabel("Carrera: "+ alumno.getCarrera());
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		carrera.setBounds(216, 475, 443, 29);
+		carrera.setBounds(216, 475, 700, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
 		JLabel grado_alumno = new JLabel("Grado del alumno: " + alumno.getGrado_alumno());
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grado_alumno.setBounds(119, 507, 417, 29);
+		grado_alumno.setBounds(119, 507, 700, 29);
 		addScaled.accept(grado_alumno);
 		mipanel.add(grado_alumno);
 		
 		JLabel numero_telefono = new JLabel("Número de teléfono: "+ alumno.getNo_telefono());
 		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_telefono.setBounds(111, 545, 337, 29);
+		numero_telefono.setBounds(111, 545, 700, 29);
 		addScaled.accept(numero_telefono);
 		mipanel.add(numero_telefono);
 		
@@ -1757,21 +1757,32 @@ public class AlumnosView {
 		btn_crear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-			
-				AlumnoModel am = new AlumnoModel();
-				
-				 String no_control = numero_controlField.getText();
-				 String nombre = nombresField.getText();
-				 String primer_apellido = apField.getText();
-				 String segundo_apellido = amField.getText();
-				 Date fecha_nacimiento = Date.valueOf(fechaNacimientoStr);
-				 String correo_electronico = correoField.getText();
-				 String grado_alumno = gradoField.getText();
-				 String no_telefono = telefonoField.getText();
-				 String carrera = carreraField.getText();
-				 
-				 am.insert(no_control, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
-				AlumnosView.this.confirmar_alumnoCreado(addScaled);
+	            boolean camposValidos = validarCampos(
+	                    numero_controlField, 
+	                    apField, 
+	                    amField, 
+	                    nombresField, 
+	                    correoField, 
+	                    gradoField, 
+	                    telefonoField, 
+	                    carreraField
+	                );
+				if(camposValidos) {					
+					AlumnoModel am = new AlumnoModel();
+					
+					String no_control = numero_controlField.getText();
+					String nombre = nombresField.getText();
+					String primer_apellido = apField.getText();
+					String segundo_apellido = amField.getText();
+					Date fecha_nacimiento = Date.valueOf(fechaNacimientoStr);
+					String correo_electronico = correoField.getText();
+					String grado_alumno = gradoField.getText();
+					String no_telefono = telefonoField.getText();
+					String carrera = carreraField.getText();
+					
+					am.insert(no_control, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
+					AlumnosView.this.confirmar_alumnoCreado(addScaled);
+				}
 			}
 		});
 		btn_crear.setText("Crear");
@@ -2300,6 +2311,53 @@ public class AlumnosView {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
 				AlumnosView.this.selecciona_img(addScaled);
+			}
+		});
+		btn_volver.setText("Volver");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(new Color(170, 196, 255));
+		btn_volver.setBounds(281, 250, 192, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(339, 97, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+
+	
+	//===========================================================================================================================
+	
+	
+	public void confirmar_credencialAñadida(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Credencial añadida con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(240, 10, 300, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
 			}
 		});
 		btn_volver.setText("Volver");
@@ -3072,6 +3130,8 @@ public class AlumnosView {
 		JButton btn_añadir = new JButton();
 		btn_añadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AlumnosView.this.confirmar_credencialAñadida(addScaled);
 			}
 		});
 		btn_añadir.setText("Añadir");
@@ -3134,6 +3194,7 @@ public class AlumnosView {
 		profesionField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		profesionField.setBounds(116, 549, 157, 40);
 		profesionField.setColumns(10);
+		((AbstractDocument) profesionField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
 		addScaled.accept(profesionField);
 		mipanel.add(profesionField);
 		
@@ -3143,6 +3204,7 @@ public class AlumnosView {
 		alumnoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		alumnoField.setBackground(new Color(217, 217, 217));
 		alumnoField.setBounds(905, 319, 417, 40);
+		((AbstractDocument) alumnoField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
 		addScaled.accept(alumnoField);
 		mipanel.add(alumnoField);
 		
@@ -3152,6 +3214,7 @@ public class AlumnosView {
 		n_controlField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		n_controlField.setBackground(new Color(217, 217, 217));
 		n_controlField.setBounds(905, 366, 417, 40);
+		((AbstractDocument) n_controlField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
 		addScaled.accept(n_controlField);
 		mipanel.add(n_controlField);
 		
@@ -3161,6 +3224,7 @@ public class AlumnosView {
 		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		gradoField.setBackground(new Color(217, 217, 217));
 		gradoField.setBounds(905, 417, 417, 40);
+		((AbstractDocument) gradoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
 		addScaled.accept(gradoField);
 		mipanel.add(gradoField);
 		
@@ -3179,6 +3243,7 @@ public class AlumnosView {
 		n_telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		n_telefonoField.setBackground(new Color(217, 217, 217));
 		n_telefonoField.setBounds(905, 519, 417, 40);
+		((AbstractDocument) n_telefonoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
 		addScaled.accept(n_telefonoField);
 		mipanel.add(n_telefonoField);
 		
@@ -3489,7 +3554,7 @@ public class AlumnosView {
 				AlumnosView.this.añadir_credencial(addScaled);
 			}
 		});
-		btn_AñadirCredencial.setText("Añadir credenciales");
+		btn_AñadirCredencial.setText("Editar credenciales");
 		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
@@ -3656,33 +3721,47 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				
-				  int idAlumno = alumno.getIdAlumno();  
-			        int no_control = Integer.parseInt(numero_controlField.getText());
-			        String nombre = nombresField.getText();
-			        String primer_apellido = apField.getText();
-			        String segundo_apellido = amField.getText();
-			        Date fecha_nacimiento = Date.valueOf(fechaSQL); 
-			        String correo_electronico = correoField.getText();
-			        String grado_alumno = gradoField.getText();
-			        Long no_telefono = Long.parseLong(telefonoField.getText());
-			        String carrera = carreraField.getText();
-
-			        Alumno alumno = new Alumno(
-			            idAlumno,
-			            no_control,
-			            nombre,
-			            primer_apellido,
-			            segundo_apellido,
-			            fecha_nacimiento,
-			            correo_electronico,
-			            grado_alumno,
-			            no_telefono,
-			            carrera
-			        );
-
-			        AlumnoModel am = new AlumnoModel();
-			        boolean exito = am.update(alumno);
-				AlumnosView.this.confirmar_crearAlumno(addScaled);
+	           		boolean camposValidos = validarCampos(
+		                   numero_controlField, 
+		                   apField, 
+		                   amField, 
+		                   nombresField, 
+		                   correoField, 
+		                   gradoField, 
+		                   telefonoField, 
+		                   carreraField
+		               );	
+	           		
+	           		if(camposValidos) {	           			
+	           			int idAlumno = alumno.getIdAlumno();  
+	           			int no_control = Integer.parseInt(numero_controlField.getText());
+	           			String nombre = nombresField.getText();
+	           			String primer_apellido = apField.getText();
+	           			String segundo_apellido = amField.getText();
+	           			Date fecha_nacimiento = Date.valueOf(fechaSQL); 
+	           			String correo_electronico = correoField.getText();
+	           			String grado_alumno = gradoField.getText();
+	           			Long no_telefono = Long.parseLong(telefonoField.getText());
+	           			String carrera = carreraField.getText();
+	           			
+	           			Alumno alumno = new Alumno(
+	           					idAlumno,
+	           					no_control,
+	           					nombre,
+	           					primer_apellido,
+	           					segundo_apellido,
+	           					fecha_nacimiento,
+	           					correo_electronico,
+	           					grado_alumno,
+	           					no_telefono,
+	           					carrera
+	           					);
+	           			
+	           			AlumnoModel am = new AlumnoModel();
+	           			boolean exito = am.update(alumno);
+	           			AlumnosView.this.confirmar_crearAlumno(addScaled);
+	           		}
+	           		
 			}
 		});
 		btn_guardar.setText("Guardar");
@@ -3754,7 +3833,29 @@ public class AlumnosView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 	}
-
+	
+	
+	//===========================================================================================================================
+	
+	
+	private boolean validarCampos(JTextField... campos) {
+	    boolean todosValidos = true;
+	    
+	    for(JTextField campo : campos) {
+	        if(campo.getText().trim().isEmpty()) {
+	            campo.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+	            todosValidos = false;
+	        } else {
+	            campo.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+	        }
+	    }
+	    
+	    if(!todosValidos) {
+	        JOptionPane.showMessageDialog(ventana, "Por favor complete todos los campos obligatorios", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+	    }
+	    
+	    return todosValidos;
+	}
 	
 	//===========================================================================================================================
 	
