@@ -37,8 +37,8 @@ public class AuthModel {
 		            PreparedStatement stmt = conn.prepareStatement(sql)
 		        ) {
 		            stmt.setString(1, usuario);
-		            stmt.setString(2, correo);
-		            stmt.setString(3, contrasena);
+		            stmt.setString(2, contrasena);
+		            stmt.setString(3, correo);
 		            
 		            int rowsInserted = stmt.executeUpdate();  // CORRECTO para INSERT
 		            return rowsInserted > 0;

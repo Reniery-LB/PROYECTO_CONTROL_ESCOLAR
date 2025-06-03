@@ -18,55 +18,36 @@ public class AlumnoModel {
 		
 	}
 	
-	public List getAll() {
-		
-		String query = "select * from Alumno";
-		Connection conn = null;
-		Statement stmt = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while (rs.next()) { 
-				
-				Integer id = rs.getInt(1);
-				Integer no_control = rs.getInt(2); 
-				String nombre = rs.getString(3); 
-				String primer_apellido = rs.getString(4); 
-				String segundo_apellido = rs.getString(5); 
-				Date fecha = rs.getDate(6);
-				String correo = rs.getString(7); 
-				String grado = rs.getString(8); 
-				Long no_telefono = rs.getLong(9);
-				String carrera = rs.getString(10);
+	public List<Alumno> getAll() {
+	    List<Alumno> alumnos = new ArrayList<>();
+	    String query = "SELECT * FROM Alumno";
 
+	    try (
+	        Connection conn = new ConnectionModel().getConnection();
+	        PreparedStatement stmt = conn.prepareStatement(query);
+	        ResultSet rs = stmt.executeQuery()
+	    ) {
+	        while (rs.next()) {
+	            Integer id = rs.getInt(1);
+	            Integer no_control = rs.getInt(2);
+	            String nombre = rs.getString(3);
+	            String primer_apellido = rs.getString(4);
+	            String segundo_apellido = rs.getString(5);
+	            Date fecha = rs.getDate(6);
+	            String correo = rs.getString(7);
+	            String grado = rs.getString(8);
+	            Long no_telefono = rs.getLong(9);
+	            String carrera = rs.getString(10);
 
-				
-				//System.out.println("empId:" + id);
-				//System.out.println("firstName:" + name);
-				 
-				System.out.println(""); 
-				
-				alumnos.add(new Alumno(id,no_control,nombre,primer_apellido,segundo_apellido,fecha,correo,grado,no_telefono,carrera));
-			}
-			
-			rs.close();
-			
-			return alumnos;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				conn.close();
-			} catch (Exception e) {}
-		}
-		
-		return alumnos;
-		
+	            alumnos.add(new Alumno(id, no_control, nombre, primer_apellido, segundo_apellido,
+	                                   fecha, correo, grado, no_telefono, carrera));
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return alumnos;
 	}
 	
 	public static boolean remove(int id) {
@@ -75,8 +56,7 @@ public class AlumnoModel {
 	    PreparedStatement stmt = null;
 
 	    try {
-	        Class.forName("com.mysql.cj.jdbc.Driver");
-	        conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+	    	 conn = new ConnectionModel().getConnection();
 	        stmt = conn.prepareStatement(query);
 	        stmt.setInt(1, id);
 
@@ -109,8 +89,8 @@ public class AlumnoModel {
 			PreparedStatement ps = null;
 			
 			try {
-			  Class.forName("com.mysql.cj.jdbc.Driver");
-			  conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+		    conn = new ConnectionModel().getConnection();
+
 			
 			  ps = conn.prepareStatement(query);
 			
@@ -145,10 +125,13 @@ public class AlumnoModel {
 		public boolean update(Alumno alumno) {
 		    String sql = "UPDATE Alumno SET nombre = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?, grado_alumno = ?, no_telefono = ?, carrera = ? WHERE idAlumno = ?";
 		    
-		    try (
-		        Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
-		        PreparedStatement stmt = conn.prepareStatement(sql)
-		    ) {
+			Connection conn = null;
+
+		    try 
+		     {
+		    	conn = new ConnectionModel().getConnection();		
+			   	PreparedStatement stmt = conn.prepareStatement(sql);
+			    	
 		        stmt.setString(1, alumno.getNombre());
 		        stmt.setString(2, alumno.getPrimer_apellido());
 		        stmt.setString(3, alumno.getSegundo_apellido());
@@ -172,9 +155,12 @@ public class AlumnoModel {
 
 		public boolean existeNoControl(String no_control) {
 		    String query = "SELECT COUNT(*) FROM Alumno WHERE no_control = ?";
-		    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
-		         PreparedStatement stmt = conn.prepareStatement(query)) {
+		    
+			Connection conn = null;
 
+		    try  {
+		    	conn = new ConnectionModel().getConnection();
+		    	PreparedStatement stmt = conn.prepareStatement(query);
 		        stmt.setString(1, no_control);
 		        ResultSet rs = stmt.executeQuery();
 		        if (rs.next()) {

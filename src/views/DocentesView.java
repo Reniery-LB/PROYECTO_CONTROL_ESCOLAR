@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,10 @@ import controllers.AlumnosController;
 import controllers.AsignaturasController;
 import controllers.AuthController;
 import controllers.GruposController;
+import models.Alumno;
+import models.AlumnoModel;
+import models.Docente;
+import models.DocentesModel;
 
 public class DocentesView {
 	
@@ -635,17 +640,20 @@ public class DocentesView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "ID"};
-		
-		String data [][]= {
-							{"Lucero"   , "Betran"  , "Reniery"            , "40"},
-							{"Soto"     , " "       , "Jonathan Giovanni"  , "12"},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-		};
-		
-		JTable table = new JTable(data,titles) {
+		List<Docente> docente = new DocentesModel().getAll();
+
+		String[] titles = {"Apellido paterno", "Apellido materno", "Nombres", "Id de Docente"};
+		String[][] data = new String[docente.size()][4];
+
+		for (int i = 0; i < docente.size(); i++) {
+		    Docente a = docente.get(i);
+		    data[i][0] = a.getPrimer_apellido();
+		    data[i][1] = a.getSegundo_apellido();
+		    data[i][2] = a.getNombre();
+		    data[i][3] = String.valueOf(a.getIdDocente());
+		}
+
+		JTable table = new JTable(data, titles) {
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
 		        return false;
