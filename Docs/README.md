@@ -54,6 +54,6 @@ Este proyecto es un sistema de control escolar que permite la gestión de alumno
 - Eliminar asignaturas.
 
 ## Prueba para Iniciar Sesión 
-  - Usuario: diegoaabaroa
+  - Usuario: Aabroa26
   - Contraseña: vildosola
 
