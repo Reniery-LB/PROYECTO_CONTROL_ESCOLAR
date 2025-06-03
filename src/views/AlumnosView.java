@@ -3025,7 +3025,7 @@ public class AlumnosView {
 				if(origen.equals("añadir")) {
 					AlumnosView.this.añadir_alumno(addScaled);					
 				} else {
-					AlumnosView.this.editar_alumno(addScaled);
+					AlumnosView.this.editar_alumno(null, addScaled);
 				}
 			}
 		});
@@ -3503,20 +3503,6 @@ public class AlumnosView {
 		addScaled.accept(fecha_nacimiento);
 		mipanel.add(fecha_nacimiento);
 		
-		JButton btn_guardar = new JButton();
-		btn_guardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.confirmar_crearAlumno(addScaled);
-			}
-		});
-		btn_guardar.setText("Guardar");
-		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_guardar.setBackground(new Color(170, 196, 255));
-		btn_guardar.setBounds(678, 716, 192, 40);
-		addScaled.accept(btn_guardar);
-		mipanel.add(btn_guardar);
 		
 		JLabel apellido_materno = new JLabel("Apellido materno: " );
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3636,6 +3622,12 @@ public class AlumnosView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
+		String diaSeleccionado = (String) dia.getSelectedItem();
+		String mesSeleccionado = (String) mes.getSelectedItem();
+		String añoSeleccionado = (String) año.getSelectedItem();
+
+		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
+		
 		JTextField gradoField = new JTextField(alumno.getGrado_alumno());
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		gradoField.setColumns(10);
@@ -3659,6 +3651,49 @@ public class AlumnosView {
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
+		JButton btn_guardar = new JButton();
+		btn_guardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				
+				  int idAlumno = alumno.getIdAlumno();  
+			        int no_control = Integer.parseInt(numero_controlField.getText());
+			        String nombre = nombresField.getText();
+			        String primer_apellido = apField.getText();
+			        String segundo_apellido = amField.getText();
+			        Date fecha_nacimiento = Date.valueOf(fechaSQL); 
+			        String correo_electronico = correoField.getText();
+			        String grado_alumno = gradoField.getText();
+			        Long no_telefono = Long.parseLong(telefonoField.getText());
+			        String carrera = carreraField.getText();
+
+			        Alumno alumno = new Alumno(
+			            idAlumno,
+			            no_control,
+			            nombre,
+			            primer_apellido,
+			            segundo_apellido,
+			            fecha_nacimiento,
+			            correo_electronico,
+			            grado_alumno,
+			            no_telefono,
+			            carrera
+			        );
+
+			        AlumnoModel am = new AlumnoModel();
+			        boolean exito = am.update(alumno);
+				AlumnosView.this.confirmar_crearAlumno(addScaled);
+			}
+		});
+		btn_guardar.setText("Guardar");
+		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_guardar.setBackground(new Color(170, 196, 255));
+		btn_guardar.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_guardar);
+		mipanel.add(btn_guardar);
+		
+		
 		JButton btn_DescargarCredencial = new JButton();
 		btn_DescargarCredencial.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -3680,7 +3715,24 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alerta_eliminar(addScaled);
+				 
+			            int idAlumno = alumno.getIdAlumno(); 
+
+			            AlumnosView.this.alerta_eliminar(addScaled);
+
+
+			            Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, numero, origen);
+			            boolean eliminado = AlumnoModel.remove(idAlumno);
+						
+
+
+			            if (eliminado) {
+			            	} else {
+			                JOptionPane.showMessageDialog(null, "Error al eliminar el alumno.");
+			            }
+			        
+			    
+				
 			}
 		});
 		btn_basura.setOpaque(false);

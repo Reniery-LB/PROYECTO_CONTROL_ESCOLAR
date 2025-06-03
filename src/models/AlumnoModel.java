@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,34 +69,34 @@ public class AlumnoModel {
 		
 	}
 	
-		public boolean remove(int id) {
-		
-		String query = "\"DELETE FROM Alumno WHERE `Alumno`.`idAlumno` = "+ id;
-		Connection conn = null;
-		Statement stmt = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
-			stmt = conn.createStatement();
-			
-			stmt.executeUpdate(query);
-			
-			return true; 
-				
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				conn.close();
-			} catch (Exception e) {}
-		}
-		
-		
-		return false;
-		
+	public static boolean remove(int id) {
+	    String query = "DELETE FROM Alumno WHERE idAlumno = ?";
+	    Connection conn = null;
+	    PreparedStatement stmt = null;
+
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+	        stmt = conn.prepareStatement(query);
+	        stmt.setInt(1, id);
+
+	        int rowsAffected = stmt.executeUpdate();
+	        return rowsAffected > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (conn != null) conn.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return false;
 	}
+
 					
 		public boolean insert(String no_control, String apellido_paterno, String apellido_materno,
 			                String nombres, Date fecha_nacimiento, String correo, String carrera,
@@ -139,6 +140,35 @@ public class AlumnoModel {
 			
 			return false;
 			}
+		
+		
+		public boolean update(Alumno alumno) {
+		    String sql = "UPDATE Alumno SET nombre = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?, grado_alumno = ?, no_telefono = ?, carrera = ? WHERE idAlumno = ?";
+		    
+		    try (
+		        Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+		        PreparedStatement stmt = conn.prepareStatement(sql)
+		    ) {
+		        stmt.setString(1, alumno.getNombre());
+		        stmt.setString(2, alumno.getPrimer_apellido());
+		        stmt.setString(3, alumno.getSegundo_apellido());
+		        stmt.setDate(4, new java.sql.Date(alumno.getFecha_nacimiento().getTime()));
+		        stmt.setString(5, alumno.getCorreo_electronico());
+		        stmt.setString(6, alumno.getGrado_alumno());
+		        stmt.setLong(7, alumno.getNo_telefono());
+		        stmt.setString(8, alumno.getCarrera());
+		        stmt.setInt(9, alumno.getIdAlumno());
+
+		        int rowsUpdated = stmt.executeUpdate();
+		        return rowsUpdated > 0;
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+
 
 		public boolean existeNoControl(String no_control) {
 		    String query = "SELECT COUNT(*) FROM Alumno WHERE no_control = ?";
@@ -189,6 +219,9 @@ public class AlumnoModel {
 
 		    return alumno;
 		}
+		
+		
+
 
 		
 
