@@ -72,12 +72,12 @@ public class DocentesModel {
 	}
 	
 	
-	public boolean insert(String apellido_paterno, String apellido_materno,
+	public boolean insert(int idDocente, String apellido_paterno, String apellido_materno,
 			            String nombres, Date fecha_nacimiento, String correo, String materia,
 			             String no_telefono) {
 			
-			String query = "INSERT INTO Docente (nombres, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono) "
-			       + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO Docente (idDocente,nombres, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono) "
+			       + "VALUES (?,?, ?, ?, ?, ?, ?, ?)";
 			
 			Connection conn = null;
 			PreparedStatement ps = null;
@@ -88,13 +88,14 @@ public class DocentesModel {
 			
 			ps = conn.prepareStatement(query);
 			
-			ps.setString(1, apellido_paterno);
-			ps.setString(2, apellido_materno);
-			ps.setString(3, nombres);
-			ps.setDate(4,new java.sql.Date(fecha_nacimiento.getTime()));
-			ps.setString(5, correo);
-			ps.setString(6, materia);
-			ps.setString(7, no_telefono);
+			ps.setInt(1,idDocente);
+			ps.setString(2, apellido_paterno);
+			ps.setString(3, apellido_materno);
+			ps.setString(4, nombres);
+			ps.setDate(5,new java.sql.Date(fecha_nacimiento.getTime()));
+			ps.setString(6, correo);
+			ps.setString(7, materia);
+			ps.setString(8, no_telefono);
 			
 			ps.executeUpdate();
 			return true;
@@ -142,34 +143,17 @@ public class DocentesModel {
 	}
 	
 	
-	public boolean existeIdDocente(String idDocente) {
-	    String query = "SELECT COUNT(*) FROM Docente WHERE idDocente = ?";
-	    
-		Connection conn = null;
-
-	    try  {
-	    	conn = new ConnectionModel().getConnection();
-	    	PreparedStatement stmt = conn.prepareStatement(query);
-	        stmt.setString(1, idDocente);
-	        ResultSet rs = stmt.executeQuery();
-	        if (rs.next()) {
-	            return rs.getInt(1) > 0;
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
+	
 	
 	public static Docente busca_docente(int idDocente) {
-	    String query = "SELECT * FROM Alumno WHERE no_control = ?";
+	    String query = "SELECT * FROM Docente WHERE idDocente = ?";
 	    Docente docente = null;
 
 	    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 
 	        stmt.setInt(1, idDocente);
-	        System.out.println("Buscando alumno con no_control = " + idDocente);
+	        System.out.println("Buscando docente con idDocente = " + idDocente);
 
 	        ResultSet rs = stmt.executeQuery();
 

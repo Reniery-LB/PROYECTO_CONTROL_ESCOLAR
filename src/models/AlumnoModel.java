@@ -153,24 +153,7 @@ public class AlumnoModel {
 
 
 
-		public boolean existeNoControl(String no_control) {
-		    String query = "SELECT COUNT(*) FROM Alumno WHERE no_control = ?";
-		    
-			Connection conn = null;
-
-		    try  {
-		    	conn = new ConnectionModel().getConnection();
-		    	PreparedStatement stmt = conn.prepareStatement(query);
-		        stmt.setString(1, no_control);
-		        ResultSet rs = stmt.executeQuery();
-		        if (rs.next()) {
-		            return rs.getInt(1) > 0;
-		        }
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
-		    return false;
-		}
+		
 		
 		public static Alumno busca_alumno(int noControl) {
 		    String query = "SELECT * FROM Alumno WHERE no_control = ?";

@@ -1707,7 +1707,7 @@ public class AlumnosView {
 
 		String fechaNacimientoStr = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 
-		java.sql.Date fechaNacimiento1 = java.sql.Date.valueOf(fechaNacimientoStr);
+		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
 
 		
 		JTextField gradoField = new JTextField();

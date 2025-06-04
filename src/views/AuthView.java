@@ -151,7 +151,7 @@ public class AuthView {
 				
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*String usuario = usuario_field.getText().trim();
+				String usuario = usuario_field.getText().trim();
 		        String contrasena = new String(contra_field.getPassword());
 		        
 
@@ -175,12 +175,12 @@ public class AuthView {
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
 		        }
-		    }*/
+		    }
 			
-	            AuthView.this.administrador(addScaled);  
+	           // AuthView.this.administrador(addScaled);  
 
 	
-}});
+});
 		
 		
 		
