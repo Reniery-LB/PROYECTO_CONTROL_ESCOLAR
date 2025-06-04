@@ -215,6 +215,7 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
 				AlumnosView.this.alumnos(addScaled);	
 			}
 		});
@@ -231,6 +232,7 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
 				AlumnosView.this.alumnos(addScaled);
 			}
 		});
@@ -1213,7 +1215,6 @@ public class AlumnosView {
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(111, 243, 700, 29);
 		addScaled.accept(numero_control);
-		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
 		JLabel apellido_paterno = new JLabel("Apellido paterno: " +alumno.getPrimer_apellido());
@@ -1559,23 +1560,23 @@ public class AlumnosView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-		JButton btn_AñadirCredencial = new JButton();
-		btn_AñadirCredencial.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				origen = "añadir";
-				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_credencial(addScaled);
-			}
-		});
-		btn_AñadirCredencial.setText("Añadir credenciales");
-		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-		addScaled.accept(btn_AñadirCredencial);
-		mipanel.add(btn_AñadirCredencial);
+//		JButton btn_AñadirCredencial = new JButton();
+//		btn_AñadirCredencial.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				origen = "añadir";
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.añadir_credencial(addScaled);
+//			}
+//		});
+//		btn_AñadirCredencial.setText("Añadir credenciales");
+//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
+//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
+//		addScaled.accept(btn_AñadirCredencial);
+//		mipanel.add(btn_AñadirCredencial);
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1729,20 +1730,37 @@ public class AlumnosView {
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
-		JButton btn_DescargarCredencial = new JButton();
-		btn_DescargarCredencial.addActionListener(new ActionListener() {
+//		JButton btn_DescargarCredencial = new JButton();
+//		btn_DescargarCredencial.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
+//			}
+//		});
+//		btn_DescargarCredencial.setText("Descargar credenciales");
+//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
+//		btn_DescargarCredencial.setBounds(1191, 530, 249, 40);
+//		addScaled.accept(btn_DescargarCredencial);
+//		mipanel.add(btn_DescargarCredencial);
+		
+		JButton btn_credencial = new JButton();
+		btn_credencial.addActionListener(new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
 			}
 		});
-		btn_DescargarCredencial.setText("Descargar credenciales");
-		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
-		addScaled.accept(btn_DescargarCredencial);
-		mipanel.add(btn_DescargarCredencial);
+		btn_credencial.setText("Credencial");
+		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_credencial.setBackground(new Color(170, 196, 255));
+		btn_credencial.setBounds(1220, 534, 192, 40);
+		addScaled.accept(btn_credencial);
+		mipanel.add(btn_credencial);
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -2575,7 +2593,11 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.informacion_alumno(alumno, addScaled);
+		        if(origen.equals("editar")) {
+		            AlumnosView.this.editar_alumno(alumno, addScaled);
+		        } else {
+		            AlumnosView.this.informacion_alumno(alumno, addScaled);
+		        }
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -2618,20 +2640,20 @@ public class AlumnosView {
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
 		
-		JButton btn_editar = new JButton();
-		btn_editar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_credencial(addScaled);
-			}
-		});
-		btn_editar.setText("Editar");
-		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_editar.setBackground(new Color(170, 196, 255));
-		btn_editar.setBounds(678, 716, 192, 40);
-		addScaled.accept(btn_editar);
-		mipanel.add(btn_editar);
+//		JButton btn_editar = new JButton();
+//		btn_editar.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.añadir_credencial(addScaled);
+//			}
+//		});
+//		btn_editar.setText("Editar");
+//		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_editar.setBackground(new Color(170, 196, 255));
+//		btn_editar.setBounds(678, 716, 192, 40);
+//		addScaled.accept(btn_editar);
+//		mipanel.add(btn_editar);
 		
 		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3544,23 +3566,23 @@ public class AlumnosView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-		JButton btn_AñadirCredencial = new JButton();
-		btn_AñadirCredencial.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				origen = "editar";
-				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_credencial(addScaled);
-			}
-		});
-		btn_AñadirCredencial.setText("Editar credenciales");
-		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-		addScaled.accept(btn_AñadirCredencial);
-		mipanel.add(btn_AñadirCredencial);
+//		JButton btn_AñadirCredencial = new JButton();
+//		btn_AñadirCredencial.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				origen = "editar";
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.añadir_credencial(addScaled);
+//			}
+//		});
+//		btn_AñadirCredencial.setText("Editar credenciales");
+//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
+//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
+//		addScaled.accept(btn_AñadirCredencial);
+//		mipanel.add(btn_AñadirCredencial);
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: " );
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3773,20 +3795,37 @@ public class AlumnosView {
 		mipanel.add(btn_guardar);
 		
 		
-		JButton btn_DescargarCredencial = new JButton();
-		btn_DescargarCredencial.addActionListener(new ActionListener() {
+//		JButton btn_DescargarCredencial = new JButton();
+//		btn_DescargarCredencial.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+//			}
+//		});
+//		btn_DescargarCredencial.setText("Descargar credenciales");
+//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
+//		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
+//		addScaled.accept(btn_DescargarCredencial);
+//		mipanel.add(btn_DescargarCredencial);
+		
+		JButton btn_credencial = new JButton();
+		btn_credencial.addActionListener(new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+				AlumnosView.this.credencial_alumno(alumno ,addScaled);
 			}
 		});
-		btn_DescargarCredencial.setText("Descargar credenciales");
-		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
-		addScaled.accept(btn_DescargarCredencial);
-		mipanel.add(btn_DescargarCredencial);
+		btn_credencial.setText("Credencial");
+		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_credencial.setBackground(new Color(170, 196, 255));
+		btn_credencial.setBounds(1220, 534, 192, 40);
+		addScaled.accept(btn_credencial);
+		mipanel.add(btn_credencial);
 		
 		JButton btn_basura = new JButton();
 		btn_basura.addActionListener(new ActionListener() {

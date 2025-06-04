@@ -205,6 +205,7 @@ public class AuthView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				remover();
 				AuthView.this.registro(addScaled);		
 			}
 		});
@@ -306,13 +307,6 @@ public class AuthView {
 		addScaled.accept(terminos);
 		mipanel.add(terminos);
 		
-		JLabel fondo_registro = new JLabel();
-		fondo_registro.setBounds(97, 72, 1350, 700);
-		fondo_registro.setBackground(Color.decode("#EEF1FF"));
-		fondo_registro.setOpaque(true);
-		addScaled.accept(fondo_registro);
-		mipanel.add(fondo_registro);
-		
 		JPasswordField contra_field = new JPasswordField();
 		contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		contra_field.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -383,30 +377,33 @@ public class AuthView {
 		iniciar_sesion_btn.addActionListener(new ActionListener() {
 		    	@Override
 				public void actionPerformed(ActionEvent e) {
-					String usuario = usuario_field.getText().trim();
-			        String contrasena = new String(contra_field.getPassword());
-			        
-
-			        if (usuario.isEmpty() || contrasena.isEmpty()) {
-			            JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-			            return;
-			        }
-					
-			        JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
-
-
-			        Usuario user = new Usuario(0, usuario, contrasena, contrasena);
-
-			        AuthModel am = new AuthModel();
-			        boolean esValido = am.validarUsuario(user);
-
-			        if (esValido) {
-			            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-			            AuthView.this.administrador(addScaled);  
-			        } else {
-			            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
-			        }
-			    }
+		    		remover();
+		    		AuthView.this.login(addScaled);
+		    	}
+//					String usuario = usuario_field.getText().trim();
+//			        String contrasena = new String(contra_field.getPassword());
+//			        
+//
+//			        if (usuario.isEmpty() || contrasena.isEmpty()) {
+//			            JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+//			            return;
+//			        }
+//					
+//			        JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
+//
+//
+//			        Usuario user = new Usuario(0, usuario, contrasena, contrasena);
+//
+//			        AuthModel am = new AuthModel();
+//			        boolean esValido = am.validarUsuario(user);
+//
+//			        if (esValido) {
+//			            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+//			            AuthView.this.administrador(addScaled);  
+//			        } else {
+//			            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
+//			        }
+//			    }
 		});
 
 		iniciar_sesion_btn.setOpaque(true);
@@ -418,7 +415,12 @@ public class AuthView {
 		mipanel.add(iniciar_sesion_btn);
 		addScaled.accept(iniciar_sesion_btn);
 		
-		
+		JLabel fondo_registro = new JLabel();
+		fondo_registro.setBounds(97, 72, 1350, 700);
+		fondo_registro.setBackground(Color.decode("#EEF1FF"));
+		fondo_registro.setOpaque(true);
+		addScaled.accept(fondo_registro);
+		mipanel.add(fondo_registro);
 		
 		
 	}
