@@ -1584,11 +1584,11 @@ public class DocentesView {
 		addScaled.accept(numero_telefono);
 		mipanel.add(numero_telefono);
 		
-		JLabel ingeniero = new JLabel("Ingeniero");
-		ingeniero.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		ingeniero.setBounds(152, 510, 101, 29);
-		addScaled.accept(ingeniero);
-		mipanel.add(ingeniero);
+		JLabel oficio = new JLabel("Maestro");
+		oficio.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		oficio.setBounds(152, 510, 101, 29);
+		addScaled.accept(oficio);
+		mipanel.add(oficio);
 		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
@@ -2104,10 +2104,6 @@ public class DocentesView {
 		 
 		 Date fechaSQL = Date.valueOf(localDate);
 
-		
-		
-
-		
 		JTextField materiaField = new JTextField();
 		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		materiaField.setColumns(10);
@@ -3509,6 +3505,7 @@ public class DocentesView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
 				opciones_panel.setVisible(false);
 				 
 			            int idDocente = docente.getIdDocente(); 

@@ -1263,7 +1263,7 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				origen = "editar";
 				opciones_panel.setVisible(false);
-				AlumnosView.this.numero_control(addScaled);
+				AlumnosView.this.editar_alumno(alumno,addScaled);
 			}
 		});
 		btn_editar.setText("Editar");
@@ -2679,11 +2679,11 @@ public class AlumnosView {
 		addScaled.accept(numero_telefono);
 		mipanel.add(numero_telefono);
 		
-		JLabel ingeniero = new JLabel("Ingeniero");
-		ingeniero.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		ingeniero.setBounds(152, 510, 101, 29);
-		addScaled.accept(ingeniero);
-		mipanel.add(ingeniero);
+		JLabel oficio = new JLabel("Alumno");
+		oficio.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		oficio.setBounds(152, 510, 101, 29);
+		addScaled.accept(oficio);
+		mipanel.add(oficio);
 		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
@@ -3922,6 +3922,7 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
 				opciones_panel.setVisible(false);
 				 
 			            int idAlumno = alumno.getIdAlumno(); 
