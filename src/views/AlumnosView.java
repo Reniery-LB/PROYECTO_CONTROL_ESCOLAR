@@ -3834,21 +3834,21 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				 
-			            int idAlumno = alumno.getIdAlumno(); 
+			           // int idAlumno = alumno.getIdAlumno(); 
 
-			            AlumnosView.this.alerta_eliminar(addScaled);
+			            AlumnosView.this.alerta_eliminar(alumno, addScaled);
 
 
-			            Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, numero, origen);
-			            boolean eliminado = AlumnoModel.remove(idAlumno);
+			          //  Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, numero, origen);
+			          //  boolean eliminado = AlumnoModel.remove(idAlumno);
 						
 
 
-			            if (eliminado) {
+			          /*  if (eliminado) {
 			            	} else {
 			                JOptionPane.showMessageDialog(null, "Error al eliminar el alumno.");
 			            }
-			        
+			        */
 			    
 				
 			}
@@ -3899,7 +3899,7 @@ public class AlumnosView {
 	//===========================================================================================================================
 	
 	
-	public void alerta_eliminar(Consumer<JComponent> addScaled) {
+	public void alerta_eliminar(Alumno alumno, Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3922,9 +3922,33 @@ public class AlumnosView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				 
+			            int idAlumno = alumno.getIdAlumno(); 
+
+
+
+			            Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, null, origen);
+			            boolean eliminado = AlumnoModel.remove(idAlumno);
+						
+
+
+			            if (eliminado) {
+							AlumnosView.this.confirmar_eliminarAlumno(addScaled);
+
+			            	} else {
+			                JOptionPane.showMessageDialog(null, "Error al eliminar el alumno.");
+			            }
+			        
+			    
+				
+			}
+			
+		/*	@Override
+			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();	
 				AlumnosView.this.confirmar_eliminarAlumno(addScaled);
-			}
+			}*/
 		});
 		btn_si.setForeground(new Color(255, 255, 255));
 		btn_si.setText("Si");
