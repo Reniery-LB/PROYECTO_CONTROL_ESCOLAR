@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.AbstractDocument;
 
+
 import aplication.LetterDocumentFilter;
 import aplication.NumericDocumentFilter;
 import aplication.ScalableUtils;
@@ -58,6 +59,8 @@ public class AlumnosView {
 		origen = "añadir";
 		inicializar();
 	}
+	
+	
 	
 	public void inicializar() {
 		//VENTANA PRINCIPAL
@@ -4181,6 +4184,9 @@ public class AlumnosView {
 	    String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
 	    return correo.matches(regex);
 	}
+	
+	
+	
 
 
 	

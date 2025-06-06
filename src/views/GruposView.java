@@ -1633,10 +1633,6 @@ public class GruposView {
 		mipanel.add(fondo_grupo);
 	}
 	
-	
-	//===========================================================================================================================
-	
-	
 	public void ITC(Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
@@ -2280,6 +2276,9 @@ public class GruposView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 	}
+	
+	
+	
 	
 	//===========================================================================================================================
 	
