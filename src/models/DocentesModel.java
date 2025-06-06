@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,12 +74,12 @@ public class DocentesModel {
 	}
 	
 	
-	public boolean insert(int idDocente, String apellido_paterno, String apellido_materno,
+	public boolean insert( String apellido_paterno, String apellido_materno,
 			            String nombres, Date fecha_nacimiento, String correo, String materia,
 			             String no_telefono) {
 			
-			String query = "INSERT INTO Docente (idDocente,nombres, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono) "
-			       + "VALUES (?,?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO Docente (nombres, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono) "
+			       + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			
 			Connection conn = null;
 			PreparedStatement ps = null;
@@ -88,14 +90,13 @@ public class DocentesModel {
 			
 			ps = conn.prepareStatement(query);
 			
-			ps.setInt(1,idDocente);
-			ps.setString(2, apellido_paterno);
-			ps.setString(3, apellido_materno);
-			ps.setString(4, nombres);
-			ps.setDate(5,new java.sql.Date(fecha_nacimiento.getTime()));
-			ps.setString(6, correo);
-			ps.setString(7, materia);
-			ps.setString(8, no_telefono);
+			ps.setString(1, apellido_paterno);
+			ps.setString(2, apellido_materno);
+			ps.setString(3, nombres);
+			ps.setDate(4,new java.sql.Date(fecha_nacimiento.getTime()));
+			ps.setString(5, correo);
+			ps.setString(6, materia);
+			ps.setString(7, no_telefono);
 			
 			ps.executeUpdate();
 			return true;
@@ -113,18 +114,13 @@ public class DocentesModel {
 			
 			return false;
 			}
-	
-	
-	public boolean update(Docente docente) {
-	    String sql = "UPDATE Docente SET nombres = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?,  no_telefono = ?, materia = ? WHERE idDocente = ?";
-	    
-		Connection conn = null;
 
-	    try 
-	     {
-	    	conn = new ConnectionModel().getConnection();		
-		   	PreparedStatement stmt = conn.prepareStatement(sql);
-		    	
+	public boolean update(Docente docente) {
+	    String sql = "UPDATE Docente SET nombres = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?, no_telefono = ?, materia = ? WHERE idDocente = ?";
+	    
+	    try (Connection conn = new ConnectionModel().getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        
 	        stmt.setString(1, docente.getNombre());
 	        stmt.setString(2, docente.getPrimer_apellido());
 	        stmt.setString(3, docente.getSegundo_apellido());
@@ -132,6 +128,7 @@ public class DocentesModel {
 	        stmt.setString(5, docente.getCorreo_electronico());
 	        stmt.setLong(6, docente.getNo_telefono());
 	        stmt.setString(7, docente.getMateria());
+	        stmt.setInt(8, docente.getIdDocente()); // ¡Este es el parámetro faltante!
 
 	        int rowsUpdated = stmt.executeUpdate();
 	        return rowsUpdated > 0;

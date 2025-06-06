@@ -655,15 +655,15 @@ public class DocentesView {
 		
 		List<Docente> docente = new DocentesModel().getAll();
 
-		String[] titles = {"Apellido paterno", "Apellido materno", "Nombres", "Id de Docente"};
+		String[] titles = {"Id de Docente", "Apellido paterno", "Apellido materno", "Nombres"};
 		String[][] data = new String[docente.size()][4];
 
 		for (int i = 0; i < docente.size(); i++) {
 		    Docente a = docente.get(i);
-		    data[i][0] = a.getPrimer_apellido();
-		    data[i][1] = a.getSegundo_apellido();
-		    data[i][2] = a.getNombre();
-		    data[i][3] = String.valueOf(a.getIdDocente());
+		    data[i][1] = a.getPrimer_apellido();
+		    data[i][2] = a.getSegundo_apellido();
+		    data[i][3] = a.getNombre();
+		    data[i][0] = String.valueOf(a.getIdDocente());
 		}
 
 		JTable table = new JTable(data, titles) {
@@ -2095,21 +2095,18 @@ public class DocentesView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
-		String diasele = dia.getSelectedItem().toString();   // "01" a "31"
-		String messele = mes.getSelectedItem().toString();   // "01" a "12"
-		String añosele= año.getSelectedItem().toString();   // "1997" a "2005"
+		String diaSeleccionado = dia.getSelectedItem().toString();
+		String mesSeleccionado = mes.getSelectedItem().toString();
+		String añoSeleccionado = año.getSelectedItem().toString();
+
+		String fechaNacimientoStr = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
+
+		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
 		
-		 int diaNum = Integer.parseInt(diasele);
-		    int mesNum = Integer.parseInt(messele);
-		    int añoNum = Integer.parseInt(añosele);
-		    
-		 LocalDate localDate = LocalDate.of(añoNum, mesNum, diaNum);
 		 
-		 Date fechaSQL = Date.valueOf(localDate);
-		 
-		dia.setSelectedItem("01");
-		mes.setSelectedItem("01");
-		año.setSelectedItem("2000");
+	//	dia.setSelectedItem("01");
+		//mes.setSelectedItem("01");
+		//año.setSelectedItem("2000");
 		 
 		JTextField materiaField = new JTextField();
 		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -2130,7 +2127,9 @@ public class DocentesView {
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
-		JButton btn_crear = new JButton();
+	
+		
+        JButton btn_crear = new JButton();
 		btn_crear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
@@ -2151,6 +2150,8 @@ public class DocentesView {
 		        }
 		        
 		        String fechaNacimientoStr = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
+		        Date fechaNacimiento = Date.valueOf(fechaNacimientoStr);
+				
 				
 				 boolean camposValidos = validarCampos(
 		                    idField, 
@@ -2165,17 +2166,16 @@ public class DocentesView {
 					if(camposValidos) {					
 						DocentesModel dm = new DocentesModel();
 						
-						int id = Integer.parseInt(idField.getText());
 						String nombre = nombresField.getText();
 						String primer_apellido = apField.getText();
 						String segundo_apellido = amField.getText();
-						Date fecha_nacimiento = (fechaSQL);
+						Date fecha_nacimiento = (fechaNacimiento);
 						String correo_electronico = correoField.getText();
 						String materia = materiaField.getText();
 						String no_telefono = telefonoField.getText();
 						
 						
-						dm.insert( id,nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono);	
+						dm.insert( nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, materia, no_telefono);	
 						
 				
 				DocentesView.this.confirmar_docenteCreado(addScaled);
@@ -3346,17 +3346,27 @@ public class DocentesView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
+		if (docente != null && docente.getFecha_nacimiento() != null) {
+		    LocalDate fechaAlumno = docente.getFecha_nacimiento().toLocalDate();
+		    dia.setSelectedItem(String.format("%02d", fechaAlumno.getDayOfMonth()));
+		    mes.setSelectedItem(String.format("%02d", fechaAlumno.getMonthValue()));
+		    año.setSelectedItem(String.valueOf(fechaAlumno.getYear()));
+		} else {
+		    dia.setSelectedItem("01");
+		    mes.setSelectedItem("01");
+		    año.setSelectedItem("2000");
+		}
+		
 		String diaSeleccionado = (String) dia.getSelectedItem();
 		String mesSeleccionado = (String) mes.getSelectedItem();
 		String añoSeleccionado = (String) año.getSelectedItem();
 
 		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 		
-		Long numero = docente.getNo_telefono();
 		
-		dia.setSelectedItem("01");
-		mes.setSelectedItem("01");
-		año.setSelectedItem("2000");
+		
+		Long numero = docente.getNo_telefono();
+
 		
 		JTextField telefonoField = new JTextField(String.valueOf(numero));
 		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));

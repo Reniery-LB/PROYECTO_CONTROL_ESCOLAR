@@ -153,40 +153,42 @@ public class AuthView {
 				
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String usuario = usuario_field.getText().trim();
-		        String contrasena = new String(contra_field.getPassword());
-		        
-
-
-		        if (usuario.isEmpty() || contrasena.isEmpty()) {
-		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-		            showTimedMessage(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE, 2000);
-		            return;
-		        }
-		        
-//				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
-
-
-		        Usuario user = new Usuario(0, usuario, contrasena, contrasena);
-
-		        AuthModel am = new AuthModel();
-		        boolean esValido = am.validarUsuario(user);
-
-		        if (esValido) {
-		        	usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
-		            contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
-		            showTimedMessage(null, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
-		            AuthView.this.administrador(addScaled);  
-		        } else {
-		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-		            showTimedMessage(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE, 2000);
-		        }
-		    }
+//				String usuario = usuario_field.getText().trim();
+//		        String contrasena = new String(contra_field.getPassword());
+//		        
+//
+//
+//		        if (usuario.isEmpty() || contrasena.isEmpty()) {
+//		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+//		            showTimedMessage(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE, 2000);
+//		            return;
+//		        }
+//		        
+////				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
+//
+//		        String contrasenaEncriptada = hashPassword(contrasena);
+//
+//		        Usuario user = new Usuario(0, usuario, contrasenaEncriptada, contrasenaEncriptada);
+//
+//		        AuthModel am = new AuthModel();
+//		        boolean esValido = am.validarUsuario(user);
+//
+//		        if (esValido) {
+//		        	usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+//		            showTimedMessage(null, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
+//		            AuthView.this.administrador(addScaled);  
+//		        } else {
+//		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+//		            showTimedMessage(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE, 2000);
+//		        }
+//		    }
 			
-	           // AuthView.this.administrador(addScaled);  
-		});	
+			       AuthView.this.administrador(addScaled); 
+			}}
+		);	
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -350,7 +352,8 @@ public class AuthView {
 		        }
 		        
 		        AuthModel am = new AuthModel();
-		        boolean exito = am.registrarUsuario(usuario,correo,contrasena);
+		        String contrasenaEncriptada = hashPassword(contrasena);
+		        boolean exito = am.registrarUsuario(usuario, correo, contrasenaEncriptada);
 
 		        if(exito) {
 		        	 JOptionPane.showMessageDialog(null, "Registro exitoso.");
@@ -426,6 +429,25 @@ public class AuthView {
 		
 	}
 	
+	
+	private String hashPassword(String password) {
+	    try {
+	        MessageDigest md = MessageDigest.getInstance("SHA-256");
+	        byte[] hash = md.digest(password.getBytes());
+	        StringBuilder hexString = new StringBuilder();
+
+	        for (byte b : hash) {
+	            String hex = Integer.toHexString(0xff & b);
+	            if (hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+
+	    } catch (NoSuchAlgorithmException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
 	
 
 	

@@ -9,7 +9,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -660,15 +662,15 @@ public class AlumnosView {
 		
 		List<Alumno> alumnos = new AlumnoModel().getAll();
 
-		String[] titles = {"Apellido paterno", "Apellido materno", "Nombres", "No. de control"};
+		String[] titles = {"No. de control", "Apellido paterno", "Apellido materno", "Nombres"};
 		String[][] data = new String[alumnos.size()][4];
 
 		for (int i = 0; i < alumnos.size(); i++) {
 		    Alumno a = alumnos.get(i);
-		    data[i][0] = a.getPrimer_apellido();
-		    data[i][1] = a.getSegundo_apellido();
-		    data[i][2] = a.getNombre();
-		    data[i][3] = String.valueOf(a.getNo_control());
+		    data[i][1] = a.getPrimer_apellido();
+		    data[i][2] = a.getSegundo_apellido();
+		    data[i][3] = a.getNombre();
+		    data[i][0] = String.valueOf(a.getNo_control());
 		}
 
 		JTable table = new JTable(data, titles) {
@@ -705,15 +707,15 @@ public class AlumnosView {
 		addScaled.accept(scroll);
 		mipanel.add(scroll);
 		
+
+		
 		JButton detalles = new JButton("Detalles");
 		detalles.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	opciones_panel.setVisible(false);
 				AlumnosView.this.numero_control(addScaled);
-			}
-		});
+		}});
 		detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		detalles.setBackground(Color.decode("#D9D9D9"));
 		detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1000,6 +1002,8 @@ public class AlumnosView {
 		mipanel.add(fondo_grupo);
 	}
 	
+	
+
 	
 	//===========================================================================================================================
 	
@@ -1323,6 +1327,10 @@ public class AlumnosView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 	}
+	
+	
+
+
 	
 	
 	//===========================================================================================================================
@@ -1713,9 +1721,9 @@ public class AlumnosView {
 
 		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
 		
-		dia.setSelectedItem("01");
-		mes.setSelectedItem("01");
-		año.setSelectedItem("2000");
+//		dia.setSelectedItem("01");
+//		mes.setSelectedItem("01");
+//		año.setSelectedItem("2000");
 		
 		JTextField gradoField = new JTextField();
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -1777,56 +1785,55 @@ public class AlumnosView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 		
-		
 		JButton btn_crear = new JButton();
 		btn_crear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				
+		    public void actionPerformed(ActionEvent e) {
+		        opciones_panel.setVisible(false);
+		        
 		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
 		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
 		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
 		        
 		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
-		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Error", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
 		        
 		        if (!validarCorreo(correoField.getText())) {
 		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+		            JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCampos(numero_controlField, apField, nombresField, correoField, gradoField, telefonoField, carreraField)) {
+		            JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
 		        
 		        String fechaNacimientoStr = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
+		        Date fechaNacimiento = Date.valueOf(fechaNacimientoStr);
+		        
+		        AlumnoModel am = new AlumnoModel();
+		        boolean exito = am.insert(
+				    numero_controlField.getText(),
+				    nombresField.getText(),   
+				    apField.getText(),           
+				    amField.getText(),           
+				    fechaNacimiento,
+				    correoField.getText(),
+				    carreraField.getText(),
+				    gradoField.getText(),
+				    telefonoField.getText()
+				);
 				
-	            boolean camposValidos = validarCampos(
-	                    numero_controlField, 
-	                    apField, 
-	                    amField, 
-	                    nombresField, 
-	                    correoField, 
-	                    gradoField, 
-	                    telefonoField, 
-	                    carreraField
-	                );
-				if(camposValidos) {					
-					AlumnoModel am = new AlumnoModel();
-					
-					String no_control = numero_controlField.getText();
-					String nombre = nombresField.getText();
-					String primer_apellido = apField.getText();
-					String segundo_apellido = amField.getText();
-					Date fecha_nacimiento = Date.valueOf(fechaNacimientoStr);
-					String correo_electronico = correoField.getText();
-					String grado_alumno = gradoField.getText();
-					String no_telefono = telefonoField.getText();
-					String carrera = carreraField.getText();
-					
-					am.insert(no_control, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, correo_electronico, carrera, grado_alumno, no_telefono);	
-					AlumnosView.this.confirmar_alumnoCreado(addScaled);
+				if (exito) {
+				    JOptionPane.showMessageDialog(ventana, "Alumno registrado exitosamente");
+				    AlumnosView.this.confirmar_alumnoCreado(addScaled);
+				} else {
+				    JOptionPane.showMessageDialog(ventana, "Numero de control ya existente", "Error", JOptionPane.ERROR_MESSAGE);
+				    return;
 				}
-			}
+		    }
 		});
 		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3736,15 +3743,24 @@ public class AlumnosView {
 		addScaled.accept(año);
 		mipanel.add(año);
 		
+		if (alumno != null && alumno.getFecha_nacimiento() != null) {
+		    LocalDate fechaAlumno = alumno.getFecha_nacimiento().toLocalDate();
+		    dia.setSelectedItem(String.format("%02d", fechaAlumno.getDayOfMonth()));
+		    mes.setSelectedItem(String.format("%02d", fechaAlumno.getMonthValue()));
+		    año.setSelectedItem(String.valueOf(fechaAlumno.getYear()));
+		} else {
+		    dia.setSelectedItem("01");
+		    mes.setSelectedItem("01");
+		    año.setSelectedItem("2000");
+		}
+		
 		String diaSeleccionado = (String) dia.getSelectedItem();
 		String mesSeleccionado = (String) mes.getSelectedItem();
 		String añoSeleccionado = (String) año.getSelectedItem();
 
 		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 		
-		dia.setSelectedItem("01");
-		mes.setSelectedItem("01");
-		año.setSelectedItem("2000");
+		
 		
 		JTextField gradoField = new JTextField(alumno.getGrado_alumno());
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
