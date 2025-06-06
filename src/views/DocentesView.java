@@ -372,7 +372,7 @@ public class DocentesView {
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		docentes_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		docentes_barraLabel.setBounds(894, 0, 263, 102);
 		addScaled.accept(docentes_barraLabel);
@@ -2086,7 +2086,10 @@ public class DocentesView {
 		addScaled.accept(mes);
 		mipanel.add(mes);
 		
-		JComboBox año = new JComboBox(new Object[]{"2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997"});
+		JComboBox<String> año = new JComboBox<>();
+		for (int i = LocalDate.now().getYear(); i >= 1900; i--) {
+		    año.addItem(String.valueOf(i));
+		}
 		año.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		año.setBounds(449, 434, 85, 32);
 		addScaled.accept(año);
@@ -2103,7 +2106,11 @@ public class DocentesView {
 		 LocalDate localDate = LocalDate.of(añoNum, mesNum, diaNum);
 		 
 		 Date fechaSQL = Date.valueOf(localDate);
-
+		 
+		dia.setSelectedItem("01");
+		mes.setSelectedItem("01");
+		año.setSelectedItem("2000");
+		 
 		JTextField materiaField = new JTextField();
 		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		materiaField.setColumns(10);
@@ -2127,6 +2134,24 @@ public class DocentesView {
 		btn_crear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
+				
+		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
+		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
+		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+		        
+		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
+		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        String fechaNacimientoStr = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
+				
 				 boolean camposValidos = validarCampos(
 		                    idField, 
 		                    apField, 
@@ -3312,7 +3337,10 @@ public class DocentesView {
 		addScaled.accept(mes);
 		mipanel.add(mes);
 		
-		JComboBox año = new JComboBox(new Object[]{"2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997"});
+		JComboBox<String> año = new JComboBox<>();
+		for (int i = LocalDate.now().getYear(); i >= 1900; i--) {
+		    año.addItem(String.valueOf(i));
+		}
 		año.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		año.setBounds(449, 434, 85, 32);
 		addScaled.accept(año);
@@ -3325,6 +3353,10 @@ public class DocentesView {
 		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 		
 		Long numero = docente.getNo_telefono();
+		
+		dia.setSelectedItem("01");
+		mes.setSelectedItem("01");
+		año.setSelectedItem("2000");
 		
 		JTextField telefonoField = new JTextField(String.valueOf(numero));
 		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3355,6 +3387,23 @@ public class DocentesView {
 		btn_guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
+				
+		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
+		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
+		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+		        
+		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
+		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        String fechaSQL = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
 				
 				boolean camposValidos = validarCampos(
 		                   idField, 
@@ -3864,7 +3913,6 @@ public class DocentesView {
 	}
 	
 	
-	
 	//===========================================================================================================================
 	
 	
@@ -3912,6 +3960,42 @@ public class DocentesView {
 		
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
+	}
+	
+	public boolean validarFecha(int dia, int mes, int año) {
+		   try {
+		        if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+		            return false;
+		        }
+
+		        if (mes == 2) {
+		            if (dia > 29) {
+		                return false;
+		            }
+		            if (dia == 29) {
+		                if (!(año % 4 == 0 && (año % 100 != 0 || año % 400 == 0))) {
+		                    return false;
+		                }
+		            }
+		        }
+		       
+		        if (mes < 1 || mes > 12) {
+		            return false;
+		        }
+		        
+		        if (dia < 1 || dia > 31) {
+		            return false;
+		        }
+		        
+		        return true;
+		    } catch (NumberFormatException e) {
+		        return false;
+		    }
+	}
+	
+	private boolean validarCorreo(String correo) {
+	    String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+	    return correo.matches(regex);
 	}
 	
 	public void remover() {

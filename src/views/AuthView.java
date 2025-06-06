@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,6 +32,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import aplication.ScalableUtils;
 import controllers.AlumnosController;
@@ -107,7 +109,7 @@ public class AuthView {
 		
 		JLabel iniciar_sesion_label = new JLabel("Iniciar sesión");
 		iniciar_sesion_label.setFont(new Font("SansSerif", Font.PLAIN, 34));
-		iniciar_sesion_label.setBounds(277, 173, 242, 63);
+		iniciar_sesion_label.setBounds(325, 173, 203, 63);
 		addScaled.accept(iniciar_sesion_label);
 		mipanel.add(iniciar_sesion_label);
 		
@@ -157,11 +159,13 @@ public class AuthView {
 
 
 		        if (usuario.isEmpty() || contrasena.isEmpty()) {
-		            JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            showTimedMessage(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE, 2000);
 		            return;
 		        }
 		        
-				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
+//				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
 
 
 		        Usuario user = new Usuario(0, usuario, contrasena, contrasena);
@@ -170,20 +174,19 @@ public class AuthView {
 		        boolean esValido = am.validarUsuario(user);
 
 		        if (esValido) {
-		            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+		        	usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		            showTimedMessage(null, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
 		            AuthView.this.administrador(addScaled);  
 		        } else {
-		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
+		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            showTimedMessage(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE, 2000);
 		        }
 		    }
 			
 	           // AuthView.this.administrador(addScaled);  
-
-	
-});
-		
-		
-		
+		});	
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -191,8 +194,6 @@ public class AuthView {
 		acceder_btn.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 		addScaled.accept(acceder_btn);
 		mipanel.add(acceder_btn);
-		
-	
 		
 		JLabel subrayado = new JLabel("_________________");
 		subrayado.setFont(new Font("SansSerif", Font.PLAIN, 12));
@@ -612,6 +613,17 @@ public class AuthView {
 		btn_cerrarSesion.setOpaque(false);
 		addScaled.accept(btn_cerrarSesion);
 		mipanel.add(btn_cerrarSesion);
+	}
+	
+	public void showTimedMessage(JComponent parent, String message, String title, int messageType, int delay) {
+		  JOptionPane pane = new JOptionPane(message, messageType);
+		    JDialog dialog = pane.createDialog(parent, title);
+		    
+		    Timer timer = new Timer(delay, e -> dialog.dispose());
+		    timer.setRepeats(false);
+		    timer.start();
+		    
+		    dialog.setVisible(true);
 	}
 	
 	public void remover() {

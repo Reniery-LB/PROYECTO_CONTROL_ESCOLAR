@@ -369,7 +369,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);

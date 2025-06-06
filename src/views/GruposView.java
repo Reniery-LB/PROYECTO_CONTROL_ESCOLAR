@@ -325,7 +325,7 @@ public class GruposView {
 		grupos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		grupos_barraLabel.setForeground(Color.BLACK);
 		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		grupos_barraLabel.setBounds(372, 0, 263, 102);
 		addScaled.accept(grupos_barraLabel);
 		mipanel.add(grupos_barraLabel);

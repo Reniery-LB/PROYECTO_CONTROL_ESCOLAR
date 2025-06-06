@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -357,7 +358,7 @@ public class AlumnosView {
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		alumnos_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		alumnos_barraLabel.setBounds(633, 0, 263, 102);
 		addScaled.accept(alumnos_barraLabel);
@@ -1695,7 +1696,10 @@ public class AlumnosView {
 		addScaled.accept(mes);
 		mipanel.add(mes);
 		
-		JComboBox año = new JComboBox(new Object[]{"2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997"});
+		JComboBox<String> año = new JComboBox<>();
+		for (int i = LocalDate.now().getYear(); i >= 1900; i--) {
+		    año.addItem(String.valueOf(i));
+		}
 		año.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		año.setBounds(449, 434, 85, 32);
 		addScaled.accept(año);
@@ -1708,7 +1712,10 @@ public class AlumnosView {
 		String fechaNacimientoStr = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 
 		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
-
+		
+		dia.setSelectedItem("01");
+		mes.setSelectedItem("01");
+		año.setSelectedItem("2000");
 		
 		JTextField gradoField = new JTextField();
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -1745,22 +1752,22 @@ public class AlumnosView {
 //		addScaled.accept(btn_DescargarCredencial);
 //		mipanel.add(btn_DescargarCredencial);
 		
-		JButton btn_credencial = new JButton();
-		btn_credencial.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-		btn_credencial.setText("Credencial");
-		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_credencial.setBackground(new Color(170, 196, 255));
-		btn_credencial.setBounds(1220, 534, 192, 40);
-		addScaled.accept(btn_credencial);
-		mipanel.add(btn_credencial);
+//		JButton btn_credencial = new JButton();
+//		btn_credencial.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
+//			}
+//		});
+//		btn_credencial.setText("Credencial");
+//		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_credencial.setBackground(new Color(170, 196, 255));
+//		btn_credencial.setBounds(1220, 534, 192, 40);
+//		addScaled.accept(btn_credencial);
+//		mipanel.add(btn_credencial);
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -1775,6 +1782,24 @@ public class AlumnosView {
 		btn_crear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
+				
+		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
+		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
+		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+		        
+		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
+		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        String fechaNacimientoStr = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
+				
 	            boolean camposValidos = validarCampos(
 	                    numero_controlField, 
 	                    apField, 
@@ -1841,13 +1866,12 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				opciones_panel.setVisible(false);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel de administrador");
+		btn_volver.setText("Panel de Alumnos");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
@@ -3703,7 +3727,10 @@ public class AlumnosView {
 		addScaled.accept(mes);
 		mipanel.add(mes);
 		
-		JComboBox año = new JComboBox(new Object[]{"2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997"});
+		JComboBox<String> año = new JComboBox<>();
+		for (int i = LocalDate.now().getYear(); i >= 1900; i--) {
+		    año.addItem(String.valueOf(i));
+		}
 		año.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		año.setBounds(449, 434, 85, 32);
 		addScaled.accept(año);
@@ -3714,6 +3741,10 @@ public class AlumnosView {
 		String añoSeleccionado = (String) año.getSelectedItem();
 
 		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
+		
+		dia.setSelectedItem("01");
+		mes.setSelectedItem("01");
+		año.setSelectedItem("2000");
 		
 		JTextField gradoField = new JTextField(alumno.getGrado_alumno());
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3742,6 +3773,23 @@ public class AlumnosView {
 		btn_guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
+				
+		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
+		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
+		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+		        
+		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
+		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        String fechaSQL = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
 				
 	           		boolean camposValidos = validarCampos(
 		                   numero_controlField, 
@@ -4013,13 +4061,11 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel de administrador");
+		btn_volver.setText("Panel de Alumnos");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
@@ -4064,13 +4110,11 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel administrador\r\n");
+		btn_volver.setText("Panel de Alumnos\r\n");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
@@ -4085,6 +4129,44 @@ public class AlumnosView {
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
 	}
+	
+	public boolean validarFecha(int dia, int mes, int año) {
+		   try {
+		        if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+		            return false;
+		        }
+
+		        if (mes == 2) {
+		            if (dia > 29) {
+		                return false;
+		            }
+		            if (dia == 29) {
+		                if (!(año % 4 == 0 && (año % 100 != 0 || año % 400 == 0))) {
+		                    return false;
+		                }
+		            }
+		        }
+		       
+		        if (mes < 1 || mes > 12) {
+		            return false;
+		        }
+		        
+		        if (dia < 1 || dia > 31) {
+		            return false;
+		        }
+		        
+		        return true;
+		    } catch (NumberFormatException e) {
+		        return false;
+		    }
+	}
+	
+	private boolean validarCorreo(String correo) {
+	    String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+	    return correo.matches(regex);
+	}
+
+
 	
 	public void remover() {
 		mipanel.removeAll();
