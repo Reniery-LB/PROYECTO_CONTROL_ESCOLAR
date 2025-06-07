@@ -10,6 +10,9 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -37,6 +40,11 @@ import controllers.AlumnosController;
 import controllers.AsignaturasController;
 import controllers.AuthController;
 import controllers.DocentesController;
+import models.Alumno;
+import models.AlumnoModel;
+import models.ConnectionModel;
+import models.Grupo;
+import models.GruposModel;
 
 public class GruposView {
 	
@@ -48,7 +56,9 @@ public class GruposView {
 	
 	public GruposView() {
 		inicializar();
+		
 	}
+	
 	
 	public void inicializar() {
 		//VENTANA PRINCIPAL
@@ -1025,12 +1035,14 @@ public class GruposView {
 		addScaled.accept(turno_grupoLabel);
 		mipanel.add(turno_grupoLabel);
 		
+		
+		
 		String dataset []= {"Matutino", "Vespertino"};
 		JComboBox turno_comboBox = new JComboBox(dataset);
 		turno_comboBox.setBackground(new Color(217, 217, 217));
 		turno_comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		turno_comboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		turno_comboBox.setBounds(313, 421, 386, 40);
+		turno_comboBox.setBounds(313, 425, 386, 40);
 		addScaled.accept(turno_comboBox);
 		mipanel.add(turno_comboBox);
 		
@@ -1042,15 +1054,14 @@ public class GruposView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 		
-		JButton btn_crear = new JButton();
-		btn_crear.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.confirmar_grupoCreado(addScaled);
-			}
-		});
+		JButton btn_crear = new JButton("Crear");
+	    btn_crear.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            
+	        }
+	    });
+	    
 		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1351,6 +1362,7 @@ public class GruposView {
 	
 	
 	public void IDS(Consumer<JComponent> addScaled) {
+
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1673,6 +1685,7 @@ public class GruposView {
 	}
 	
 	public void ITC(Consumer<JComponent> addScaled) {
+
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1995,6 +2008,7 @@ public class GruposView {
 	}
 	
 	public void Ciberseguridad(Consumer<JComponent> addScaled) {
+
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -2323,6 +2337,7 @@ public class GruposView {
 	
 	
 	public void alerta_btnDescargar(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmación", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -2385,6 +2400,7 @@ public class GruposView {
 	
 	
 	public void confirmar_btnDescargar(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -2660,23 +2676,25 @@ public class GruposView {
 		addScaled.accept(btn_guardar);
 		mipanel.add(btn_guardar);
 		
-		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "ID"};
-		
-		String data [][]= {
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-		};
-		
-		JTable table = new JTable(data,titles) {
+		List<Alumno> alumnos = new AlumnoModel().getAll();
+
+		String[] titles = {"No. de control", "Apellido paterno", "Apellido materno", "Nombres"};
+		String[][] data = new String[alumnos.size()][4];
+
+		for (int i = 0; i < alumnos.size(); i++) {
+		    Alumno a = alumnos.get(i);
+		    data[i][1] = a.getPrimer_apellido();
+		    data[i][2] = a.getSegundo_apellido();
+		    data[i][3] = a.getNombre();
+		    data[i][0] = String.valueOf(a.getNo_control());
+		}
+
+		JTable table = new JTable(data, titles) {
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
 		        return false;
 		    }
-		};
-		
+		};		
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE); 
 		header.setForeground(Color.BLACK);
@@ -2779,6 +2797,7 @@ public class GruposView {
 	
 	
 	public void eliminar_alumno(Consumer<JComponent> addScaled) {
+
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -3134,6 +3153,7 @@ public class GruposView {
 
 	
 	public void alerta_letra(String letraSeleccionada, Consumer<JComponent> addScaled, String origen) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmación", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3207,6 +3227,7 @@ public class GruposView {
 	
 	public void alerta_añadirAlumnos(Consumer<JComponent> addScaled) {
 
+
 	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3258,6 +3279,7 @@ public class GruposView {
 
 	
 	public void editar_grupo(Consumer<JComponent> addScaled, String letraSeleccionada) {
+
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -3622,6 +3644,7 @@ public class GruposView {
 
 	
 	public void alerta_eliminar(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3686,6 +3709,7 @@ public class GruposView {
 
 	
 	public void confirmar_grupoEliminado(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3736,6 +3760,7 @@ public class GruposView {
 
 	
 	public void confirmar_grupoCreado(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3786,6 +3811,7 @@ public class GruposView {
 
 	
 	public void alerta_IrAlumnos(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3850,6 +3876,7 @@ public class GruposView {
 
 	
 	public void alerta_IrDocentes(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -3914,6 +3941,7 @@ public class GruposView {
 
 	
 	public void alerta_IrAsignaturas(Consumer<JComponent> addScaled) {
+
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);

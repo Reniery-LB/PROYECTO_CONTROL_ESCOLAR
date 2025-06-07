@@ -61,8 +61,10 @@ public class AlumnosView {
 	
 	public AlumnosView() {
 		origen = "añadir";
+		
 		inicializar();
 	}
+	
 	
 	
 	
@@ -1292,7 +1294,7 @@ public class AlumnosView {
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Carrera: "+ alumno.getCarrera());
+		JLabel carrera = new JLabel("Grupo: "+ alumno.getCarrera());
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 475, 700, 29);
 		addScaled.accept(carrera);
@@ -1608,7 +1610,7 @@ public class AlumnosView {
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Carrera: ");
+		JLabel carrera = new JLabel("Grupo: ");
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 530, 800, 29);
 		addScaled.accept(carrera);
@@ -3716,7 +3718,7 @@ public class AlumnosView {
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Carrera: " );
+		JLabel carrera = new JLabel("Grupo: " );
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 530, 113, 29);
 		addScaled.accept(carrera);

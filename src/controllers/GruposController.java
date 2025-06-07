@@ -22,4 +22,5 @@ public class GruposController {
 		vista.grupos_registros(addScaled);
 	}
 
+	
 }

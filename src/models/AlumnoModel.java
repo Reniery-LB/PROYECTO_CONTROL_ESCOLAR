@@ -16,11 +16,15 @@ public class AlumnoModel {
 	
 	public AlumnoModel() {
 		
+		
 	}
+	
 	
 	public List<Alumno> getAll() {
 	    List<Alumno> alumnos = new ArrayList<>();
 	    String query = "SELECT * FROM Alumno";
+	    
+	    
 
 	    try (
 	        Connection conn = new ConnectionModel().getConnection();

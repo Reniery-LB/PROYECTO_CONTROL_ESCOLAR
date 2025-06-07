@@ -2,25 +2,35 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import aplication.ScalableUtils;
@@ -28,6 +38,11 @@ import controllers.AlumnosController;
 import controllers.AuthController;
 import controllers.DocentesController;
 import controllers.GruposController;
+import models.Asignatura;
+import models.AsignaturasModel;
+import models.ConnectionModel;
+import models.Docente;
+import models.DocentesModel;
 
 public class AsignaturasView {
 
@@ -39,6 +54,7 @@ public class AsignaturasView {
 	
 	public AsignaturasView() {
 		inicializar();
+		
 	}
 	
 	public void inicializar() {
@@ -163,7 +179,7 @@ public class AsignaturasView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.detalles(addScaled);
+				AsignaturasView.this.asignaturas(addScaled);
 			}
 		});
 		btn_detalles.setOpaque(true);
@@ -181,7 +197,7 @@ public class AsignaturasView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.detalles(addScaled);			}
+				AsignaturasView.this.asignaturas(addScaled);			}
 		});
 		btn_detalles_label.setFont(new Font("SansSerif", Font.PLAIN, 24));
 		btn_detalles_label.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -432,6 +448,53 @@ public class AsignaturasView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
+		 JPanel asignaturasContainer = new JPanel();
+		 asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
+		 asignaturasContainer.setBackground(Color.decode("#27548A"));
+		
+		 try {
+			    AsignaturasModel asignaturaModel = new AsignaturasModel();
+			    List<Asignatura> asignaturas = asignaturaModel.gettAll();
+
+			    for (Asignatura asignatura : asignaturas) {
+			        JButton btnAsignatura = new JButton(asignatura.getNombre());
+			        btnAsignatura.setFont(new Font("SansSerif", Font.PLAIN, 26));
+			        btnAsignatura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+			        btnAsignatura.setBackground(new Color(170, 196, 255));
+			        btnAsignatura.setAlignmentX(Component.CENTER_ALIGNMENT);
+			        btnAsignatura.setMaximumSize(new Dimension(1348, 117));
+
+			        btnAsignatura.addActionListener(new ActionListener() {
+			            @Override
+			            public void actionPerformed(ActionEvent e) {
+			                opciones_panel.setVisible(false);
+							AsignaturasView.this.detalles_ingles(addScaled);
+
+			                
+			            }
+			        });
+
+			        asignaturasContainer.add(btnAsignatura);
+			        asignaturasContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+			    }
+
+			} catch (SQLException ex) {
+			    ex.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error al cargar asignaturas: " + ex.getMessage());
+			}
+		 
+		 JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
+		 scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+		 scrollGrupos.setBounds(93, 274, 1348, 345); 
+		 scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		 addScaled.accept(scrollGrupos);
+		 mipanel.add(scrollGrupos);
+		 
+		 
+
+
+			
+		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
@@ -665,6 +728,7 @@ public class AsignaturasView {
 	//===========================================================================================================================
 	
 	
+	
 	public void detalles(Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
@@ -687,6 +751,50 @@ public class AsignaturasView {
 		fondo_barra_2.setBounds(0, 101, 1540, 102);
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
+		
+		JPanel asignaturasContainer = new JPanel();
+		 asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
+		 asignaturasContainer.setBackground(Color.decode("#27548A"));
+		
+		 try {
+			    AsignaturasModel asignaturaModel = new AsignaturasModel();
+			    List<Asignatura> asignaturas = asignaturaModel.gettAll();
+
+			    for (Asignatura asignatura : asignaturas) {
+			        JButton btnAsignatura = new JButton(asignatura.getNombre());
+			        btnAsignatura.setFont(new Font("SansSerif", Font.PLAIN, 26));
+			        btnAsignatura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+			        btnAsignatura.setBackground(new Color(170, 196, 255));
+			        btnAsignatura.setAlignmentX(Component.CENTER_ALIGNMENT);
+			        btnAsignatura.setMaximumSize(new Dimension(1348, 117));
+
+			        btnAsignatura.addActionListener(new ActionListener() {
+			            @Override
+			            public void actionPerformed(ActionEvent e) {
+			                opciones_panel.setVisible(false);
+							AsignaturasView.this.detalles_ingles(addScaled);
+
+			                
+			            }
+			        });
+
+			        asignaturasContainer.add(btnAsignatura);
+			        asignaturasContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+			    }
+
+			} catch (SQLException ex) {
+			    ex.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error al cargar asignaturas: " + ex.getMessage());
+			}
+		 
+		 JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
+		 scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+		 scrollGrupos.setBounds(93, 274, 1348, 345); 
+		 scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		 addScaled.accept(scrollGrupos);
+		 mipanel.add(scrollGrupos);
+		
+		
 		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1134,20 +1242,7 @@ public class AsignaturasView {
 		addScaled.accept(nombre_materia);
 		mipanel.add(nombre_materia);
 		
-		JButton btn_crear = new JButton();
-		btn_crear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AsignaturasView.this.confirmar_asignaturaCreada(addScaled);
-			}
-		});
-		btn_crear.setText("Crear");
-		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_crear.setBackground(new Color(170, 196, 255));
-		btn_crear.setBounds(678, 716, 192, 40);
-		addScaled.accept(btn_crear);
-		mipanel.add(btn_crear);
+		
 		
 		JLabel docente_cargo = new JLabel("Docente a cargo:");
 		docente_cargo.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1155,11 +1250,11 @@ public class AsignaturasView {
 		addScaled.accept(docente_cargo);
 		mipanel.add(docente_cargo);
 		
-		JLabel id_docente = new JLabel("ID del docente:");
+	/*	JLabel id_docente = new JLabel("ID del docente:");
 		id_docente.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		id_docente.setBounds(179, 363, 152, 29);
 		addScaled.accept(id_docente);
-		mipanel.add(id_docente);
+		mipanel.add(id_docente);*/
 		
 		JTextArea descripcion = new JTextArea();
 		descripcion.setText("Descripción:");
@@ -1177,23 +1272,29 @@ public class AsignaturasView {
 		addScaled.accept(materiaField);
 		mipanel.add(materiaField);
 		
-		JTextField docenteField = new JTextField();
-		docenteField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		docenteField.setColumns(10);
-		docenteField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		docenteField.setBackground(new Color(217, 217, 217));
-		docenteField.setBounds(341, 292, 510, 40);
-		addScaled.accept(docenteField);
-		mipanel.add(docenteField);
+		JComboBox<String> docenteComboBox = new JComboBox<>();
+		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docenteComboBox.setBackground(new Color(217, 217, 217));
+		docenteComboBox.setBounds(341, 292, 510, 40);
+
+		//Connection conn = new ConnectionModel().getConnection();
+
+		DocentesModel docenteModel = new DocentesModel();
+		List<Docente> docentes = docenteModel.getAll();
 		
-		JTextField idField = new JTextField();
-		idField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		idField.setColumns(10);
-		idField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		idField.setBackground(new Color(217, 217, 217));
-		idField.setBounds(341, 352, 510, 40);
-		addScaled.accept(idField);
-		mipanel.add(idField);
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+		for (Docente docente : docentes) {
+		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		}
+		docenteComboBox.setModel(comboModel);
+		
+		if (docentes.isEmpty()) {
+		    docenteComboBox.addItem("No hay docentes disponibles");
+		}
+
+		addScaled.accept(docenteComboBox);
+		mipanel.add(docenteComboBox);
 		
 		JTextArea descField = new JTextArea();
 		descField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -1203,6 +1304,61 @@ public class AsignaturasView {
 		descField.setBounds(340, 423, 700, 200);
 		addScaled.accept(descField);
 		mipanel.add(descField);
+		
+		JButton btn_crear = new JButton();
+		 btn_crear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String nombreMateria = materiaField.getText().trim();
+					String descripcionMateria = descField.getText().trim();
+					String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
+
+					if (nombreMateria.isEmpty() || descripcionMateria.isEmpty() || docenteSeleccionado == null) {
+						JOptionPane.showMessageDialog(null, "Por favor completa todos los campos.");
+						return;
+					}
+
+					int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
+
+					Asignatura nuevaAsignatura = new Asignatura(nombreMateria, descripcionMateria);
+					AsignaturasModel asignaturaModel = new AsignaturasModel();
+					boolean insertado = asignaturaModel.insertarAsignatura(nuevaAsignatura);
+
+					if (insertado) {
+						int idAsignatura = asignaturaModel.obtenerUltimoId();
+
+						asignaturaModel.asignarDocente(idDocente, idAsignatura);
+						JOptionPane.showMessageDialog(null, "Asignatura creada correctamente.");
+						AsignaturasView.this.panel_asignaturas(addScaled);
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al crear la asignatura.");
+					}
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Ocurrió un error: " + ex.getMessage());
+				}
+			}
+		});
+		btn_crear.setText("Crear");
+		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear.setBackground(new Color(170, 196, 255));
+		btn_crear.setBounds(678, 716, 192, 40);
+		addScaled.accept(btn_crear);
+		mipanel.add(btn_crear);
+
+		
+		/*JTextField idField = new JTextField();
+		idField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		idField.setColumns(10);
+		idField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		idField.setBackground(new Color(217, 217, 217));
+		idField.setBounds(341, 352, 510, 40);
+		addScaled.accept(idField);
+		mipanel.add(idField);*/
+		
+		
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -1449,11 +1605,11 @@ public class AsignaturasView {
 		addScaled.accept(docente_cargo);
 		mipanel.add(docente_cargo);
 		
-		JLabel id_docente = new JLabel("ID del docente:");
+		/*JLabel id_docente = new JLabel("ID del docente:");
 		id_docente.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		id_docente.setBounds(179, 363, 152, 29);
 		addScaled.accept(id_docente);
-		mipanel.add(id_docente);
+		mipanel.add(id_docente);*/
 		
 		JTextArea descripcion = new JTextArea();
 		descripcion.setText("Descripción:");
@@ -1471,23 +1627,37 @@ public class AsignaturasView {
 		addScaled.accept(materiaField);
 		mipanel.add(materiaField);
 		
-		JTextField docenteField = new JTextField();
-		docenteField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		docenteField.setColumns(10);
-		docenteField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		docenteField.setBackground(new Color(217, 217, 217));
-		docenteField.setBounds(341, 292, 510, 40);
-		addScaled.accept(docenteField);
-		mipanel.add(docenteField);
+		JComboBox<String> docenteComboBox = new JComboBox<>();
+		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docenteComboBox.setBackground(new Color(217, 217, 217));
+		docenteComboBox.setBounds(341, 292, 510, 40);
+
+
+		DocentesModel docenteModel = new DocentesModel();
+		List<Docente> docentes = docenteModel.getAll();
 		
-		JTextField idField = new JTextField();
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+		for (Docente docente : docentes) {
+		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		}
+		docenteComboBox.setModel(comboModel);
+		
+		if (docentes.isEmpty()) {
+		    docenteComboBox.addItem("No hay docentes disponibles");
+		}
+
+		addScaled.accept(docenteComboBox);
+		mipanel.add(docenteComboBox);
+		
+		/*JTextField idField = new JTextField();
 		idField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		idField.setColumns(10);
 		idField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		idField.setBackground(new Color(217, 217, 217));
 		idField.setBounds(341, 352, 510, 40);
 		addScaled.accept(idField);
-		mipanel.add(idField);
+		mipanel.add(idField);*/
 		
 		JTextArea descField = new JTextArea();
 		descField.setFont(new Font("SansSerif", Font.PLAIN, 18));

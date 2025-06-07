@@ -59,6 +59,7 @@ public class DocentesView {
 	
 	public DocentesView() {
 		origen = "añadir";
+		
 		inicializar();
 	}
 	
