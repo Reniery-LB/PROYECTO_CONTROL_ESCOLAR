@@ -115,6 +115,7 @@ public class DocentesModel {
 			return false;
 			}
 
+	
 	public boolean update(Docente docente) {
 	    String sql = "UPDATE Docente SET nombres = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?, no_telefono = ?, materia = ? WHERE idDocente = ?";
 	    

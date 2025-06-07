@@ -329,44 +329,82 @@ public class AuthView {
 		acceder_btn.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		       String usuario = usuario_field.getText().trim();
-		        String correo = correo_field.getText().trim();
-		        String contrasena = new String(contra_field.getPassword());
-		        String confirmar = new String(confirmar_field.getPassword());
+	            String usuario = usuario_field.getText().trim();
+	            String correo = correo_field.getText().trim();
+	            String contrasena = new String(contra_field.getPassword());
+	            String confirmar = new String(confirmar_field.getPassword());
+	            
+	            usuario_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	            correo_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	            contra_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	            confirmar_field.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	            
+	            boolean valid = true;
+	            
+	            if (usuario.isEmpty()) {
+	                usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                valid = false;
+	            } else {
+	                usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	            }
+	            
+	            if (correo.isEmpty()) {
+	                correo_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                valid = false;
+	            } else if (!validarCorreo(correo)) {
+	                correo_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                showTimedMessage(null, "El formato del correo no es válido", "Error", JOptionPane.ERROR_MESSAGE, 2000);
+	                valid = false;
+	            } else {
+	                correo_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	            }
+	            
+	            if (contrasena.isEmpty()) {
+	                contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                valid = false;
+	            } else {
+	                contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	            }
+	            
+	            if (confirmar.isEmpty()) {
+	                confirmar_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                valid = false;
+	            } else {
+	                confirmar_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	            }
+	            
+	            if (!valid) {
+	                showTimedMessage(null, "Por favor completa todos los campos correctamente", "Campos incompletos", JOptionPane.WARNING_MESSAGE, 2000);
+	                return;
+	            }
+	            
+	            if (!contrasena.equals(confirmar)) {
+	                contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                confirmar_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+	                showTimedMessage(null, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE, 2000);
+	                return;
+	            } else {
+	                contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	                confirmar_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+	            }
 
-		        if (usuario.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmar.isEmpty()) {
-		            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
-		            return;
-		        }
+	            if (!terminos.isSelected()) {
+	                showTimedMessage(null, "Debes aceptar los términos y condiciones", "Error", JOptionPane.ERROR_MESSAGE, 2000);
+	                return;
+	            }
+	            
+	            AuthModel am = new AuthModel();
+	            String contrasenaEncriptada = hashPassword(contrasena);
+	            boolean exito = am.registrarUsuario(usuario, correo, contrasenaEncriptada);
 
-		        if (!contrasena.equals(confirmar)) {
-		            JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden.");
-		            return;
-		        }
-
-		        
-
-		        if (!terminos.isSelected()) {
-		            JOptionPane.showMessageDialog(null, "Debes aceptar los términos y condiciones.");
-		            return;
-		        }
-		        
-		        AuthModel am = new AuthModel();
-		        String contrasenaEncriptada = hashPassword(contrasena);
-		        boolean exito = am.registrarUsuario(usuario, correo, contrasenaEncriptada);
-
-		        if(exito) {
-		        	 JOptionPane.showMessageDialog(null, "Registro exitoso.");
-			            AuthView.this.login(addScaled); 
-		        }else {
-		        	 JOptionPane.showMessageDialog(null, "Error al registrar Usuario");
-
-		        }
-		     
-		    }    
-		    
-		});
-
+	            if(exito) {
+	                showTimedMessage(null, "Registro exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
+	                AuthView.this.login(addScaled); 
+	            } else {
+	                showTimedMessage(null, "Error al registrar Usuario", "Error", JOptionPane.ERROR_MESSAGE, 2000);
+	            }
+	        }    
+	    });
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 650, 299, 56);
 		acceder_btn.setBackground(Color.decode("#AAC4FF"));
@@ -646,6 +684,11 @@ public class AuthView {
 		    timer.start();
 		    
 		    dialog.setVisible(true);
+	}
+	
+	private boolean validarCorreo(String correo) {
+	    String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+	    return correo.matches(regex);
 	}
 	
 	public void remover() {

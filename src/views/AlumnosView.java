@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,10 +36,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.AbstractDocument;
 
-
+import PDF.PDFGenerator;
 import aplication.LetterDocumentFilter;
 import aplication.NumericDocumentFilter;
 import aplication.ScalableUtils;
+import aplication.TextDocumentFilter;
 import controllers.AlumnosController;
 import controllers.AsignaturasController;
 import controllers.AuthController;
@@ -48,6 +51,7 @@ import models.AlumnoModel;
 
 public class AlumnosView {
 	
+	private JTextField amField;
 	private String origen;
 	private static final int BASE_ANCHO = 1024;
 	private static final int BASE_ALTURA = 768;
@@ -1249,7 +1253,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.credencial_alumno(alumno ,addScaled);
+				AlumnosView.this.credencial_alumno(alumno, addScaled);
 			}
 		});
 		btn_credencial.setText("Credencial");
@@ -1315,6 +1319,7 @@ public class AlumnosView {
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
+//		img_alumno.setText("SIN FOTO");
 		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
 		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		img_alumno.setHorizontalAlignment(JLabel.CENTER);
@@ -1550,25 +1555,25 @@ public class AlumnosView {
 		
 		JLabel numero_control = new JLabel("Número de control: \r\n");
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_control.setBounds(111, 243, 218, 29);
+		numero_control.setBounds(111, 243, 800, 29);
 		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
 		JLabel apellido_paterno = new JLabel("Apellido paterno: ");
 		apellido_paterno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		apellido_paterno.setBounds(133, 290, 196, 29);
+		apellido_paterno.setBounds(133, 290, 800, 29);
 		addScaled.accept(apellido_paterno);
 		mipanel.add(apellido_paterno);
 		
 		JLabel nombres = new JLabel("Nombres: ");
 		nombres.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		nombres.setBounds(200, 386, 129, 29);
+		nombres.setBounds(200, 386, 800, 29);
 		addScaled.accept(nombres);
 		mipanel.add(nombres);
 		
 		JLabel correo_electronico = new JLabel("Correo electrónico: ");
 		correo_electronico.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		correo_electronico.setBounds(111, 482, 218, 29);
+		correo_electronico.setBounds(111, 482, 800, 29);
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
@@ -1592,32 +1597,32 @@ public class AlumnosView {
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		fecha_nacimiento.setBounds(90, 434, 239, 29);
+		fecha_nacimiento.setBounds(90, 434, 800, 29);
 		addScaled.accept(fecha_nacimiento);
 		mipanel.add(fecha_nacimiento);
 		
 		
 		JLabel apellido_materno = new JLabel("Apellido materno: \r\n");
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		apellido_materno.setBounds(127, 338, 202, 29);
+		apellido_materno.setBounds(127, 338, 800, 29);
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
 		JLabel carrera = new JLabel("Carrera: ");
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		carrera.setBounds(216, 530, 113, 29);
+		carrera.setBounds(216, 530, 800, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
 		JLabel grado_alumno = new JLabel("Grado del alumno: \r\n");
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grado_alumno.setBounds(119, 578, 210, 29);
+		grado_alumno.setBounds(119, 578, 800, 29);
 		addScaled.accept(grado_alumno);
 		mipanel.add(grado_alumno);
 		
 		JLabel numero_telefono = new JLabel("Número de teléfono: ");
 		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_telefono.setBounds(99, 626, 218, 29);
+		numero_telefono.setBounds(99, 626, 800, 29);
 		addScaled.accept(numero_telefono);
 		mipanel.add(numero_telefono);
 		
@@ -1627,6 +1632,23 @@ public class AlumnosView {
 		addScaled.accept(perfil_alumno);
 		mipanel.add(perfil_alumno);
 		
+//		JButton btn_imagen = new JButton();
+//		btn_imagen.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.selecciona_img(addScaled);
+//			}
+//		});
+//		btn_imagen.setText("Imagen");
+//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_imagen.setBackground(new Color(170, 196, 255));
+//		btn_imagen.setBounds(1236, 237, 157, 40);
+//		addScaled.accept(btn_imagen);
+//		mipanel.add(btn_imagen);
+//		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
@@ -1643,7 +1665,7 @@ public class AlumnosView {
 		numero_controlField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		numero_controlField.setBounds(311, 239, 453, 40);
 		numero_controlField.setColumns(10);
-		((AbstractDocument) numero_controlField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+		((AbstractDocument) numero_controlField.getDocument()).setDocumentFilter(new NumericDocumentFilter(10));
 		addScaled.accept(numero_controlField);
 		mipanel.add(numero_controlField);
 		
@@ -1653,17 +1675,17 @@ public class AlumnosView {
 		apField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		apField.setBackground(new Color(217, 217, 217));
 		apField.setBounds(311, 287, 453, 40);
-		((AbstractDocument) apField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) apField.getDocument()).setDocumentFilter(new LetterDocumentFilter(30));
 		addScaled.accept(apField);
 		mipanel.add(apField);
 		
-		JTextField amField = new JTextField();
+		amField = new JTextField();
 		amField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		amField.setColumns(10);
 		amField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		amField.setBackground(new Color(217, 217, 217));
 		amField.setBounds(311, 335, 453, 40);
-		((AbstractDocument) amField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) amField.getDocument()).setDocumentFilter(new LetterDocumentFilter(30));
 		addScaled.accept(amField);
 		mipanel.add(amField);
 		
@@ -1673,7 +1695,7 @@ public class AlumnosView {
 		nombresField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		nombresField.setBackground(new Color(217, 217, 217));
 		nombresField.setBounds(311, 383, 453, 40);
-		((AbstractDocument) nombresField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) nombresField.getDocument()).setDocumentFilter(new LetterDocumentFilter(40));
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
@@ -1683,6 +1705,7 @@ public class AlumnosView {
 		carreraField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		carreraField.setBackground(new Color(217, 217, 217));
 		carreraField.setBounds(311, 527, 453, 40);
+		((AbstractDocument) carreraField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
 		addScaled.accept(carreraField);
 		mipanel.add(carreraField);
 		
@@ -1692,6 +1715,7 @@ public class AlumnosView {
 		correoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		correoField.setBackground(new Color(217, 217, 217));
 		correoField.setBounds(311, 479, 453, 40);
+		((AbstractDocument) correoField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
 		addScaled.accept(correoField);
 		mipanel.add(correoField);
 		
@@ -1734,7 +1758,7 @@ public class AlumnosView {
 		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		gradoField.setBackground(new Color(217, 217, 217));
 		gradoField.setBounds(311, 575, 453, 40);
-		((AbstractDocument) gradoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+		((AbstractDocument) gradoField.getDocument()).setDocumentFilter(new NumericDocumentFilter(1));
 		addScaled.accept(gradoField);
 		mipanel.add(gradoField);
 		
@@ -1744,7 +1768,7 @@ public class AlumnosView {
 		telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		telefonoField.setBackground(new Color(217, 217, 217));
 		telefonoField.setBounds(311, 623, 453, 40);
-		((AbstractDocument) telefonoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+		((AbstractDocument) telefonoField.getDocument()).setDocumentFilter(new NumericDocumentFilter(10));
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
@@ -1830,7 +1854,6 @@ public class AlumnosView {
 				);
 				
 				if (exito) {
-				    JOptionPane.showMessageDialog(ventana, "Alumno registrado exitosamente");
 				    AlumnosView.this.confirmar_alumnoCreado(addScaled);
 				} else {
 				    JOptionPane.showMessageDialog(ventana, "Numero de control ya existente", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1901,7 +1924,7 @@ public class AlumnosView {
 	//===========================================================================================================================
 	
 	
-	public void alerta_DescargarCredencial(Consumer<JComponent> addScaled) {
+	public void alerta_DescargarCredencial(Alumno alumno, Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -1926,7 +1949,52 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				AlumnosView.this.confirmar_CredencialDescargada(addScaled);
+		        JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Guardar credencial como PDF");
+		        
+		        String defaultFileName = "Credencial_" + alumno.getNo_control() + ".pdf";
+		        fileChooser.setSelectedFile(new File(defaultFileName));
+		        
+		        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+		            @Override
+		            public boolean accept(File f) {
+		                return f.getName().toLowerCase().endsWith(".pdf") || f.isDirectory();
+		            }
+		            
+		            @Override
+		            public String getDescription() {
+		                return "Archivos PDF (*.pdf)";
+		            }
+		        });
+		        
+		        int userSelection = fileChooser.showSaveDialog(ventana);
+		        
+		        if (userSelection == JFileChooser.APPROVE_OPTION) {
+		            File fileToSave = fileChooser.getSelectedFile();
+		            String filePath = fileToSave.getAbsolutePath();
+		           
+		            if (!filePath.toLowerCase().endsWith(".pdf")) {
+		                filePath += ".pdf";
+		                fileToSave = new File(filePath);
+		            }
+		            
+		            if (fileToSave.exists()) {
+		                int confirm = JOptionPane.showConfirmDialog(ventana,
+		                    "El archivo ya existe. ¿Desea reemplazarlo?",
+		                    "Confirmar sobrescritura",
+		                    JOptionPane.YES_NO_OPTION,
+		                    JOptionPane.WARNING_MESSAGE);
+		                
+		                if (confirm != JOptionPane.YES_OPTION) {
+		                    return;
+		                }
+		            }
+		            
+		            PDFGenerator pdfGenerator = new PDFGenerator();
+		            pdfGenerator.generarCredencialPDF(alumno, filePath);
+		            		
+		            AlumnosView.this.confirmar_CredencialDescargada(addScaled);
+		        }
 			}
 		});
 		btn_aceptar.setText("Aceptar");
@@ -2196,7 +2264,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.añadir_credencial(addScaled);
+				AlumnosView.this.editar_alumno(null, addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -2210,20 +2278,20 @@ public class AlumnosView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JButton btn_añadir = new JButton();
-		btn_añadir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AlumnosView.this.confirmar_imgColocada(addScaled);
-			}
-		});
-		btn_añadir.setText("Añadir");
-		btn_añadir.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_añadir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_añadir.setBackground(new Color(170, 196, 255));
-		btn_añadir.setBounds(677, 641, 192, 40);
-		addScaled.accept(btn_añadir);
-		mipanel.add(btn_añadir);
+//		JButton btn_añadir = new JButton();
+//		btn_añadir.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.confirmar_imgColocada(addScaled);
+//			}
+//		});
+//		btn_añadir.setText("Añadir");
+//		btn_añadir.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_añadir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_añadir.setBackground(new Color(170, 196, 255));
+//		btn_añadir.setBounds(677, 641, 192, 40);
+//		addScaled.accept(btn_añadir);
+//		mipanel.add(btn_añadir);
 		
 		JLabel mensaje = new JLabel("¡Seleccione una imagen!");
 		mensaje.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2663,7 +2731,7 @@ public class AlumnosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AlumnosView.this.alerta_DescargarCredencial(addScaled);
+				AlumnosView.this.alerta_DescargarCredencial(alumno, addScaled);
 			}
 		});
 		btn_credencial.setText("Descargar credencial");
@@ -2689,27 +2757,44 @@ public class AlumnosView {
 //		addScaled.accept(btn_editar);
 //		mipanel.add(btn_editar);
 		
+//		JButton btn_imagen = new JButton();
+//		btn_imagen.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.selecciona_img(addScaled);
+//			}
+//		});
+//		btn_imagen.setText("Imagen");
+//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_imagen.setBackground(new Color(170, 196, 255));
+//		btn_imagen.setBounds(116, 273, 157, 40);
+//		addScaled.accept(btn_imagen);
+//		mipanel.add(btn_imagen);
+		
 		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_control.setBounds(705, 370, 263, 29);
+		numero_control.setBounds(705, 370, 800, 29);
 		addScaled.accept(numero_control);
 		mipanel.add(numero_control);
 		
 		JLabel carrera = new JLabel("Carrera: "+ alumno.getCarrera());
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		carrera.setBounds(810, 471, 467, 29);
+		carrera.setBounds(810, 471, 800, 29);
 		addScaled.accept(carrera);
 		mipanel.add(carrera);
 		
 		JLabel grado_alumno = new JLabel("Grado del alumno:  " + alumno.getGrado_alumno() + " Semestre");
 		grado_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grado_alumno.setBounds(714, 421, 417, 29);
+		grado_alumno.setBounds(714, 421, 800, 29);
 		addScaled.accept(grado_alumno);
 		mipanel.add(grado_alumno);
 		
 		JLabel numero_telefono = new JLabel("Número de teléfono:  " + alumno.getNo_telefono());
 		numero_telefono.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		numero_telefono.setBounds(693, 530, 366, 29);
+		numero_telefono.setBounds(693, 530, 800, 29);
 		addScaled.accept(numero_telefono);
 		mipanel.add(numero_telefono);
 		
@@ -2722,13 +2807,13 @@ public class AlumnosView {
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
+//		img_alumno.setText("SIN FOTO");
 		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
 		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		img_alumno.setHorizontalAlignment(JLabel.CENTER);
 		img_alumno.setBounds(116, 323, 157, 177);
 		addScaled.accept(img_alumno);
 		mipanel.add(img_alumno);
-		
 		
 		JLabel logo_credencial = new JLabel();
 		logo_credencial.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
@@ -3655,9 +3740,27 @@ public class AlumnosView {
 		addScaled.accept(perfil_alumno);
 		mipanel.add(perfil_alumno);
 		
+//		JButton btn_imagen = new JButton();
+//		btn_imagen.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AlumnosView.this.selecciona_img(addScaled);
+//			}
+//		});
+//		btn_imagen.setText("Imagen");
+//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_imagen.setBackground(new Color(170, 196, 255));
+//		btn_imagen.setBounds(1236, 237, 157, 40);
+//		addScaled.accept(btn_imagen);
+//		mipanel.add(btn_imagen);
+		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
+//		img_alumno.setText("SIN FOTO");
 		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
 		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		img_alumno.setHorizontalAlignment(JLabel.CENTER);
@@ -3668,10 +3771,12 @@ public class AlumnosView {
 		int telefono = alumno.getNo_control();
 		
 		JTextField numero_controlField = new JTextField(String.valueOf(telefono));
-		numero_controlField.setBackground(Color.decode("#D9D9D9"));
+		numero_controlField.setBackground(Color.GRAY);
 		numero_controlField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		numero_controlField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		numero_controlField.setForeground(Color.WHITE);
 		numero_controlField.setBounds(311, 239, 453, 40);
+		numero_controlField.setEditable(false);
 		numero_controlField.setColumns(10);
 		((AbstractDocument) numero_controlField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
 		addScaled.accept(numero_controlField);
@@ -3683,17 +3788,17 @@ public class AlumnosView {
 		apField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		apField.setBackground(new Color(217, 217, 217));
 		apField.setBounds(311, 287, 453, 40);
-		((AbstractDocument) apField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) apField.getDocument()).setDocumentFilter(new LetterDocumentFilter(30));
 		addScaled.accept(apField);
 		mipanel.add(apField);
 		
-		JTextField amField = new JTextField(alumno.getSegundo_apellido());
+		amField = new JTextField(alumno.getSegundo_apellido());
 		amField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		amField.setColumns(10);
 		amField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		amField.setBackground(new Color(217, 217, 217));
 		amField.setBounds(311, 335, 453, 40);
-		((AbstractDocument) amField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) amField.getDocument()).setDocumentFilter(new LetterDocumentFilter(30));
 		addScaled.accept(amField);
 		mipanel.add(amField);
 		
@@ -3703,7 +3808,7 @@ public class AlumnosView {
 		nombresField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		nombresField.setBackground(new Color(217, 217, 217));
 		nombresField.setBounds(311, 383, 453, 40);
-		((AbstractDocument) nombresField.getDocument()).setDocumentFilter(new LetterDocumentFilter());
+		((AbstractDocument) nombresField.getDocument()).setDocumentFilter(new LetterDocumentFilter(40));
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
@@ -3713,6 +3818,7 @@ public class AlumnosView {
 		carreraField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		carreraField.setBackground(new Color(217, 217, 217));
 		carreraField.setBounds(311, 527, 453, 40);
+		((AbstractDocument) carreraField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
 		addScaled.accept(carreraField);
 		mipanel.add(carreraField);
 		
@@ -3722,6 +3828,7 @@ public class AlumnosView {
 		correoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		correoField.setBackground(new Color(217, 217, 217));
 		correoField.setBounds(311, 479, 453, 40);
+		((AbstractDocument) correoField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
 		addScaled.accept(correoField);
 		mipanel.add(correoField);
 		
@@ -3763,20 +3870,17 @@ public class AlumnosView {
 
 		String fechaSQL = añoSeleccionado + "-" + mesSeleccionado + "-" + diaSeleccionado;
 		
-		
-		
 		JTextField gradoField = new JTextField(alumno.getGrado_alumno());
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		gradoField.setColumns(10);
 		gradoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		gradoField.setBackground(new Color(217, 217, 217));
 		gradoField.setBounds(311, 575, 453, 40);
-		((AbstractDocument) gradoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+		((AbstractDocument) gradoField.getDocument()).setDocumentFilter(new NumericDocumentFilter(1));
 		addScaled.accept(gradoField);
 		mipanel.add(gradoField);
 		
 		Long numero = alumno.getNo_telefono();
-		
 		
 		JTextField telefonoField = new JTextField(String.valueOf(numero));
 		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3784,7 +3888,7 @@ public class AlumnosView {
 		telefonoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		telefonoField.setBackground(new Color(217, 217, 217));
 		telefonoField.setBounds(311, 623, 453, 40);
-		((AbstractDocument) telefonoField.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+		((AbstractDocument) telefonoField.getDocument()).setDocumentFilter(new NumericDocumentFilter(10));
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
@@ -3792,65 +3896,54 @@ public class AlumnosView {
 		btn_guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				
-		        int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
-		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
-		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
-		        
-		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
-		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
-		            return;
-		        }
-		        
-		        if (!validarCorreo(correoField.getText())) {
-		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-		            JOptionPane.showMessageDialog(ventana, "Por favor ingrese un correo electrónico válido", "Correo inválido", JOptionPane.WARNING_MESSAGE);
-		            return;
-		        }
-		        
-		        String fechaSQL = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
-				
-	           		boolean camposValidos = validarCampos(
-		                   numero_controlField, 
-		                   apField, 
-		                   amField, 
-		                   nombresField, 
-		                   correoField, 
-		                   gradoField, 
-		                   telefonoField, 
-		                   carreraField
-		               );	
-	           		
-	           		if(camposValidos) {	           			
-	           			int idAlumno = alumno.getIdAlumno();  
-	           			int no_control = Integer.parseInt(numero_controlField.getText());
-	           			String nombre = nombresField.getText();
-	           			String primer_apellido = apField.getText();
-	           			String segundo_apellido = amField.getText();
-	           			Date fecha_nacimiento = Date.valueOf(fechaSQL); 
-	           			String correo_electronico = correoField.getText();
-	           			String grado_alumno = gradoField.getText();
-	           			Long no_telefono = Long.parseLong(telefonoField.getText());
-	           			String carrera = carreraField.getText();
-	           			
-	           			Alumno alumno = new Alumno(
-	           					idAlumno,
-	           					no_control,
-	           					nombre,
-	           					primer_apellido,
-	           					segundo_apellido,
-	           					fecha_nacimiento,
-	           					correo_electronico,
-	           					grado_alumno,
-	           					no_telefono,
-	           					carrera
-	           					);
-	           			
-	           			AlumnoModel am = new AlumnoModel();
-	           			boolean exito = am.update(alumno);
-	           			AlumnosView.this.confirmar_crearAlumno(addScaled);
-	           		}
-	           		
+
+				try {
+					int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
+					int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
+					int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+
+					if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
+						JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					if (!validarCorreo(correoField.getText())) {
+						correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+						JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+
+					if (!validarCampos(numero_controlField, apField, nombresField, correoField, gradoField, telefonoField, carreraField)) {
+						JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+
+					String fechaNacimientoStr = String.format("%04d-%02d-%02d", añoSeleccionado, mesSeleccionado, diaSeleccionado);
+					Date fechaNacimiento = Date.valueOf(fechaNacimientoStr);
+
+					Alumno alumno = new Alumno();
+					alumno.setNo_control(Integer.parseInt(numero_controlField.getText())); // ← este sí
+					alumno.setNombre(nombresField.getText());
+					alumno.setPrimer_apellido(apField.getText());
+					alumno.setSegundo_apellido(amField.getText());
+					alumno.setFecha_nacimiento(fechaNacimiento);
+					alumno.setCorreo_electronico(correoField.getText());
+					alumno.setCarrera(carreraField.getText());
+					alumno.setGrado_alumno(gradoField.getText());
+					alumno.setNo_telefono(Long.parseLong(telefonoField.getText()));
+
+					AlumnoModel am = new AlumnoModel();
+					boolean exito = am.update(alumno);
+
+					if (exito) {
+						AlumnosView.this.confirmar_alumnoCreado(addScaled);
+					} else {
+						JOptionPane.showMessageDialog(ventana, "Error al actualizar el alumno", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(ventana, "Error: " + ex.getMessage(), "Excepción", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btn_guardar.setText("Guardar");
@@ -3948,11 +4041,12 @@ public class AlumnosView {
 	    boolean todosValidos = true;
 	    
 	    for(JTextField campo : campos) {
-	        if(campo.getText().trim().isEmpty()) {
+	        if(campo != amField && campo.getText().trim().isEmpty()) {
 	            campo.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 	            todosValidos = false;
 	        } else {
 	            campo.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+	            amField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
 	        }
 	    }
 	    
@@ -4184,11 +4278,6 @@ public class AlumnosView {
 	    String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
 	    return correo.matches(regex);
 	}
-	
-	
-	
-
-
 	
 	public void remover() {
 		mipanel.removeAll();

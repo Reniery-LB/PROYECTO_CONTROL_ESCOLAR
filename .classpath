@@ -6,11 +6,15 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/BD/mysql-connector-j-9.3.0.jar">
+	<classpathentry kind="lib" path="D:/MATERIAS DE LA UNI/PROGRAMACION 3/TRABAJOS ECLIPSE/PROYECTO_CONTROL_ESCOLAR/src/BD/itext5-itextpdf-5.5.12.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/emili/Downloads/itextpdf-5.5.13.3 (1).jar"/>
+	<classpathentry kind="lib" path="D:/MATERIAS DE LA UNI/PROGRAMACION 3/TRABAJOS ECLIPSE/PROYECTO_CONTROL_ESCOLAR/src/BD/mysql-connector-j-9.3.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

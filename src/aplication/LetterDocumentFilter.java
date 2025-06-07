@@ -5,11 +5,24 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 public class LetterDocumentFilter extends DocumentFilter {
+    private int maxLength;
+
+    public LetterDocumentFilter() {
+        this.maxLength = Integer.MAX_VALUE; // Sin límite por defecto
+    }
+
+    public LetterDocumentFilter(int maxLength) {
+        this.maxLength = maxLength;
+    }
+
     @Override
     public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) 
             throws BadLocationException {
-    
-        if (string.matches("[a-zA-Z áéíóúÁÉÍÓÚñÑ'\\-]*")) {
+        if (string == null) {
+            return;
+        }
+        
+        if (isLetter(string) && (fb.getDocument().getLength() + string.length()) <= maxLength) {
             super.insertString(fb, offset, string, attr);
         }
     }
@@ -17,9 +30,16 @@ public class LetterDocumentFilter extends DocumentFilter {
     @Override
     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) 
             throws BadLocationException {
-
-        if (text.matches("[a-zA-Z áéíóúÁÉÍÓÚñÑ'\\-]*")) {
+        if (text == null) {
+            return;
+        }
+        
+        if (isLetter(text) && (fb.getDocument().getLength() - length + text.length()) <= maxLength) {
             super.replace(fb, offset, length, text, attrs);
         }
+    }
+
+    private boolean isLetter(String text) {
+        return text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*");
     }
 }

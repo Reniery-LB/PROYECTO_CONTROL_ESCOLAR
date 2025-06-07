@@ -89,6 +89,9 @@ public class Docente {
 	public void setNo_telefono(Long no_telefono) {
 		this.no_telefono = no_telefono;
 	}
-
+	
+	public Docente() {
+		
+	}
 	
 }
