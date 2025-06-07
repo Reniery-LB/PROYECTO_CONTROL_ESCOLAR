@@ -15,7 +15,7 @@ public class GruposController {
 	}
 	
 	public void grupos(Consumer<JComponent> addScaled) {
-		vista.grupos(addScaled);
+		vista.panel_grupos(addScaled);
 	}
 	
 	public void grupos_registros(Consumer<JComponent> addScaled) {

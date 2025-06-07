@@ -2,6 +2,7 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -12,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -78,7 +81,7 @@ public class GruposView {
 		//METODO PARA AGREGAR COMPONENTES ESCALADOS
 		Consumer<JComponent> addScaled = ScalableUtils.createScaler(BASE_ANCHO, BASE_ALTURA);
 		
-		grupos(addScaled);
+		panel_grupos(addScaled);
 		ventana.setVisible(true);
 	}
 	
@@ -86,7 +89,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void grupos(Consumer<JComponent> addScaled) {
+	public void panel_grupos(Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -442,6 +445,42 @@ public class GruposView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
+	    JPanel gruposContainer = new JPanel();
+	    gruposContainer.setLayout(new BoxLayout(gruposContainer, BoxLayout.Y_AXIS));
+	    gruposContainer.setBackground(Color.decode("#27548A"));
+	    
+	    //LO IMPORTANTE DE GRUPOS_REGISTROS
+	    
+	    String[] nombresGrupos = {"ITC", "IDS", "Ciberseguridad", "Grupo 4", "Grupo 5", "Grupo 6", "Grupo 7"};
+	    
+	    for (String nombreGrupo : nombresGrupos) {
+	        JButton btnGrupo = new JButton(nombreGrupo);
+	        btnGrupo.setFont(new Font("SansSerif", Font.PLAIN, 26));
+	        btnGrupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+	        btnGrupo.setBackground(new Color(170, 196, 255));
+	        btnGrupo.setAlignmentX(Component.CENTER_ALIGNMENT);
+	        btnGrupo.setMaximumSize(new Dimension(1348, 117));
+	        
+	        btnGrupo.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                opciones_panel.setVisible(false);
+	                JOptionPane.showMessageDialog(ventana, "Mostrando detalles del grupo: " + nombreGrupo);
+	            }
+	        });
+	        
+	        gruposContainer.add(btnGrupo);
+	        gruposContainer.add(Box.createRigidArea(new Dimension(0, 10))); 
+	    }
+	    
+	    JScrollPane scrollGrupos = new JScrollPane(gruposContainer);
+	    scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+	    scrollGrupos.setBounds(93, 274, 1348, 345); 
+	    addScaled.accept(scrollGrupos);
+	    mipanel.add(scrollGrupos);
+		
+	    /////////////////////////////////////////////////////////////////////////////////////////////
+	    
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
@@ -612,7 +651,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.grupos(addScaled);
+				GruposView.this.panel_grupos(addScaled);
 			}
 			
 		});
@@ -627,53 +666,53 @@ public class GruposView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JButton btn_itc = new JButton("ITC");
-		btn_itc.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.ITC(addScaled);
-			}
-		});
-		btn_itc.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_itc.setBounds(93, 274, 1348, 117);
-		btn_itc.setBackground(Color.decode("#AAC4FF"));
-		btn_itc.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		addScaled.accept(btn_itc);
-		mipanel.add(btn_itc);
-		
-		JButton btn_ids = new JButton("IDS");
-		btn_ids.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.IDS(addScaled);
-			}
-		});
-		btn_ids.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_ids.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_ids.setBackground(new Color(170, 196, 255));
-		btn_ids.setBounds(93, 387, 1348, 117);
-		addScaled.accept(btn_ids);
-		mipanel.add(btn_ids);
-		
-		JButton btn_ciber = new JButton("Ciberseguridad");
-		btn_ciber.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.Ciberseguridad(addScaled);
-			}
-		});
-		btn_ciber.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_ciber.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_ciber.setBackground(new Color(170, 196, 255));
-		btn_ciber.setBounds(93, 502, 1348, 117);
-		addScaled.accept(btn_ciber);
-		mipanel.add(btn_ciber);
+//		JButton btn_itc = new JButton("ITC");
+//		btn_itc.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.ITC(addScaled);
+//			}
+//		});
+//		btn_itc.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_itc.setBounds(93, 274, 1348, 117);
+//		btn_itc.setBackground(Color.decode("#AAC4FF"));
+//		btn_itc.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		addScaled.accept(btn_itc);
+//		mipanel.add(btn_itc);
+//		
+//		JButton btn_ids = new JButton("IDS");
+//		btn_ids.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.IDS(addScaled);
+//			}
+//		});
+//		btn_ids.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_ids.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_ids.setBackground(new Color(170, 196, 255));
+//		btn_ids.setBounds(93, 387, 1348, 117);
+//		addScaled.accept(btn_ids);
+//		mipanel.add(btn_ids);
+//		
+//		JButton btn_ciber = new JButton("Ciberseguridad");
+//		btn_ciber.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.Ciberseguridad(addScaled);
+//			}
+//		});
+//		btn_ciber.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_ciber.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_ciber.setBackground(new Color(170, 196, 255));
+//		btn_ciber.setBounds(93, 502, 1348, 117);
+//		addScaled.accept(btn_ciber);
+//		mipanel.add(btn_ciber);
 	}
 	
 	
@@ -881,7 +920,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.grupos(addScaled);
+				GruposView.this.panel_grupos(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
@@ -1223,7 +1262,7 @@ public class GruposView {
 	            } else if ("editar_grupo".equals(origen)) {
 	                GruposView.this.editar_grupo(addScaled, null);
 	            } else {
-	                GruposView.this.grupos(addScaled);
+	                GruposView.this.panel_grupos(addScaled);
 	            }
 			}
 		});
@@ -2589,7 +2628,7 @@ public class GruposView {
 				} else if ("editar_grupo".equals(origen)) {
 					GruposView.this.editar_grupo(addScaled, null);	
 				} else {
-					GruposView.this.grupos(addScaled);
+					GruposView.this.panel_grupos(addScaled);
 				}
 			}
 		});
@@ -3141,7 +3180,7 @@ public class GruposView {
 						GruposView.this.editar_grupo(addScaled, letraSeleccionada);
 						break;
 					default:
-						GruposView.this.grupos(addScaled);
+						GruposView.this.panel_grupos(addScaled);
 				}
 			}
 		});
@@ -3411,7 +3450,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.grupos(addScaled);
+				GruposView.this.panel_grupos(addScaled);
 			}
 		});
 		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
