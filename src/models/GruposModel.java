@@ -61,7 +61,6 @@ public class GruposModel {
         return grupos;
     }
 
-    // READ BY ID
     public Grupo getGrupoById(int id) throws SQLException {
         String sql = "SELECT * FROM Grupo WHERE idGrupo = ?";
         
@@ -83,7 +82,18 @@ public class GruposModel {
         }
         return null;
     }
-
+    
+    public boolean existeGrupo(String nombreGrupo, String turno) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Grupo WHERE nombre_grupo = ? AND turno = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nombreGrupo);
+            stmt.setString(2, turno);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        }
+    }
+    
     // UPDATE
     public boolean update(Grupo grupo) throws SQLException {
         String sql = "UPDATE Grupo SET nombre_grupo = ?, turno = ?, periodo = ?, " +
@@ -104,14 +114,12 @@ public class GruposModel {
 
     // DELETE
     public boolean delete(int idGrupo) throws SQLException {
-        // Primero eliminar relaciones con alumnos
         String deleteRelaciones = "DELETE FROM Alumno_has_Grupo WHERE Grupo_idGrupo = ?";
         try (PreparedStatement stmt = connection.prepareStatement(deleteRelaciones)) {
             stmt.setInt(1, idGrupo);
             stmt.executeUpdate();
         }
 
-        // Luego eliminar el grupo
         String sql = "DELETE FROM Grupo WHERE idGrupo = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idGrupo);
@@ -119,7 +127,6 @@ public class GruposModel {
         }
     }
 
-    // Verificar si existe una asignatura
     public boolean existeAsignatura(int idAsignatura) throws SQLException {
         String sql = "SELECT 1 FROM Asignatura WHERE idAsignatura = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -130,7 +137,6 @@ public class GruposModel {
         }
     }
 
-    // Verificar si existe un docente
     public boolean existeDocente(int idDocente) throws SQLException {
         String sql = "SELECT 1 FROM Docente WHERE idDocente = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -141,7 +147,6 @@ public class GruposModel {
         }
     }
 
-    // Obtener alumnos en un grupo
     public List<Integer> getAlumnosEnGrupo(int idGrupo) throws SQLException {
         List<Integer> alumnos = new ArrayList<>();
         String sql = "SELECT Alumno_idAlumno FROM Alumno_has_Grupo WHERE Grupo_idGrupo = ?";
@@ -158,7 +163,6 @@ public class GruposModel {
         return alumnos;
     }
 
-    // Agregar alumno a grupo
     public boolean agregarAlumnoAGrupo(int idAlumno, int idGrupo) throws SQLException {
         String sql = "INSERT INTO Alumno_has_Grupo (Alumno_idAlumno, Grupo_idGrupo) VALUES (?, ?)";
         
@@ -169,7 +173,6 @@ public class GruposModel {
         }
     }
 
-    // Remover alumno de grupo
     public boolean removerAlumnoDeGrupo(int idAlumno, int idGrupo) throws SQLException {
         String sql = "DELETE FROM Alumno_has_Grupo WHERE Alumno_idAlumno = ? AND Grupo_idGrupo = ?";
         

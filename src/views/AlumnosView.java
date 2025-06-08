@@ -2785,7 +2785,6 @@ public class AlumnosView {
 		            try {
 						AlumnosView.this.editar_alumno(alumno, addScaled);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 		        } else {

@@ -14,13 +14,13 @@ public class AsignaturasModel {
 	public Connection conn = new ConnectionModel().getConnection();
 
 	
-	public boolean insertarAsignatura(Asignatura asignatura) {
+	public boolean insert(Asignatura nuevaAsignatura) {
 	    String sql = "INSERT INTO Asignatura (nombre, descripcion) VALUES (?, ?)";
 	    try (Connection conn = new ConnectionModel().getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 	         
-	        stmt.setString(1, asignatura.getNombre());
-	        stmt.setString(2, asignatura.getDescripcion());
+	        stmt.setString(1, nuevaAsignatura.getNombre());
+	        stmt.setString(2, nuevaAsignatura.getDescripcion());
 	        int affectedRows = stmt.executeUpdate();
 	        
 	        return affectedRows > 0;
@@ -83,11 +83,30 @@ public class AsignaturasModel {
     }
 
     public boolean asignarDocente(int idDocente, int idAsignatura) throws SQLException {
-        String sql = "INSERT INTO Docente_has_Asignatura (Docente_idDocente, Asignatura_idAsignatura) VALUES (?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idDocente);
-            stmt.setInt(2, idAsignatura);
-            return stmt.executeUpdate() > 0;
+        try {
+            conn.setAutoCommit(false); // Iniciar transacción
+            
+            // Eliminar
+            String deleteSql = "DELETE FROM Docente_has_Asignatura WHERE Asignatura_idAsignatura = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                deleteStmt.setInt(1, idAsignatura);
+                deleteStmt.executeUpdate();
+            }
+            
+            // Insertar
+            String insertSql = "INSERT INTO Docente_has_Asignatura (Docente_idDocente, Asignatura_idAsignatura) VALUES (?, ?)";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setInt(1, idDocente);
+                insertStmt.setInt(2, idAsignatura);
+                boolean success = insertStmt.executeUpdate() > 0;
+                conn.commit(); // Confirmar cambios
+                return success;
+            }
+        } catch (SQLException e) {
+            conn.rollback(); // Revertir en caso de error
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
         }
     }
 

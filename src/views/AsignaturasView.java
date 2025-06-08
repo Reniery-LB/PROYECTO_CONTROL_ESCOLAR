@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -24,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,12 +33,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
+import PDF.PDFGenerator;
 import aplication.NumericDocumentFilter;
 import aplication.ScalableUtils;
 import aplication.TextDocumentFilter;
@@ -44,6 +52,7 @@ import controllers.AlumnosController;
 import controllers.AuthController;
 import controllers.DocentesController;
 import controllers.GruposController;
+import models.Alumno;
 import models.Asignatura;
 import models.AsignaturasModel;
 import models.ConnectionModel;
@@ -57,8 +66,9 @@ public class AsignaturasView {
 	private JFrame ventana;
 	private JPanel mipanel;
 	private JPanel opciones_panel;
-	public Connection conn = new ConnectionModel().getConnection();
-
+	public  Connection conn = new ConnectionModel().getConnection();
+	private JTextArea descField;
+	
 	
 	public AsignaturasView() {
 		inicializar();
@@ -123,7 +133,7 @@ public class AsignaturasView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.editar_asignatura(addScaled, null);
+				AsignaturasView.this.mostrar_lista_para_editar(addScaled);
 			}
 		});
 		btn_editar.setOpaque(true);
@@ -140,7 +150,7 @@ public class AsignaturasView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.editar_asignatura(addScaled, null);
+				AsignaturasView.this.mostrar_lista_para_editar(addScaled);
 			}
 		});
 		btn_editar_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -375,7 +385,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, null);
+							AsignaturasView.this.editar_asignatura(null, addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -456,53 +466,48 @@ public class AsignaturasView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
-		 JPanel asignaturasContainer = new JPanel();
-		 asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
-		 asignaturasContainer.setBackground(Color.decode("#27548A"));
+		JPanel asignaturasContainer = new JPanel();
+		asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
+		asignaturasContainer.setBackground(Color.decode("#27548A"));
 		
-		 try {
+		try {
 			    AsignaturasModel asignaturaModel = new AsignaturasModel();
 			    List<Asignatura> asignaturas = asignaturaModel.gettAll();
-
+	
 			    for (Asignatura asignatura : asignaturas) {
+			    	
 			        JButton btnAsignatura = new JButton(asignatura.getNombre());
 			        btnAsignatura.setFont(new Font("SansSerif", Font.PLAIN, 26));
 			        btnAsignatura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 			        btnAsignatura.setBackground(new Color(170, 196, 255));
 			        btnAsignatura.setAlignmentX(Component.CENTER_ALIGNMENT);
 			        btnAsignatura.setMaximumSize(new Dimension(1348, 117));
-
+	
 			        btnAsignatura.addActionListener(new ActionListener() {
 			            @Override
 			            public void actionPerformed(ActionEvent e) {
 			                opciones_panel.setVisible(false);
-			                detalles_asignatura( asignatura,addScaled); 
-
-			                
+			                AsignaturasView.this.detalles_asignatura(asignatura, addScaled);
+			               
 			            }
 			        });
-
+	
 			        asignaturasContainer.add(btnAsignatura);
 			        asignaturasContainer.add(Box.createRigidArea(new Dimension(0, 10)));
 			    }
-
+	
 			} catch (SQLException ex) {
 			    ex.printStackTrace();
 			    JOptionPane.showMessageDialog(null, "Error al cargar asignaturas: " + ex.getMessage());
 			}
 		 
-		 JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
-		 scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
-		 scrollGrupos.setBounds(93, 274, 1348, 345); 
-		 scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		 addScaled.accept(scrollGrupos);
-		 mipanel.add(scrollGrupos);
+		JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
+		scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+		scrollGrupos.setBounds(93, 274, 1348, 345); 
+		scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		addScaled.accept(scrollGrupos);
+		mipanel.add(scrollGrupos);
 		 
-		 
-
-
-			
-		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
@@ -631,8 +636,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, null);
-						}
+							AsignaturasView.this.mostrar_lista_para_editar(addScaled);						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 					editar.setBackground(Color.decode("#EEF1FF"));
@@ -685,49 +689,49 @@ public class AsignaturasView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JButton btn_prog = new JButton("Programación");
-		btn_prog.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AsignaturasView.this.detalles(addScaled);
-			}
-		});
-		btn_prog.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_prog.setBounds(93, 274, 1348, 117);
-		btn_prog.setBackground(Color.decode("#AAC4FF"));
-		btn_prog.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		addScaled.accept(btn_prog);
-		mipanel.add(btn_prog);
+//		JButton btn_prog = new JButton("Programación");
+//		btn_prog.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AsignaturasView.this.detalles(addScaled);
+//			}
+//		});
+//		btn_prog.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_prog.setBounds(93, 274, 1348, 117);
+//		btn_prog.setBackground(Color.decode("#AAC4FF"));
+//		btn_prog.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		addScaled.accept(btn_prog);
+//		mipanel.add(btn_prog);
+//		
+//		JButton btn_ingl = new JButton("Inglés");
+//		btn_ingl.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);			}
+//		});
+//		btn_ingl.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_ingl.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_ingl.setBackground(new Color(170, 196, 255));
+//		btn_ingl.setBounds(93, 387, 1348, 117);
+//		addScaled.accept(btn_ingl);
+//		mipanel.add(btn_ingl);
 		
-		JButton btn_ingl = new JButton("Inglés");
-		btn_ingl.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);			}
-		});
-		btn_ingl.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_ingl.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_ingl.setBackground(new Color(170, 196, 255));
-		btn_ingl.setBounds(93, 387, 1348, 117);
-		addScaled.accept(btn_ingl);
-		mipanel.add(btn_ingl);
-		
-		JButton btn_mate = new JButton("Matemáticas");
-		btn_mate.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AsignaturasView.this.detalles_mate(addScaled);
-			}
-		});
-		btn_mate.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_mate.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_mate.setBackground(new Color(170, 196, 255));
-		btn_mate.setBounds(93, 502, 1348, 117);
-		addScaled.accept(btn_mate);
-		mipanel.add(btn_mate);
+//		JButton btn_mate = new JButton("Matemáticas");
+//		btn_mate.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				AsignaturasView.this.detalles_mate(addScaled);
+//			}
+//		});
+//		btn_mate.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_mate.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_mate.setBackground(new Color(170, 196, 255));
+//		btn_mate.setBounds(93, 502, 1348, 117);
+//		addScaled.accept(btn_mate);
+//		mipanel.add(btn_mate);
 	}
 	
 	
@@ -930,7 +934,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, null);
+							AsignaturasView.this.editar_asignatura(null, addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -994,7 +998,7 @@ public class AsignaturasView {
 		btn_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.editar_asignatura(addScaled, null);
+				AsignaturasView.this.editar_asignatura(null, addScaled, null);
 			}
 		});
 		btn_editar.setText("Editar");
@@ -1188,7 +1192,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, null);
+							AsignaturasView.this.editar_asignatura(null ,addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1389,7 +1393,7 @@ public class AsignaturasView {
 		            int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
 
 		            Asignatura nuevaAsignatura = new Asignatura(nombreMateria, descripcionMateria);
-		            boolean insertado = asignaturaModel.insertarAsignatura(nuevaAsignatura);
+		            boolean insertado = (asignaturaModel).insert(nuevaAsignatura);
 
 		            if (insertado) {
 		                int idAsignatura = asignaturaModel.obtenerUltimoId();
@@ -1443,7 +1447,7 @@ public class AsignaturasView {
 	//===========================================================================================================================	
 	
 	
-	public void editar_asignatura(Consumer<JComponent> addScaled, Asignatura asignaturaSeleccionada) {
+	public void editar_asignatura(Asignatura asignatura, Consumer<JComponent> addScaled, Asignatura asignaturaSeleccionada) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1465,8 +1469,6 @@ public class AsignaturasView {
 		fondo_barra_2.setBounds(0, 101, 1540, 102);
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
-		
-		
 		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1596,7 +1598,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, asignaturaSeleccionada);
+							AsignaturasView.this.editar_asignatura(asignatura,addScaled, asignaturaSeleccionada);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1655,9 +1657,7 @@ public class AsignaturasView {
 		nombre_materia.setBounds(111, 243, 220, 29);
 		addScaled.accept(nombre_materia);
 		mipanel.add(nombre_materia);
-		
-		
-		
+			
 		JLabel docente_cargo = new JLabel("Docente a cargo:");
 		docente_cargo.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		docente_cargo.setBounds(160, 300, 169, 29);
@@ -1670,12 +1670,12 @@ public class AsignaturasView {
 		addScaled.accept(id_docente);
 		mipanel.add(id_docente);*/
 		
-		JTextArea descripcion = new JTextArea();
-		descripcion.setText("Descripción:");
-		descripcion.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		descripcion.setBounds(203, 423, 127, 40);
-		addScaled.accept(descripcion);
-		mipanel.add(descripcion);
+		JTextArea descripcionArea = new JTextArea();
+		descripcionArea.setText("Descripción:");
+		descripcionArea.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		descripcionArea.setBounds(203, 423, 127, 40);
+		addScaled.accept(descripcionArea);
+		mipanel.add(descripcionArea);
 		
 		JTextField materiaField = new JTextField();
 		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -1683,25 +1683,15 @@ public class AsignaturasView {
 		materiaField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		materiaField.setBackground(new Color(217, 217, 217));
 		materiaField.setBounds(341, 239, 510, 40);
+		((AbstractDocument) materiaField.getDocument()).setDocumentFilter(new TextDocumentFilter(30));
 		addScaled.accept(materiaField);
 		mipanel.add(materiaField);
-		
-		JTextArea descField = new JTextArea();
-		descField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		descField.setColumns(10);
-		descField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		descField.setBackground(new Color(217, 217, 217));
-		descField.setBounds(340, 423, 700, 200);
-		addScaled.accept(descField);
-		mipanel.add(descField);
-		
 		
 		JComboBox<String> docenteComboBox = new JComboBox<>();
 		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		docenteComboBox.setBackground(new Color(217, 217, 217));
 		docenteComboBox.setBounds(341, 292, 510, 40);
-
 
 		DocentesModel docenteModel = new DocentesModel();
 		List<Docente> docentes = docenteModel.getAll();
@@ -1719,6 +1709,35 @@ public class AsignaturasView {
 		addScaled.accept(docenteComboBox);
 		mipanel.add(docenteComboBox);
 		
+		descField = new JTextArea(asignaturaSeleccionada.getDescripcion());
+	    descField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+	    descField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+	    descField.setBackground(new Color(217, 217, 217));
+	    descField.setLineWrap(true);
+	    descField.setWrapStyleWord(true);
+		
+	    JScrollPane scrollDesc = new JScrollPane(descField);
+	    scrollDesc.setBounds(340, 423, 700, 200);
+	    ((AbstractDocument) descField.getDocument()).setDocumentFilter(new TextDocumentFilter(255));
+	    
+	    JLabel charCountLabel = new JLabel(descField.getText().length() + "/255 caracteres");
+	    charCountLabel.setBounds(340, 630, 200, 20);
+	    descField.getDocument().addDocumentListener(new DocumentListener() {
+	        public void insertUpdate(DocumentEvent e) { updateCount(); }
+	        public void removeUpdate(DocumentEvent e) { updateCount(); }
+	        public void changedUpdate(DocumentEvent e) { updateCount(); }
+	        private void updateCount() {
+	            int length = descField.getText().length();
+	            charCountLabel.setText(length + "/255 caracteres");
+	            charCountLabel.setForeground(length >= 255 ? Color.RED : Color.BLACK);
+	        }
+	    });
+
+	    addScaled.accept(scrollDesc);
+	    addScaled.accept(charCountLabel);
+	    mipanel.add(scrollDesc);
+	    mipanel.add(charCountLabel);
+	    
 		if (asignaturaSeleccionada != null) {
 	        materiaField.setText(asignaturaSeleccionada.getNombre());
 	        descField.setText(asignaturaSeleccionada.getDescripcion());
@@ -1760,48 +1779,53 @@ public class AsignaturasView {
 		addScaled.accept(idField);
 		mipanel.add(idField);*/
 		
-		JButton btn_guardar = new JButton();
-		 btn_guardar.addActionListener(new ActionListener() {
-		        public void actionPerformed(ActionEvent e) {
-		            try {
-		                String nuevoNombre = materiaField.getText();
-		                String nuevaDescripcion = descField.getText();
-		                
-		                String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
-		                int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
+	    JButton btn_guardar = new JButton("Guardar");
+	    btn_guardar.addActionListener(e -> {
+	        try {
+	            String nombre = materiaField.getText().trim();
+	            String descripcion = descField.getText().trim();
+	            String docenteSel = (String) docenteComboBox.getSelectedItem();
+	            
+	            if (nombre.isEmpty() || descripcion.isEmpty()) {
+	                JOptionPane.showMessageDialog(null, "Nombre y descripción son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+	                return;
+	            }
 
-		                asignaturaSeleccionada.setNombre(nuevoNombre);
-		                asignaturaSeleccionada.setDescripcion(nuevaDescripcion);
-		                
-		                AsignaturasModel model = new AsignaturasModel();
-		                boolean exitoUpdate = model.update(asignaturaSeleccionada);
-		                
-		                if (exitoUpdate) {
-		                    String sqlDelete = "DELETE FROM Docente_has_Asignatura WHERE Asignatura_idAsignatura = ?";
-		                    try (PreparedStatement stmt = conn.prepareStatement(sqlDelete)) {
-		                        stmt.setInt(1, asignaturaSeleccionada.getIdAsignatura());
-		                        stmt.executeUpdate();
-		                    }
-		                    
-		                    boolean exitoAsignacion = model.asignarDocente(idDocente, asignaturaSeleccionada.getIdAsignatura());
-		                    
-		                    if (exitoAsignacion) {
-		                        JOptionPane.showMessageDialog(null, "Asignatura actualizada correctamente");
-		                        opciones_panel.setVisible(false);
-		                        panel_asignaturas(addScaled); 
-		                    } else {
-		                        JOptionPane.showMessageDialog(null, "Error al asignar el docente", "Error", JOptionPane.ERROR_MESSAGE);
-		                    }
-		                } else {
-		                    JOptionPane.showMessageDialog(null, "Error al actualizar la asignatura", "Error", JOptionPane.ERROR_MESSAGE);
-		                }
-		            } catch (SQLException ex) {
-		                ex.printStackTrace();
-		                JOptionPane.showMessageDialog(null, "Error de base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-		            } catch (NumberFormatException ex) {
-		                JOptionPane.showMessageDialog(null, "Seleccione un docente válido", "Error", JOptionPane.ERROR_MESSAGE);
-		            }}
-		        });
+	            int idDocenteNuevo = -1;
+	            if (!docenteSel.equals("No hay docentes disponibles")) {
+	                idDocenteNuevo = Integer.parseInt(docenteSel.split(" - ")[0]);
+	            }
+	            
+	            asignaturaSeleccionada.setNombre(nombre);
+	            asignaturaSeleccionada.setDescripcion(descripcion);
+	            
+	            AsignaturasModel model = new AsignaturasModel();
+	            boolean actualizacionOk = model.update(asignaturaSeleccionada);
+	            
+	            if (actualizacionOk && idDocenteNuevo != -1) {
+	                List<Integer> docentesActuales = model.obtenerDocentesPorAsignatura(asignaturaSeleccionada.getIdAsignatura());
+	                int idDocenteActual = docentesActuales.isEmpty() ? -1 : docentesActuales.get(0);
+	                
+	                if (idDocenteActual != idDocenteNuevo) {
+	                    model.asignarDocente(idDocenteNuevo, asignaturaSeleccionada.getIdAsignatura());
+	                }
+	            }
+	            
+	            opciones_panel.setVisible(false);
+	            AsignaturasView.this.confirmar_asignaturaEditada(addScaled);
+	            
+	        } catch (SQLException ex) {
+	            JOptionPane.showMessageDialog(null, 
+	                "Error al guardar: " + ex.getMessage(), 
+	                "Error", 
+	                JOptionPane.ERROR_MESSAGE);
+	        } catch (NumberFormatException ex) {
+	            JOptionPane.showMessageDialog(null, 
+	                "Formato de docente inválido", 
+	                "Error", 
+	                JOptionPane.ERROR_MESSAGE);
+	        }
+	    });
 		btn_guardar.setText("Guardar");
 		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1810,45 +1834,33 @@ public class AsignaturasView {
 		addScaled.accept(btn_guardar);
 		mipanel.add(btn_guardar);
 		
-		
 		JButton btn_basura = new JButton();
 		 btn_basura.addActionListener(new ActionListener() {
-		        @Override
-		        public void actionPerformed(ActionEvent e) {
-		            int confirmacion = JOptionPane.showConfirmDialog(
-		                null, 
-		                "¿Está seguro de eliminar esta asignatura?\nEsta acción no se puede deshacer.", 
-		                "Confirmar eliminación", 
-		                JOptionPane.YES_NO_OPTION,
-		                JOptionPane.WARNING_MESSAGE
-		            );
-		            
-		            if (confirmacion == JOptionPane.YES_OPTION) {
-		                try {
-		                    AsignaturasModel model = new AsignaturasModel();
-		                    
-		                    String sqlDeleteRelaciones = "DELETE FROM Docente_has_Asignatura WHERE Asignatura_idAsignatura = ?";
-		                    try (PreparedStatement stmt = conn.prepareStatement(sqlDeleteRelaciones)) {
-		                        stmt.setInt(1, asignaturaSeleccionada.getIdAsignatura());
-		                        stmt.executeUpdate();
-		                    }
-		                    
-		                    boolean exito = model.delete(asignaturaSeleccionada.getIdAsignatura());
-		                    
-		                    if (exito) {
-		                        JOptionPane.showMessageDialog(null, "Asignatura eliminada correctamente");
-		                        opciones_panel.setVisible(false);
-		                        panel_asignaturas(addScaled); 
-		                    } else {
-		                        JOptionPane.showMessageDialog(null, "Error al eliminar la asignatura", "Error", JOptionPane.ERROR_MESSAGE);
-		                    }
-		                } catch (SQLException ex) {
-		                    ex.printStackTrace();
-		                    JOptionPane.showMessageDialog(null, "Error de base de datos al eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-		                }
-		            }
-		        }
-		    });
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+                try {
+                    AsignaturasModel model = new AsignaturasModel();
+                    
+                    String sqlDeleteRelaciones = "DELETE FROM Docente_has_Asignatura WHERE Asignatura_idAsignatura = ?";
+                    try (PreparedStatement stmt = conn.prepareStatement(sqlDeleteRelaciones)) {
+                        stmt.setInt(1, asignaturaSeleccionada.getIdAsignatura());
+                        stmt.executeUpdate();
+                    }
+                    
+                    boolean exito = model.delete(asignaturaSeleccionada.getIdAsignatura());
+                    
+                    if (exito) {
+                    	 opciones_panel.setVisible(false);
+                    	 AsignaturasView.this.alerta_eliminar(addScaled);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al eliminar la asignatura", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error de base de datos al eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+	    });
 		btn_basura.setOpaque(false);
 		btn_basura.setIcon(new ImageIcon(getClass().getResource("/img/basura.png")));
 		btn_basura.setHorizontalAlignment(SwingConstants.LEFT);
@@ -1859,6 +1871,22 @@ public class AsignaturasView {
 		btn_basura.setBounds(1447, 700, 65, 74);
 		addScaled.accept(btn_basura);
 		mipanel.add(btn_basura);
+		
+		JButton btn_descargar = new JButton();
+		btn_descargar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	opciones_panel.setVisible(false);
+		    	AsignaturasView.this.alerta_DescargarAsignatura(asignaturaSeleccionada, addScaled);
+		    }
+		});
+		btn_descargar.setText("Descargar Asignatura");
+		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_descargar.setBackground(new Color(170, 196, 255));
+		btn_descargar.setBounds(1230, 641, 238, 40);
+		addScaled.accept(btn_descargar);
+		mipanel.add(btn_descargar);
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -1871,8 +1899,6 @@ public class AsignaturasView {
 	
 	
 	//===========================================================================================================================	
-	
-	
 	
 	
 	public void detalles_asignatura(Asignatura asignatura,Consumer<JComponent> addScaled) {
@@ -1907,7 +1933,15 @@ public class AsignaturasView {
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
-		JLabel grupos_barraLabel = new JLabel("    Grupos");
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrGrupos(addScaled);
+			}
+		});
 		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
 		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
@@ -1917,7 +1951,15 @@ public class AsignaturasView {
 		addScaled.accept(grupos_barraLabel);
 		mipanel.add(grupos_barraLabel);
 		
-		JLabel alumnos_barraLabel = new JLabel("    Alumnos");
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrAlumnos(addScaled);
+			}
+		});
 		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
 		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1927,7 +1969,15 @@ public class AsignaturasView {
 		addScaled.accept(alumnos_barraLabel);
 		mipanel.add(alumnos_barraLabel);
 		
-		JLabel docentes_barraLabel = new JLabel(" Docentes");
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrDocentes(addScaled);	
+			}
+		});
 		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
 		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2002,7 +2052,7 @@ public class AsignaturasView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AsignaturasView.this.editar_asignatura(addScaled, asignatura);
+							AsignaturasView.this.editar_asignatura(asignatura,addScaled, null);
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2020,8 +2070,8 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
 		mipanel.add(asignaturas_barraLabel);
@@ -2066,7 +2116,7 @@ public class AsignaturasView {
 		btn_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				AsignaturasView.this.editar_asignatura(addScaled, asignatura);
+				AsignaturasView.this.editar_asignatura(asignatura, addScaled, asignatura);
 			}
 		});
 		btn_editar.setText("Editar");
@@ -2104,16 +2154,42 @@ public class AsignaturasView {
 		addScaled.accept(id_docente);
 		mipanel.add(id_docente);
 		
-		JTextArea descripcionArea = new JTextArea("Descripción: " + asignatura.getDescripcion());
-		descripcionArea.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		descripcionArea.setWrapStyleWord(true);
-		descripcionArea.setLineWrap(true);
-		descripcionArea.setEditable(false);
-		descripcionArea.setOpaque(false);
-		descripcionArea.setBounds(203, 423, 800, 120);
-		addScaled.accept(descripcionArea);
-		mipanel.add(descripcionArea);
+		JPanel descripcionContainer = new JPanel(null);
+		descripcionContainer.setOpaque(false);
+		descripcionContainer.setBounds(203, 423, 800, 120);
 
+		JLabel descLabel = new JLabel("Descripción:    ");
+		descLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		descLabel.setBounds(0, 0, 150, 30);
+		descripcionContainer.add(descLabel);
+
+		JTextArea descText = new JTextArea(asignatura.getDescripcion());
+		descText.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		descText.setLineWrap(true);
+		descText.setWrapStyleWord(true);
+		descText.setEditable(false);
+		descText.setOpaque(false);
+		descText.setBounds(150, 0, 650, 120); 
+
+		descripcionContainer.add(descText);
+		addScaled.accept(descripcionContainer);
+		mipanel.add(descripcionContainer);
+		
+		JButton btn_descargar = new JButton();
+		btn_descargar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	opciones_panel.setVisible(false);
+		    	AsignaturasView.this.alerta_DescargarAsignatura(asignatura, addScaled);
+		    }
+		});
+		btn_descargar.setText("Descargar Asignatura");
+		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_descargar.setBackground(new Color(170, 196, 255));
+		btn_descargar.setBounds(1230, 641, 238, 40);
+		addScaled.accept(btn_descargar);
+		mipanel.add(btn_descargar);
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -2128,7 +2204,7 @@ public class AsignaturasView {
 	//===========================================================================================================================
 	
 	
-	public void detalles_mate(Consumer<JComponent> addScaled) {
+	/*public void detalles_mate(Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -2356,7 +2432,7 @@ public class AsignaturasView {
 		fondo_grupo.setBounds(56, 210, 1435, 480);
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
-	}
+	} */
 	
 	
 	
@@ -2381,7 +2457,7 @@ public class AsignaturasView {
 		
 		JLabel mensajeLabel = new JLabel("¿Desea eliminar esta asignatura?");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		mensajeLabel.setBounds(227, 10, 320, 97);
+		mensajeLabel.setBounds(222, 10, 370, 97);
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_si = new JButton();
@@ -2390,7 +2466,7 @@ public class AsignaturasView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();	
-				AsignaturasView.this.confirmar_eliminarDocente(addScaled);
+				AsignaturasView.this.confirmar_eliminarAsignatura(addScaled);
 			}
 		});
 		btn_si.setForeground(new Color(255, 255, 255));
@@ -2430,9 +2506,7 @@ public class AsignaturasView {
 	//===========================================================================================================================
 	
 	
-	
-	
-	public void confirmar_eliminarDocente(Consumer<JComponent> addScaled) {
+	public void confirmar_eliminarAsignatura(Consumer<JComponent> addScaled) {
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
 	    dialogo.setLayout(null);
 	    dialogo.setSize(764, 353);
@@ -2445,9 +2519,9 @@ public class AsignaturasView {
 		alerta_panel.setOpaque(true);
 		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		
-		JLabel mensajeLabel = new JLabel("¡Asignatura editada con éxito!");
+		JLabel mensajeLabel = new JLabel("¡Asignatura eliminada con éxito!");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		mensajeLabel.setBounds(225, 56, 294, 51);
+		mensajeLabel.setBounds(222, 56, 360, 51);
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_volver = new JButton();
@@ -2457,32 +2531,24 @@ public class AsignaturasView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				AsignaturasView.this.panel_asignaturas(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel de administrador");
+		btn_volver.setText("Panel de Asignaturas");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
 		btn_volver.setBounds(245, 250, 248, 40);
 		alerta_panel.add(btn_volver);
 		
-		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
-		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		mensajeLabel_1.setBounds(256, 63, 230, 65);
-		alerta_panel.add(mensajeLabel_1);
-		
+
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
 	}
 	
 	
 	//===========================================================================================================================
-	
-	
 	
 	
 	public void confirmar_asignaturaEditada(Consumer<JComponent> addScaled) {
@@ -2531,11 +2597,7 @@ public class AsignaturasView {
 	}
 	
 	
-	
-	
 	//===========================================================================================================================
-	
-	
 	
 	
 	public void confirmar_asignaturaCreada(Consumer<JComponent> addScaled) {
@@ -2582,9 +2644,6 @@ public class AsignaturasView {
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
 	}
-	
-	
-
 	
 	
 	//===========================================================================================================================
@@ -2714,6 +2773,7 @@ public class AsignaturasView {
 		dialogo.setVisible(true);
 	}
 	
+	
 	//===========================================================================================================================
 
 	
@@ -2779,10 +2839,419 @@ public class AsignaturasView {
 	
 	
 	//===========================================================================================================================
-	
-	
-	
 
+	
+	public void mostrar_lista_para_editar(Consumer<JComponent> addScaled) {
+		remover();
+		addScaled.accept(opciones_panel);
+		mipanel.add(opciones_panel);
+		
+		JLabel logo = new JLabel();
+		logo.setBackground(Color.decode("#EEF1FF"));
+		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+		logo.setOpaque(true);
+		logo.setBounds(0, 10, 101, 85);
+		addScaled.accept(logo);
+		mipanel.add(logo);
+		
+		JLabel fondo_barra_2 = new JLabel(" Asignaturas");
+		fondo_barra_2.setOpaque(true);
+		fondo_barra_2.setForeground(Color.WHITE);
+		fondo_barra_2.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo_barra_2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra_2.setBackground(Color.decode("#27548A"));
+		fondo_barra_2.setBounds(-10, 105, 1540, 102);
+		addScaled.accept(fondo_barra_2);
+		mipanel.add(fondo_barra_2);
+		
+		JPanel asignaturasContainer = new JPanel();
+		asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
+		asignaturasContainer.setBackground(Color.decode("#27548A"));
+		
+		try {
+			    AsignaturasModel asignaturaModel = new AsignaturasModel();
+			    List<Asignatura> asignaturas = asignaturaModel.gettAll();
+	
+			    for (Asignatura asignatura : asignaturas) {
+			    	
+			        JButton btnAsignatura = new JButton(asignatura.getNombre());
+			        btnAsignatura.setFont(new Font("SansSerif", Font.PLAIN, 26));
+			        btnAsignatura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+			        btnAsignatura.setBackground(new Color(170, 196, 255));
+			        btnAsignatura.setAlignmentX(Component.CENTER_ALIGNMENT);
+			        btnAsignatura.setMaximumSize(new Dimension(1348, 117));
+	
+			        btnAsignatura.addActionListener(new ActionListener() {
+			            @Override
+			            public void actionPerformed(ActionEvent e) {
+			                opciones_panel.setVisible(false);
+			                AsignaturasView.this.editar_asignatura(asignatura, addScaled, asignatura);    
+			            }
+			        });
+	
+			        asignaturasContainer.add(btnAsignatura);
+			        asignaturasContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+			    }
+	
+			} catch (SQLException ex) {
+			    ex.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error al cargar asignaturas: " + ex.getMessage());
+			}
+		 
+		JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
+		scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+		scrollGrupos.setBounds(93, 274, 1348, 345); 
+		scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		addScaled.accept(scrollGrupos);
+		mipanel.add(scrollGrupos);
+		 
+		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		addScaled.accept(c_escolar_barraLabel);
+		mipanel.add(c_escolar_barraLabel);
+		
+		JButton grupos_barraLabel = new JButton("    Grupos");
+		grupos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrGrupos(addScaled);
+			}
+		});
+		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		grupos_barraLabel.setBackground(Color.decode("#EEF1FF"));
+		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		grupos_barraLabel.setBounds(372, 0, 263, 102);
+		addScaled.accept(grupos_barraLabel);
+		mipanel.add(grupos_barraLabel);
+		
+		JButton alumnos_barraLabel = new JButton("    Alumnos");
+		alumnos_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrAlumnos(addScaled);
+			}
+		});
+		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+		addScaled.accept(alumnos_barraLabel);
+		mipanel.add(alumnos_barraLabel);
+		
+		JButton docentes_barraLabel = new JButton(" Docentes");
+		docentes_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.alerta_IrDocentes(addScaled);	
+			}
+		});
+		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+		docentes_barraLabel.setBounds(894, 0, 263, 102);
+		addScaled.accept(docentes_barraLabel);
+		mipanel.add(docentes_barraLabel);
+		
+		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+		asignaturas_barraLabel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.removeAll();
+				opciones_panel.revalidate();
+				opciones_panel.repaint();
+				opciones_panel.setBounds(1168, 101, 386, 200);		
+				boolean visible = !opciones_panel.isVisible();
+		
+				opciones_panel.setVisible(visible);
+				
+				if(visible) {
+					
+					JButton registros = new JButton("Registros");
+					registros.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AsignaturasView.this.asignaturas(addScaled);
+						}
+						
+					});
+					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					registros.setBackground(Color.decode("#EEF1FF"));
+					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					registros.setBounds(0, 0, 386, 50);
+					opciones_panel.add(registros);
+					
+					JButton detalles = new JButton("Detalles");
+					detalles.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AsignaturasView.this.detalles(addScaled);
+						}
+					});
+					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					detalles.setBackground(Color.decode("#EEF1FF"));
+					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					detalles.setBounds(0, 50, 386, 50);
+					opciones_panel.add(detalles);
+					
+					JButton crear = new JButton("Crear");
+					crear.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AsignaturasView.this.añadir_asignatura(addScaled);
+						}
+					});
+					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					crear.setBackground(Color.decode("#EEF1FF"));
+					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					crear.setBounds(0, 100, 386, 50);
+					opciones_panel.add(crear);
+					
+					JButton editar = new JButton("Editar");
+					editar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							opciones_panel.setVisible(false);
+							AsignaturasView.this.mostrar_lista_para_editar(addScaled);						
+							}
+					});
+					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+					editar.setBackground(Color.decode("#EEF1FF"));
+					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+					editar.setBounds(0, 150, 386, 50);
+					opciones_panel.add(editar);
+					
+					opciones_panel.revalidate();
+					opciones_panel.repaint();
+				}
+				
+			}
+		});
+		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+	//		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
+		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+		addScaled.accept(asignaturas_barraLabel);
+		mipanel.add(asignaturas_barraLabel);
+		
+		JLabel fondo_barra = new JLabel();
+		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+		fondo_barra.setBackground(Color.decode("#EEF1FF"));
+		fondo_barra.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		fondo_barra.setBounds(0, 0, 1540, 102);
+		fondo_barra.setOpaque(true);
+		addScaled.accept(fondo_barra);
+		mipanel.add(fondo_barra);
+		
+		JButton btn_volver = new JButton("Volver");
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				AsignaturasView.this.panel_asignaturas(addScaled);
+			}
+		});
+		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+		btn_volver.setForeground(Color.WHITE);
+		btn_volver.setBackground(new Color(238, 241, 255));
+		btn_volver.setBounds(10, 716, 263, 58);
+		btn_volver.setOpaque(false);
+		addScaled.accept(btn_volver);
+		mipanel.add(btn_volver);
+	}
+	
+	
+	//===========================================================================================================================
+	
+	
+	public void alerta_DescargarAsignatura(Asignatura asignatura, Consumer<JComponent> addScaled) {
+
+	    if (asignatura == null) {
+	        JOptionPane.showMessageDialog(ventana, 
+	            "No se ha seleccionado una asignatura válida", 
+	            "Error", 
+	            JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+
+	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+	    JPanel alerta_panel = new JPanel();
+	    alerta_panel.setBounds(0, 0, 750, 316);
+	    alerta_panel.setLayout(null);
+	    alerta_panel.setBackground(Color.WHITE);
+	    alerta_panel.setOpaque(true);
+	    alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+	    
+	    JLabel mensajeLabel = new JLabel("¿Confirma que desea descargar esta asignatura?");
+	    mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+	    mensajeLabel.setBounds(138, 10, 505, 97);
+	    alerta_panel.add(mensajeLabel);
+	    
+	    JButton btn_aceptar = new JButton("Aceptar");
+	    btn_aceptar.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            dialogo.dispose();
+	            opciones_panel.setVisible(false);
+	            
+	            JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.setDialogTitle("Guardar información de asignatura como PDF");
+	            String defaultFileName = "Asignatura_" + asignatura.getNombre().replace(" ", "_") + ".pdf";
+	            fileChooser.setSelectedFile(new File(defaultFileName));
+	            
+	            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+	                @Override
+	                public boolean accept(File f) {
+	                    return f.getName().toLowerCase().endsWith(".pdf") || f.isDirectory();
+	                }
+	                
+	                @Override
+	                public String getDescription() {
+	                    return "Archivos PDF (*.pdf)";
+	                }
+	            });
+	            
+	            int userSelection = fileChooser.showSaveDialog(ventana);
+	            
+	            if (userSelection == JFileChooser.APPROVE_OPTION) {
+	                File fileToSave = fileChooser.getSelectedFile();
+	                String filePath = fileToSave.getAbsolutePath();
+	               
+	                if (!filePath.toLowerCase().endsWith(".pdf")) {
+	                    filePath += ".pdf";
+	                    fileToSave = new File(filePath);
+	                }
+	                
+	                if (fileToSave.exists()) {
+	                    int confirm = JOptionPane.showConfirmDialog(ventana,
+	                        "El archivo ya existe. ¿Desea reemplazarlo?",
+	                        "Confirmar sobrescritura",
+	                        JOptionPane.YES_NO_OPTION,
+	                        JOptionPane.WARNING_MESSAGE);
+	                    
+	                    if (confirm != JOptionPane.YES_OPTION) {
+	                        return;
+	                    }
+	                }
+	                
+	                try {
+	                    PDFGenerator pdfGenerator = new PDFGenerator();
+	                    pdfGenerator.generarAsignaturaPDF(asignatura, filePath);
+	                    
+	                    confirmar_AsignaturaDescargada(addScaled);
+	                } catch (Exception ex) {
+	                    JOptionPane.showMessageDialog(ventana, 
+	                        "Error al generar el PDF: " + ex.getMessage(),
+	                        "Error", 
+	                        JOptionPane.ERROR_MESSAGE);
+	                    ex.printStackTrace();
+	                }
+	            }
+	        }
+	    });
+	    btn_aceptar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+	    btn_aceptar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+	    btn_aceptar.setBackground(new Color(170, 196, 255));
+	    btn_aceptar.setBounds(435, 250, 192, 40);
+	    alerta_panel.add(btn_aceptar);
+	    
+	    JButton btn_no = new JButton("No, volver");
+	    btn_no.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            dialogo.dispose();
+	        }
+	    });
+	    btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+	    btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+	    btn_no.setBackground(new Color(170, 196, 255));
+	    btn_no.setBounds(125, 250, 192, 40);
+	    alerta_panel.add(btn_no);
+	    
+	    JLabel alerta_img = new JLabel();
+	    alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/alerta.png")));
+	    alerta_img.setBounds(339, 97, 95, 84);
+	    alerta_panel.add(alerta_img);
+	    
+	    dialogo.add(alerta_panel);
+	    dialogo.setVisible(true);
+	}
+	
+	public void confirmar_AsignaturaDescargada(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Asignatura descargada correctamente!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(185, 10, 400, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
+			}
+		});
+		btn_volver.setText("Volver");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(new Color(170, 196, 255));
+		btn_volver.setBounds(281, 250, 192, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(339, 97, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
 	
 	public void remover() {
 		mipanel.removeAll();

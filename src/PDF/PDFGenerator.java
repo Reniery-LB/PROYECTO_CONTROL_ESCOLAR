@@ -7,10 +7,14 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import models.Alumno;
+import models.Asignatura;
 import models.Docente;
 
 import javax.swing.JFileChooser;
@@ -190,6 +194,66 @@ public class PDFGenerator {
 	        e.printStackTrace();
 	        JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	    }
+	    
+	    
 	}
+	
+    public void generarAsignaturaPDF(Asignatura asignatura, String filePath) throws Exception {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        
+        document.open();
+        
+        // Título
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+        Paragraph title = new Paragraph("Información de Asignatura", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+        
+        // Logo (opcional)
+        Image logo = Image.getInstance(getClass().getResource("/img/logo.png"));
+        logo.scaleToFit(100, 100);
+        logo.setAlignment(Image.ALIGN_CENTER);
+        document.add(logo);
+        
+        // Datos de la asignatura
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+        Font dataFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+        
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(80);
+        table.setSpacingBefore(20);
+        table.setSpacingAfter(20);
+        
+        // Nombre
+        table.addCell(createCell("Nombre:", headerFont));
+        table.addCell(createCell(asignatura.getNombre(), dataFont));
+        
+        // Descripción
+        table.addCell(createCell("Descripción:", headerFont));
+        table.addCell(createCell(asignatura.getDescripcion(), dataFont));
+        
+        // ID
+        table.addCell(createCell("ID Asignatura:", headerFont));
+        table.addCell(createCell(String.valueOf(asignatura.getIdAsignatura()), dataFont));
+        
+        document.add(table);
+        
+        // Fecha generación
+        Font smallFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Paragraph footer = new Paragraph("Generado el: " + new Date(), smallFont);
+        footer.setAlignment(Element.ALIGN_RIGHT);
+        document.add(footer);
+        
+        document.close();
+    }
+    
+    private PdfPCell createCell(String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setPadding(5);
+        return cell;
+    }
 
 }
