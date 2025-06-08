@@ -122,15 +122,7 @@ public class AsignaturasModel {
         }
     }
 
-	private void closeResources(Connection conn, PreparedStatement stmt, ResultSet rs) {
-        try {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+	
     
     public int obtenerUltimoId() throws SQLException {
         String sql = "SELECT MAX(idAsignatura) AS id FROM Asignatura";

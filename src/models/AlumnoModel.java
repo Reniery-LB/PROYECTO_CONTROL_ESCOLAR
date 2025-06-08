@@ -139,7 +139,7 @@ public class AlumnoModel {
 		        stmt.setString(6, alumno.getGrado_alumno());
 		        stmt.setLong(7, alumno.getNo_telefono());
 		        stmt.setString(8, alumno.getCarrera());
-		        stmt.setInt(9, alumno.getNo_control()); // ← aquí usamos el número de control
+		        stmt.setInt(9, alumno.getNo_control()); 
 
 		        int rowsUpdated = stmt.executeUpdate();
 		        return rowsUpdated > 0;
