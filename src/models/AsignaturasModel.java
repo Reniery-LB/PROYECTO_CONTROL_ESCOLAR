@@ -13,9 +13,7 @@ public class AsignaturasModel {
     
 	public Connection conn = new ConnectionModel().getConnection();
 
-
-    
-    
+	
 	public boolean insertarAsignatura(Asignatura asignatura) {
 	    String sql = "INSERT INTO Asignatura (nombre, descripcion) VALUES (?, ?)";
 	    try (Connection conn = new ConnectionModel().getConnection();
