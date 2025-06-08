@@ -58,7 +58,7 @@ public class AsignaturasModel {
         return null;
     }
 
-    public boolean actualizarAsignatura(Asignatura a) throws SQLException {
+    public boolean update(Asignatura a) throws SQLException {
         String sql = "UPDATE Asignatura SET nombre = ?, descripcion = ? WHERE idAsignatura = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, a.getNombre());
@@ -68,7 +68,7 @@ public class AsignaturasModel {
         }
     }
 
-    public boolean eliminarAsignatura(int id) throws SQLException {
+    public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM Asignatura WHERE idAsignatura = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);

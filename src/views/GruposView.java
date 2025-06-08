@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -30,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -42,7 +44,11 @@ import controllers.AuthController;
 import controllers.DocentesController;
 import models.Alumno;
 import models.AlumnoModel;
+import models.Asignatura;
+import models.AsignaturasModel;
 import models.ConnectionModel;
+import models.Docente;
+import models.DocentesModel;
 import models.Grupo;
 import models.GruposModel;
 
@@ -52,6 +58,7 @@ public class GruposView {
 	private static final int BASE_ALTURA = 768;
 	private JFrame ventana;
 	private JPanel mipanel;
+
 	private JPanel opciones_panel;
 	
 	public GruposView() {
@@ -455,39 +462,49 @@ public class GruposView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
-	    JPanel gruposContainer = new JPanel();
-	    gruposContainer.setLayout(new BoxLayout(gruposContainer, BoxLayout.Y_AXIS));
-	    gruposContainer.setBackground(Color.decode("#27548A"));
-	    
-	    //LO IMPORTANTE DE GRUPOS_REGISTROS
-	    
-	    String[] nombresGrupos = {"ITC", "IDS", "Ciberseguridad", "Grupo 4", "Grupo 5", "Grupo 6", "Grupo 7"};
-	    
-	    for (String nombreGrupo : nombresGrupos) {
-	        JButton btnGrupo = new JButton(nombreGrupo);
-	        btnGrupo.setFont(new Font("SansSerif", Font.PLAIN, 26));
-	        btnGrupo.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-	        btnGrupo.setBackground(new Color(170, 196, 255));
-	        btnGrupo.setAlignmentX(Component.CENTER_ALIGNMENT);
-	        btnGrupo.setMaximumSize(new Dimension(1348, 117));
-	        
-	        btnGrupo.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	                opciones_panel.setVisible(false);
-	                JOptionPane.showMessageDialog(ventana, "Mostrando detalles del grupo: " + nombreGrupo);
-	            }
-	        });
-	        
-	        gruposContainer.add(btnGrupo);
-	        gruposContainer.add(Box.createRigidArea(new Dimension(0, 10))); 
-	    }
-	    
-	    JScrollPane scrollGrupos = new JScrollPane(gruposContainer);
-	    scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
-	    scrollGrupos.setBounds(93, 274, 1348, 345); 
-	    addScaled.accept(scrollGrupos);
-	    mipanel.add(scrollGrupos);
+		 JPanel asignaturasContainer = new JPanel();
+		 asignaturasContainer.setLayout(new BoxLayout(asignaturasContainer, BoxLayout.Y_AXIS));
+		 asignaturasContainer.setBackground(Color.decode("#27548A"));
+		   Connection conn = new ConnectionModel().getConnection();
+
+		 try {
+			    GruposModel asignaturaModel = new GruposModel(conn);
+			    List<Grupo> asignaturas = asignaturaModel.getAll();
+
+			    for (Grupo asignatura : asignaturas) {
+			        JButton btnAsignatura = new JButton(asignatura.getNombreGrupo());
+			        btnAsignatura.setFont(new Font("SansSerif", Font.PLAIN, 26));
+			        btnAsignatura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+			        btnAsignatura.setBackground(new Color(170, 196, 255));
+			        btnAsignatura.setAlignmentX(Component.CENTER_ALIGNMENT);
+			        btnAsignatura.setMaximumSize(new Dimension(1348, 117));
+
+			        btnAsignatura.addActionListener(new ActionListener() {
+			            @Override
+			            public void actionPerformed(ActionEvent e) {
+			                opciones_panel.setVisible(false);
+			              
+			                detalles_grupos(addScaled);
+
+			                
+			            }
+			        });
+
+			        asignaturasContainer.add(btnAsignatura);
+			        asignaturasContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+			    }
+
+			} catch (SQLException ex) {
+			    ex.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error al cargar asignaturas: " + ex.getMessage());
+			}
+		 
+		 JScrollPane scrollGrupos = new JScrollPane(asignaturasContainer);
+		 scrollGrupos.setBorder(BorderFactory.createEmptyBorder());
+		 scrollGrupos.setBounds(93, 274, 1348, 345); 
+		 scrollGrupos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		 addScaled.accept(scrollGrupos);
+		 mipanel.add(scrollGrupos);
 		
 	    /////////////////////////////////////////////////////////////////////////////////////////////
 	    
@@ -965,14 +982,21 @@ public class GruposView {
 		addScaled.accept(docente_grupoLabel);
 		mipanel.add(docente_grupoLabel);
 		
-		JTextField docente_grupoField = new JTextField();
-		docente_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		docente_grupoField.setColumns(10);
-		docente_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		docente_grupoField.setBackground(new Color(217, 217, 217));
-		docente_grupoField.setBounds(313, 297, 386, 40);
-		addScaled.accept(docente_grupoField);
-		mipanel.add(docente_grupoField);
+		JComboBox<String> docenteComboBox = new JComboBox<>();
+		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		docenteComboBox.setBackground(new Color(217, 217, 217));
+		docenteComboBox.setBounds(313, 297, 386, 40);
+		addScaled.accept(docenteComboBox);
+		mipanel.add(docenteComboBox);
+
+		// Cargar docentes
+		DocentesModel docentesModel = new DocentesModel();
+		List<Docente> docentes = docentesModel.getAll(); // Asegúrate que este método exista
+		for (Docente d : docentes) {
+		    docenteComboBox.addItem(d.getIdDocente() + " - " + d.getNombre());
+		}
+		
 		
 		JLabel ID_grupoLabel = new JLabel("ID del grupo:");
 		ID_grupoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1029,22 +1053,21 @@ public class GruposView {
 		addScaled.accept(btn_añadir_letra);
 		mipanel.add(btn_añadir_letra);
 		
-		JLabel turno_grupoLabel = new JLabel("Turno:");
-		turno_grupoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		turno_grupoLabel.setBounds(230, 425, 69, 29);
-		addScaled.accept(turno_grupoLabel);
-		mipanel.add(turno_grupoLabel);
 		
-		
-		
-		String dataset []= {"Matutino", "Vespertino"};
-		JComboBox turno_comboBox = new JComboBox(dataset);
-		turno_comboBox.setBackground(new Color(217, 217, 217));
-		turno_comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		turno_comboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		turno_comboBox.setBounds(313, 425, 386, 40);
-		addScaled.accept(turno_comboBox);
-		mipanel.add(turno_comboBox);
+		JLabel periodoLabel = new JLabel("Turno:");
+		periodoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		periodoLabel.setBounds(230, 425, 69, 29);
+		addScaled.accept(periodoLabel);
+		mipanel.add(periodoLabel);
+
+		String[] periodos = {"TV", "TM"};
+		JComboBox<String> periodo_comboBox = new JComboBox<>(periodos);
+		periodo_comboBox.setBackground(new Color(217, 217, 217));
+		periodo_comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		periodo_comboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		periodo_comboBox.setBounds(313, 425, 386, 40);
+		addScaled.accept(periodo_comboBox);
+		mipanel.add(periodo_comboBox);
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setOpaque(true);
@@ -1054,13 +1077,47 @@ public class GruposView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 		
-		JButton btn_crear = new JButton("Crear");
-	    btn_crear.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            
-	        }
-	    });
+		JButton btn_crear = new JButton();
+		btn_crear.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            String nombreGrupo = nombre_grupoField.getText().trim();
+		            String turno = periodo_comboBox.getSelectedItem().toString();
+		            String periodo = periodo_comboBox.getSelectedItem().toString();
+
+		            String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
+
+		            int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
+
+		            if (nombreGrupo.isEmpty()) {
+		                JOptionPane.showMessageDialog(null, "El nombre del grupo no puede estar vacío.");
+		                return;
+		            }
+
+		            Grupo grupo = new Grupo();
+		            grupo.setNombreGrupo(nombreGrupo);
+		            grupo.setTurno(Grupo.Turno.fromString(turno));
+		            grupo.setPeriodo(periodo);
+		            grupo.setIdDocente(idDocente);
+
+		            GruposModel model = new GruposModel(new ConnectionModel().getConnection());
+		            boolean creado = model.create(grupo);
+
+		            if (creado) {
+		                JOptionPane.showMessageDialog(null, "Grupo creado correctamente.");
+		                GruposView.this.panel_grupos(addScaled);
+		            } else {
+		                JOptionPane.showMessageDialog(null, "No se pudo crear el grupo.");
+		            }
+
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+		        }
+		    }
+		});
+
 	    
 		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1361,7 +1418,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void IDS(Consumer<JComponent> addScaled) {
+	public void detalles_grupos(Consumer<JComponent> addScaled) {
 
 		remover();
 		addScaled.accept(opciones_panel);

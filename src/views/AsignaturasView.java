@@ -468,7 +468,7 @@ public class AsignaturasView {
 			            @Override
 			            public void actionPerformed(ActionEvent e) {
 			                opciones_panel.setVisible(false);
-							AsignaturasView.this.detalles_ingles(addScaled);
+			                detalles_asignatura( asignatura,addScaled); 
 
 			                
 			            }
@@ -696,9 +696,7 @@ public class AsignaturasView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AsignaturasView.this.detalles_ingles(addScaled);
-			}
+				opciones_panel.setVisible(false);			}
 		});
 		btn_ingl.setFont(new Font("SansSerif", Font.PLAIN, 26));
 		btn_ingl.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -772,7 +770,7 @@ public class AsignaturasView {
 			            @Override
 			            public void actionPerformed(ActionEvent e) {
 			                opciones_panel.setVisible(false);
-							AsignaturasView.this.detalles_ingles(addScaled);
+							AsignaturasView.this.detalles_asignatura(asignatura,addScaled);
 
 			                
 			            }
@@ -1668,14 +1666,12 @@ public class AsignaturasView {
 		addScaled.accept(descField);
 		mipanel.add(descField);
 		
+		
 		JButton btn_basura = new JButton();
 		btn_basura.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				AsignaturasView.this.alerta_eliminar(addScaled);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    }
 		});
 		btn_basura.setOpaque(false);
 		btn_basura.setIcon(new ImageIcon(getClass().getResource("/img/basura.png")));
@@ -1701,7 +1697,7 @@ public class AsignaturasView {
 	//===========================================================================================================================	
 	
 	
-	public void detalles_ingles(Consumer<JComponent> addScaled) {
+	public void detalles_asignatura(Asignatura asignatura,Consumer<JComponent> addScaled) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1882,7 +1878,7 @@ public class AsignaturasView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JLabel nombre_materia = new JLabel("Nombre de la materia:     Inglés");
+		JLabel nombre_materia = new JLabel("Nombre de la materia: " + asignatura.getNombre() );
 		nombre_materia.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		nombre_materia.setBounds(111, 243, 400, 29);
 		addScaled.accept(nombre_materia);
@@ -1903,24 +1899,43 @@ public class AsignaturasView {
 		addScaled.accept(btn_editar);
 		mipanel.add(btn_editar);
 		
-		JLabel docente_cargo = new JLabel("Docente a cargo:     Veronica Carrillo y Carrillo");
+		Docente docente = null;
+		try {
+		    DocentesModel docentesModel = new DocentesModel();
+		    List<Integer> docentes = new AsignaturasModel().obtenerDocentesPorAsignatura(asignatura.getIdAsignatura());
+
+		    if (!docentes.isEmpty()) {
+		        int idDocente = docentes.get(0); 
+		        docente = docentesModel.busca_docente(idDocente);
+		        System.out.println("Asignatura ID: " + asignatura.getIdAsignatura());
+		        System.out.println("Docentes relacionados: " + docentes.size());
+		    }
+		} catch (SQLException ex) {
+		    ex.printStackTrace();
+		}
+		
+		JLabel docente_cargo = new JLabel("Docente a cargo:  " + docente.getNombre()  + " "+ docente.getPrimer_apellido()+ " " + docente.getSegundo_apellido());
 		docente_cargo.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		docente_cargo.setBounds(160, 300, 460, 29);
 		addScaled.accept(docente_cargo);
 		mipanel.add(docente_cargo);
 		
-		JLabel id_docente = new JLabel("ID del docente:     16");
+		JLabel id_docente = new JLabel("ID del docente:  " +  docente.getIdDocente());
 		id_docente.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		id_docente.setBounds(179, 363, 460, 29);
 		addScaled.accept(id_docente);
 		mipanel.add(id_docente);
 		
-		JTextArea descripcion = new JTextArea();
-		descripcion.setText("Descripción:     Inglés se refiere al estudio de la lengua inglesa, \r\n                         incluyendo gramática, vocabulario, pronunciación,\r\n                         y habilidades de comunicación oral y escrita.");
-		descripcion.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		descripcion.setBounds(203, 423, 695, 120);
-		addScaled.accept(descripcion);
-		mipanel.add(descripcion);
+		JTextArea descripcionArea = new JTextArea("Descripción: " + asignatura.getDescripcion());
+		descripcionArea.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		descripcionArea.setWrapStyleWord(true);
+		descripcionArea.setLineWrap(true);
+		descripcionArea.setEditable(false);
+		descripcionArea.setOpaque(false);
+		descripcionArea.setBounds(203, 423, 695, 120);
+		addScaled.accept(descripcionArea);
+		mipanel.add(descripcionArea);
+
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -2576,64 +2591,7 @@ public class AsignaturasView {
 	
 	
 	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
-	
-	
-	
-	
-	//===========================================================================================================================
-	
+
 	
 	public void remover() {
 		mipanel.removeAll();
