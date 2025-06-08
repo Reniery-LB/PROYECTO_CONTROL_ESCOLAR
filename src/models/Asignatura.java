@@ -1,6 +1,8 @@
 
 package models;
 
+import java.sql.Connection;
+
 public class Asignatura {
 
 		
@@ -45,6 +47,5 @@ public class Asignatura {
 		    public void setDescripcion(String descripcion) {
 		        this.descripcion = descripcion;
 		    }
-
 
 }

@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -58,6 +59,7 @@ public class GruposView {
 	private static final int BASE_ALTURA = 768;
 	private JFrame ventana;
 	private JPanel mipanel;
+	private List<Integer> alumnosTemporales = new ArrayList<>();
 
 	private JPanel opciones_panel;
 	
@@ -989,29 +991,27 @@ public class GruposView {
 		docenteComboBox.setBounds(313, 297, 386, 40);
 		addScaled.accept(docenteComboBox);
 		mipanel.add(docenteComboBox);
-
-		// Cargar docentes
+		
 		DocentesModel docentesModel = new DocentesModel();
-		List<Docente> docentes = docentesModel.getAll(); // Asegúrate que este método exista
+		List<Docente> docentes = docentesModel.getAll(); 
 		for (Docente d : docentes) {
 		    docenteComboBox.addItem(d.getIdDocente() + " - " + d.getNombre());
 		}
 		
-		
-		JLabel ID_grupoLabel = new JLabel("ID del grupo:");
-		ID_grupoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		ID_grupoLabel.setBounds(169, 362, 129, 29);
-		addScaled.accept(ID_grupoLabel);
-		mipanel.add(ID_grupoLabel);
-		
-		JTextField ID_grupoField = new JTextField();
-		ID_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		ID_grupoField.setColumns(10);
-		ID_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		ID_grupoField.setBackground(new Color(217, 217, 217));
-		ID_grupoField.setBounds(313, 358, 386, 40);
-		addScaled.accept(ID_grupoField);
-		mipanel.add(ID_grupoField);
+//		JLabel ID_grupoLabel = new JLabel("ID del grupo:");
+//		ID_grupoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		ID_grupoLabel.setBounds(169, 362, 129, 29);
+//		addScaled.accept(ID_grupoLabel);
+//		mipanel.add(ID_grupoLabel);
+//		
+//		JTextField ID_grupoField = new JTextField();
+//		ID_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+//		ID_grupoField.setColumns(10);
+//		ID_grupoField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		ID_grupoField.setBackground(new Color(217, 217, 217));
+//		ID_grupoField.setBounds(313, 358, 386, 40);
+//		addScaled.accept(ID_grupoField);
+//		mipanel.add(ID_grupoField);
 		
 		JLabel añadir_alumnosLabel = new JLabel("Añadir alumnos:");
 		añadir_alumnosLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1028,7 +1028,7 @@ public class GruposView {
 				GruposView.this.añadir_alumno(addScaled, "crear_grupo");
 			}
 		});
-		btn_añadir_alumnos.setText("Haz clic aquí");
+		btn_añadir_alumnos.setText(alumnosTemporales.isEmpty() ? "Haz clic aquí" : "Alumnos seleccionados: " + alumnosTemporales.size());
 		btn_añadir_alumnos.setBackground(Color.decode("#AAC4FF"));
 		btn_añadir_alumnos.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_añadir_alumnos.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1052,7 +1052,6 @@ public class GruposView {
 		btn_añadir_letra.setBounds(1221, 421, 192, 40);
 		addScaled.accept(btn_añadir_letra);
 		mipanel.add(btn_añadir_letra);
-		
 		
 		JLabel periodoLabel = new JLabel("Turno:");
 		periodoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1082,12 +1081,10 @@ public class GruposView {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        try {
+		            // 1. Validar datos y crear el grupo (como ya lo haces)
 		            String nombreGrupo = nombre_grupoField.getText().trim();
 		            String turno = periodo_comboBox.getSelectedItem().toString();
-		            String periodo = periodo_comboBox.getSelectedItem().toString();
-
 		            String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
-
 		            int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
 
 		            if (nombreGrupo.isEmpty()) {
@@ -1098,27 +1095,35 @@ public class GruposView {
 		            Grupo grupo = new Grupo();
 		            grupo.setNombreGrupo(nombreGrupo);
 		            grupo.setTurno(Grupo.Turno.fromString(turno));
-		            grupo.setPeriodo(periodo);
+		            grupo.setPeriodo(periodo_comboBox.getSelectedItem().toString());
 		            grupo.setIdDocente(idDocente);
 
 		            GruposModel model = new GruposModel(new ConnectionModel().getConnection());
-		            boolean creado = model.create(grupo);
+		            boolean creado = model.create(grupo); // Guarda el grupo en la BD
 
+		            // 2. Si el grupo se creó correctamente, asignar los alumnos
 		            if (creado) {
-		                JOptionPane.showMessageDialog(null, "Grupo creado correctamente.");
-		                GruposView.this.panel_grupos(addScaled);
+		                if (!alumnosTemporales.isEmpty()) {
+		                    for (int idAlumno : alumnosTemporales) {
+		                        // 3. Insertar en alumno_has_grupo
+		                        model.agregarAlumnoAGrupo(idAlumno, grupo.getIdGrupo());
+		                    }
+		                    JOptionPane.showMessageDialog(null, 
+		                        "Grupo creado con " + alumnosTemporales.size() + " alumnos.");
+		                    alumnosTemporales.clear(); // Limpiar la lista temporal
+		                } else {
+		                    JOptionPane.showMessageDialog(null, "Grupo creado (sin alumnos).");
+		                }
+		                GruposView.this.panel_grupos(addScaled); // Volver al menú principal
 		            } else {
-		                JOptionPane.showMessageDialog(null, "No se pudo crear el grupo.");
+		                JOptionPane.showMessageDialog(null, "Error al crear el grupo.");
 		            }
-
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 		        }
 		    }
 		});
-
-	    
 		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -2716,22 +2721,7 @@ public class GruposView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-		JButton btn_guardar = new JButton();
-		btn_guardar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_añadirAlumnos(addScaled);
-			}
-		});
-		btn_guardar.setText("Guardar");
-		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_guardar.setBackground(new Color(170, 196, 255));
-		btn_guardar.setBounds(688, 716, 192, 40);
-		addScaled.accept(btn_guardar);
-		mipanel.add(btn_guardar);
+
 		
 		List<Alumno> alumnos = new AlumnoModel().getAll();
 
@@ -2747,11 +2737,12 @@ public class GruposView {
 		}
 
 		JTable table = new JTable(data, titles) {
-		    @Override
-		    public boolean isCellEditable(int row, int column) {
-		        return false;
-		    }
-		};		
+	        @Override
+	        public boolean isCellEditable(int row, int column) {
+	            return false;
+	        }
+	    };
+	    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);		
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE); 
 		header.setForeground(Color.BLACK);
@@ -2777,6 +2768,29 @@ public class GruposView {
 		scroll.setBounds(272, 205, 1221, 480);
 		addScaled.accept(scroll);
 		mipanel.add(scroll);
+		
+		JButton btn_guardar = new JButton();
+		btn_guardar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        int[] selectedRows = table.getSelectedRows();
+		        alumnosTemporales.clear(); // Limpiar lista temporal
+		        
+		        for (int row : selectedRows) {
+		            // Obtener el idAlumno (no no_control)
+		            int idAlumno = alumnos.get(row).getIdAlumno(); // <-- Usar getIdAlumno()
+		            alumnosTemporales.add(idAlumno);
+		        }
+		        JOptionPane.showMessageDialog(null, alumnosTemporales.size() + " alumnos seleccionados.");
+		}
+		});
+		btn_guardar.setText("Guardar");
+		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_guardar.setBackground(new Color(170, 196, 255));
+		btn_guardar.setBounds(688, 716, 192, 40);
+		addScaled.accept(btn_guardar);
+		mipanel.add(btn_guardar);
 		
 		JButton btn_añadir1 = new JButton("Añadir");
 		btn_añadir1.addActionListener(new ActionListener() {

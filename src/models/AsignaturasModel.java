@@ -4,25 +4,33 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AsignaturasModel {
 	
     
-	Connection conn = new ConnectionModel().getConnection();
+	public Connection conn = new ConnectionModel().getConnection();
 
 
     
     
-    public boolean insertarAsignatura(Asignatura a) throws SQLException {
-        String sql = "INSERT INTO Asignatura (nombre, descripcion) VALUES (?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, a.getNombre());
-            stmt.setString(2, a.getDescripcion());
-            return stmt.executeUpdate() > 0;
-        }
-    }
+	public boolean insertarAsignatura(Asignatura asignatura) {
+	    String sql = "INSERT INTO Asignatura (nombre, descripcion) VALUES (?, ?)";
+	    try (Connection conn = new ConnectionModel().getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	         
+	        stmt.setString(1, asignatura.getNombre());
+	        stmt.setString(2, asignatura.getDescripcion());
+	        int affectedRows = stmt.executeUpdate();
+	        
+	        return affectedRows > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
     public List<Asignatura> gettAll() throws SQLException {
         List<Asignatura> lista = new ArrayList<>();
@@ -97,6 +105,31 @@ public class AsignaturasModel {
             }
         }
         return docentes;
+    }
+    
+    public boolean existeAsignatura(String nombreAsignatura) {
+        String sql = "SELECT COUNT(*) FROM Asignatura WHERE nombre = ?";
+        try (Connection conn = new ConnectionModel().getConnection();  
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, nombreAsignatura);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+	private void closeResources(Connection conn, PreparedStatement stmt, ResultSet rs) {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public int obtenerUltimoId() throws SQLException {
