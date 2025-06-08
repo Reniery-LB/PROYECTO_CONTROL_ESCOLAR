@@ -10,11 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -44,6 +46,8 @@ import controllers.AuthController;
 import controllers.GruposController;
 import models.Alumno;
 import models.AlumnoModel;
+import models.Asignatura;
+import models.AsignaturasModel;
 import models.Docente;
 import models.DocentesModel;
 
@@ -156,7 +160,12 @@ public class DocentesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				DocentesView.this.añadir_docente(addScaled);	
+				try {
+					DocentesView.this.añadir_docente(addScaled);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
 			}
 		});
 		btn_crear.setOpaque(true);
@@ -171,7 +180,12 @@ public class DocentesView {
 		btn_crear_label.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				DocentesView.this.añadir_docente(addScaled);	
+				try {
+					DocentesView.this.añadir_docente(addScaled);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
 			}
 		});
 		btn_crear_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -345,7 +359,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -554,7 +573,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -843,7 +867,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -977,7 +1006,10 @@ public class DocentesView {
 			            }
 			        } catch (NumberFormatException ex) {
 			            JOptionPane.showMessageDialog(null, "ID inválido.");
-			        }
+			        } catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 			    }
 		});
 		btn_acceder.setText("Acceder");
@@ -1120,7 +1152,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1260,7 +1297,12 @@ public class DocentesView {
 			public void actionPerformed(ActionEvent e) {
 				origen = "editar";
 				opciones_panel.setVisible(false);
-				DocentesView.this.editar_docente(docente, addScaled);
+				try {
+					DocentesView.this.editar_docente(docente, addScaled);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btn_editar.setText("Editar");
@@ -1436,7 +1478,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1511,7 +1558,12 @@ public class DocentesView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				  if(origen.equals("editar")) {
-					  DocentesView.this.editar_docente(docente, addScaled);
+					  try {
+						DocentesView.this.editar_docente(docente, addScaled);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 			        } else {
 			            DocentesView.this.informacion_docente(docente, addScaled);
 			        }
@@ -1786,7 +1838,7 @@ public class DocentesView {
 	//===========================================================================================================================
 
 	
-	public void añadir_docente(Consumer<JComponent> addScaled) {
+	public void añadir_docente(Consumer<JComponent> addScaled) throws SQLException {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1904,7 +1956,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2048,7 +2105,7 @@ public class DocentesView {
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel materia = new JLabel("Materia impartida:");
+		JLabel materia = new JLabel("Asignatura impartida: ");
 		materia.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		materia.setBounds(119, 533, 210, 29);
 		addScaled.accept(materia);
@@ -2163,15 +2220,28 @@ public class DocentesView {
 		//mes.setSelectedItem("01");
 		//año.setSelectedItem("2000");
 		 
-		JTextField materiaField = new JTextField();
-		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		materiaField.setColumns(10);
-		materiaField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		materiaField.setBackground(new Color(217, 217, 217));
-		materiaField.setBounds(311, 530, 453, 40);
-		((AbstractDocument) materiaField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
-		addScaled.accept(materiaField);
-		mipanel.add(materiaField);
+		JComboBox<String> asignaturaImpartir = new JComboBox<>();
+		asignaturaImpartir.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		asignaturaImpartir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturaImpartir.setBackground(new Color(217, 217, 217));
+		asignaturaImpartir.setBounds(311, 530, 453, 40);
+
+		AsignaturasModel docenteModel = new AsignaturasModel();
+		List<Asignatura> asignatura = docenteModel.gettAll();
+		
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+		for (Asignatura asignatura1 : asignatura) {
+		    comboModel.addElement(asignatura1.getIdAsignatura()+ " - " + asignatura1.getNombre());
+		}
+		asignaturaImpartir.setModel(comboModel);
+		
+		if (asignatura.isEmpty()) {
+			asignaturaImpartir.addItem("No hay docentes disponibles");
+		}
+		
+		
+		addScaled.accept(asignaturaImpartir);
+		mipanel.add(asignaturaImpartir);
 		
 		JTextField telefonoField = new JTextField();
 		telefonoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -2192,6 +2262,9 @@ public class DocentesView {
 		        int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
 		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
 		        
+		        String docenteSeleccionado = (String) asignaturaImpartir.getSelectedItem();
+
+		        
 		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
 		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Error", JOptionPane.ERROR_MESSAGE);
 		            return;
@@ -2203,7 +2276,7 @@ public class DocentesView {
 		            return;
 		        }
 		        
-		        if (!validarCampos(idField, apField, nombresField, correoField, materiaField, telefonoField)) {
+		        if (!validarCampos(idField, apField, nombresField, correoField, telefonoField)) {
 		            JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
@@ -2219,7 +2292,7 @@ public class DocentesView {
 				    amField.getText(),
 				    fechaNacimiento,
 				    correoField.getText(),
-				    materiaField.getText(),
+				    docenteSeleccionado,
 				    telefonoField.getText()
 				);
 				
@@ -2399,7 +2472,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2415,7 +2493,12 @@ public class DocentesView {
 						public void actionPerformed(ActionEvent e) {
 							origen = "editar";
 							opciones_panel.setVisible(false);
-							DocentesView.this.editar_docente(null,addScaled);
+							try {
+								DocentesView.this.editar_docente(null,addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2474,9 +2557,18 @@ public class DocentesView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				if(origen.equals("añadir")) {
-					DocentesView.this.añadir_docente(addScaled);					
-				} else {
-					DocentesView.this.editar_docente(null,addScaled);
+					try {
+						DocentesView.this.añadir_docente(addScaled);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}}else {
+					try {
+						DocentesView.this.editar_docente(null,addScaled);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -2758,7 +2850,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3021,7 +3118,7 @@ public class DocentesView {
 	//===========================================================================================================================
 	
 	
-	public void editar_docente(Docente docente, Consumer<JComponent> addScaled) {
+	public void editar_docente(Docente docente, Consumer<JComponent> addScaled) throws SQLException {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -3139,7 +3236,12 @@ public class DocentesView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							DocentesView.this.añadir_docente(addScaled);
+							try {
+								DocentesView.this.añadir_docente(addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3356,15 +3458,34 @@ public class DocentesView {
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
-		JTextField materiaField = new JTextField(docente.getMateria());
-		materiaField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		materiaField.setColumns(10);
-		materiaField.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		materiaField.setBackground(new Color(217, 217, 217));
-		materiaField.setBounds(311, 527, 453, 40);
-		((AbstractDocument) materiaField.getDocument()).setDocumentFilter(new TextDocumentFilter(40));
-		addScaled.accept(materiaField);
-		mipanel.add(materiaField);
+		JComboBox<String> asignaturaImpartir = new JComboBox<>();
+		asignaturaImpartir.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		asignaturaImpartir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		asignaturaImpartir.setBackground(new Color(217, 217, 217));
+		asignaturaImpartir.setBounds(311, 530, 453, 40);
+
+		AsignaturasModel docenteModel = new AsignaturasModel();
+		List<Asignatura> asignatura = docenteModel.gettAll();
+		
+		docente.getMateria();
+		
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+		for (Asignatura asignatura1 : asignatura) {
+		    comboModel.addElement(asignatura1.getIdAsignatura()+ " - " + asignatura1.getNombre());
+		}
+		asignaturaImpartir.setModel(comboModel);
+		
+		if (asignatura.isEmpty()) {
+			asignaturaImpartir.addItem("No hay docentes disponibles");
+		}
+		docente.getMateria();
+
+		
+		
+		addScaled.accept(asignaturaImpartir);
+		mipanel.add(asignaturaImpartir);
+		
+		
 		
 		JTextField correoField = new JTextField(docente.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3453,6 +3574,9 @@ public class DocentesView {
 					int diaSeleccionado = Integer.parseInt((String) dia.getSelectedItem());
 					int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
 					int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
+					
+			        String docenteSeleccionado = (String) asignaturaImpartir.getSelectedItem();
+
 
 					if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
 						JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Error", JOptionPane.ERROR_MESSAGE);
@@ -3465,7 +3589,7 @@ public class DocentesView {
 						return;
 					}
 
-					if (!validarCampos(idField, apField, nombresField, correoField, materiaField, telefonoField, amField)) {
+					if (!validarCampos(idField, apField, nombresField, correoField, telefonoField, amField)) {
 						JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
@@ -3480,7 +3604,7 @@ public class DocentesView {
 					docente.setSegundo_apellido(amField.getText());
 					docente.setFecha_nacimiento(fechaNacimiento);
 					docente.setCorreo_electronico(correoField.getText());
-					docente.setMateria(materiaField.getText());
+					docente.setMateria(docenteSeleccionado);
 					docente.setNo_telefono(Long.parseLong(telefonoField.getText()));
 
 					DocentesModel dm = new DocentesModel();
