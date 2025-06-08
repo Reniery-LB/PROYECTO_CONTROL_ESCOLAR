@@ -1245,8 +1245,6 @@ public class AsignaturasView {
 		addScaled.accept(nombre_materia);
 		mipanel.add(nombre_materia);
 		
-		
-		
 		JLabel docente_cargo = new JLabel("Docente a cargo:");
 		docente_cargo.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		docente_cargo.setBounds(160, 300, 169, 29);

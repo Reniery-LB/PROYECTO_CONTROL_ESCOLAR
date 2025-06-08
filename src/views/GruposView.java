@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,8 +38,10 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.AbstractDocument;
 
 import aplication.ScalableUtils;
+import aplication.TextDocumentFilter;
 import controllers.AlumnosController;
 import controllers.AsignaturasController;
 import controllers.AuthController;
@@ -975,6 +978,7 @@ public class GruposView {
 		nombre_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		nombre_grupoField.setBounds(313, 239, 386, 40);
 		nombre_grupoField.setColumns(10);
+		((AbstractDocument) nombre_grupoField.getDocument()).setDocumentFilter(new TextDocumentFilter(30));
 		addScaled.accept(nombre_grupoField);
 		mipanel.add(nombre_grupoField);
 		
@@ -986,17 +990,27 @@ public class GruposView {
 		
 		JComboBox<String> docenteComboBox = new JComboBox<>();
 		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		docenteComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		docenteComboBox.setBackground(new Color(217, 217, 217));
-		docenteComboBox.setBounds(313, 297, 386, 40);
+		docenteComboBox.setBounds(341, 292, 510, 40);
+
+		//Connection conn = new ConnectionModel().getConnection();
+
+		DocentesModel docenteModel = new DocentesModel();
+		List<Docente> docentes = docenteModel.getAll();
+		
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+		for (Docente docente : docentes) {
+		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		}
+		docenteComboBox.setModel(comboModel);
+		
+		if (docentes.isEmpty()) {
+		    docenteComboBox.addItem("No hay docentes disponibles");
+		}
+
 		addScaled.accept(docenteComboBox);
 		mipanel.add(docenteComboBox);
-		
-		DocentesModel docentesModel = new DocentesModel();
-		List<Docente> docentes = docentesModel.getAll(); 
-		for (Docente d : docentes) {
-		    docenteComboBox.addItem(d.getIdDocente() + " - " + d.getNombre());
-		}
 		
 //		JLabel ID_grupoLabel = new JLabel("ID del grupo:");
 //		ID_grupoLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1076,59 +1090,90 @@ public class GruposView {
 		addScaled.accept(fondo_grupo);
 		mipanel.add(fondo_grupo);
 		
-		JButton btn_crear = new JButton();
+		JButton btn_crear = new JButton("Crear");
 		btn_crear.addActionListener(new ActionListener() {
-		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        try {
-		            // 1. Validar datos y crear el grupo (como ya lo haces)
-		            String nombreGrupo = nombre_grupoField.getText().trim();
-		            String turno = periodo_comboBox.getSelectedItem().toString();
-		            String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
+		        opciones_panel.setVisible(false);
+		        
+		        // Obtener valores de los campos
+		        String nombreGrupo = nombre_grupoField.getText().trim();
+		        String turno = periodo_comboBox.getSelectedItem().toString();
+		        String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
+
+		        // Validación básica de campos
+		        if (nombreGrupo.isEmpty() || docenteSeleccionado == null || 
+		            docenteSeleccionado.equals("No hay docentes disponibles")) {
+		            
+		            nombre_grupoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(null, "Por favor completa todos los campos obligatorios.", 
+		                "Error", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+
+		        try (Connection conn = new ConnectionModel().getConnection()) {
+		            GruposModel gruposModel = new GruposModel(conn);
+		            
+		            // Obtener ID del docente
 		            int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
 
-		            if (nombreGrupo.isEmpty()) {
-		                JOptionPane.showMessageDialog(null, "El nombre del grupo no puede estar vacío.");
+		            // Verificar si el docente existe
+		            if (!gruposModel.existeDocente(idDocente)) {
+		                JOptionPane.showMessageDialog(null, "El docente seleccionado no existe.", 
+		                    "Error", JOptionPane.ERROR_MESSAGE);
 		                return;
 		            }
 
-		            Grupo grupo = new Grupo();
-		            grupo.setNombreGrupo(nombreGrupo);
-		            grupo.setTurno(Grupo.Turno.fromString(turno));
-		            grupo.setPeriodo(periodo_comboBox.getSelectedItem().toString());
-		            grupo.setIdDocente(idDocente);
+		            // Crear el objeto Grupo (asignatura temporalmente a 0)
+		            Grupo nuevoGrupo = new Grupo();
+		            nuevoGrupo.setNombreGrupo(nombreGrupo);
+		            nuevoGrupo.setTurno(Grupo.Turno.fromString(turno));
+		            nuevoGrupo.setPeriodo("2024"); // Puedes hacer esto configurable
+		            nuevoGrupo.setIdAsignatura(0); // Valor temporal
+		            nuevoGrupo.setIdDocente(idDocente);
 
-		            GruposModel model = new GruposModel(new ConnectionModel().getConnection());
-		            boolean creado = model.create(grupo); // Guarda el grupo en la BD
+		            // Guardar el grupo en la base de datos
+		            boolean grupoCreado = gruposModel.create(nuevoGrupo);
 
-		            // 2. Si el grupo se creó correctamente, asignar los alumnos
-		            if (creado) {
+		            if (grupoCreado) {
+		                // Asignar alumnos al grupo si hay seleccionados
 		                if (!alumnosTemporales.isEmpty()) {
 		                    for (int idAlumno : alumnosTemporales) {
-		                        // 3. Insertar en alumno_has_grupo
-		                        model.agregarAlumnoAGrupo(idAlumno, grupo.getIdGrupo());
+		                        gruposModel.agregarAlumnoAGrupo(idAlumno, nuevoGrupo.getIdGrupo());
 		                    }
-		                    JOptionPane.showMessageDialog(null, 
-		                        "Grupo creado con " + alumnosTemporales.size() + " alumnos.");
-		                    alumnosTemporales.clear(); // Limpiar la lista temporal
-		                } else {
-		                    JOptionPane.showMessageDialog(null, "Grupo creado (sin alumnos).");
 		                }
-		                GruposView.this.panel_grupos(addScaled); // Volver al menú principal
+
+		                // Mostrar mensaje de éxito
+		                nombre_grupoField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+		                String mensaje = "Grupo '" + nombreGrupo + "' creado exitosamente";
+		                mensaje += alumnosTemporales.isEmpty() ? "." : " con " + alumnosTemporales.size() + " alumnos.";
+		                JOptionPane.showMessageDialog(null, mensaje);
+		                
+		                // Limpiar lista temporal y volver al panel principal
+		                alumnosTemporales.clear();
+		                GruposView.this.panel_grupos(addScaled);
 		            } else {
-		                JOptionPane.showMessageDialog(null, "Error al crear el grupo.");
+		                JOptionPane.showMessageDialog(null, "Error al crear el grupo.", 
+		                    "Error", JOptionPane.ERROR_MESSAGE);
 		            }
-		        } catch (Exception ex) {
+		        } catch (NumberFormatException ex) {
+		            JOptionPane.showMessageDialog(null, "Error en el formato del ID del docente.", 
+		                "Error", JOptionPane.ERROR_MESSAGE);
 		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+		        } catch (SQLException ex) {
+		            JOptionPane.showMessageDialog(null, "Error de base de datos: " + ex.getMessage(), 
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            ex.printStackTrace();
+		        } catch (Exception ex) {
+		            JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage(), 
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            ex.printStackTrace();
 		        }
 		    }
 		});
-		btn_crear.setText("Crear");
 		btn_crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_crear.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		btn_crear.setBackground(new Color(170, 196, 255));
-		btn_crear.setBounds(688, 716, 192, 40);
+		btn_crear.setBounds(678, 716, 192, 40);
 		addScaled.accept(btn_crear);
 		mipanel.add(btn_crear);
 	}
@@ -2774,11 +2819,11 @@ public class GruposView {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        int[] selectedRows = table.getSelectedRows();
-		        alumnosTemporales.clear(); // Limpiar lista temporal
+		        alumnosTemporales.clear(); 
 		        
 		        for (int row : selectedRows) {
-		            // Obtener el idAlumno (no no_control)
-		            int idAlumno = alumnos.get(row).getIdAlumno(); // <-- Usar getIdAlumno()
+		    
+		            int idAlumno = alumnos.get(row).getIdAlumno(); 
 		            alumnosTemporales.add(idAlumno);
 		        }
 		        JOptionPane.showMessageDialog(null, alumnosTemporales.size() + " alumnos seleccionados.");
