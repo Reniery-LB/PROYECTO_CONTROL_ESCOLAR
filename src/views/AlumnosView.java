@@ -1137,7 +1137,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							AlumnosView.this.informacion_alumno(alumno, addScaled);
 						}
 					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1173,7 +1173,12 @@ public class AlumnosView {
 						public void actionPerformed(ActionEvent e) {
 							origen = "editar";
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							try {
+								AlumnosView.this.editar_alumno(alumno, addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2668,7 +2673,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							AlumnosView.this.informacion_alumno(alumno, addScaled);
 						}
 					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2704,7 +2709,12 @@ public class AlumnosView {
 						public void actionPerformed(ActionEvent e) {
 							origen = "editar";
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							try {
+								AlumnosView.this.editar_alumno(alumno, addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3644,7 +3654,7 @@ public class AlumnosView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							AlumnosView.this.informacion_alumno(alumno, addScaled);
 						}
 					});
 					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3680,7 +3690,12 @@ public class AlumnosView {
 						public void actionPerformed(ActionEvent e) {
 							origen = "editar";
 							opciones_panel.setVisible(false);
-							AlumnosView.this.numero_control(addScaled);
+							try {
+								AlumnosView.this.editar_alumno(alumno, addScaled);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					});
 					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
