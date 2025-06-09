@@ -71,8 +71,16 @@ public class GruposView {
     Connection conn = new ConnectionModel().getConnection();
     alumno_has_grupoModel alumnoGrupoModel = new alumno_has_grupoModel(conn);
 	private int idGrupo;
-
+	private int añadidos = 0;
+	private Alumno alumno;
+	private List<Alumno> alumnosParaEliminar = new ArrayList<>();
+	private int eliminados;
+	private JTable table;
 	private JPanel opciones_panel;
+	private  String nombreGrupo;
+	private int grupoAEliminarId;
+	List<Integer> alumnosSeleccionadosTemporal = new ArrayList<>();
+
 	
 	public GruposView() {
 		inicializar();
@@ -171,7 +179,7 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_grupo(addScaled, null);	
+				GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 			}
 		});
 		btn_crear.setOpaque(true);
@@ -186,7 +194,7 @@ public class GruposView {
 		btn_crear_label.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_grupo(addScaled, null);
+				GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);
 			}
 		});
 		btn_crear_label.setFont(new Font("SansSerif", Font.PLAIN, 26));
@@ -323,7 +331,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -589,7 +597,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -725,7 +733,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void añadir_grupo(Consumer<JComponent> addScaled, String letraSeleccionada) {
+	public void añadir_grupo(Consumer<JComponent> addScaled, String letraSeleccionada, String nombreGrupoPrellenado) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -808,7 +816,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupoPrellenado);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -907,13 +915,13 @@ public class GruposView {
 		addScaled.accept(asignaturas_barraLabel);
 		mipanel.add(asignaturas_barraLabel);
 		
-		if(letraSeleccionada != null) {
-	        JLabel iconoLetra = new JLabel();
-	        iconoLetra.setIcon(new ImageIcon(getClass().getResource("/img/icono_letra" + letraSeleccionada + ".png")));
-	        iconoLetra.setBounds(1268, 258, 111, 110);
-	        addScaled.accept(iconoLetra);
-	        mipanel.add(iconoLetra);
-	    }
+//		if(letraSeleccionada != null) {
+//	        JLabel iconoLetra = new JLabel();
+//	        iconoLetra.setIcon(new ImageIcon(getClass().getResource("/img/icono_letra" + letraSeleccionada + ".png")));
+//	        iconoLetra.setBounds(1268, 258, 111, 110);
+//	        addScaled.accept(iconoLetra);
+//	        mipanel.add(iconoLetra);
+//	    }
 		
 		JLabel fondo_barra = new JLabel();
 		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
@@ -957,6 +965,7 @@ public class GruposView {
 		nombre_grupoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		nombre_grupoField.setBounds(313, 239, 386, 40);
 		nombre_grupoField.setColumns(10);
+		nombre_grupoField.setText(nombreGrupoPrellenado != null ? nombreGrupoPrellenado : "");
 		((AbstractDocument) nombre_grupoField.getDocument()).setDocumentFilter(new TextDocumentFilter(30));
 		addScaled.accept(nombre_grupoField);
 		mipanel.add(nombre_grupoField);
@@ -1018,7 +1027,8 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
-				GruposView.this.añadir_alumno(addScaled, "crear_grupo");
+		        String nombreActual = nombre_grupoField.getText().trim();
+		        GruposView.this.añadir_alumno(addScaled, "crear_grupo", nombreActual);
 			}
 		});
 		btn_añadir_alumnos.setText(alumnosTemporales.isEmpty() ? "Haz clic aquí" : "Alumnos seleccionados: " + alumnosTemporales.size());
@@ -1071,8 +1081,7 @@ public class GruposView {
 		btn_crear.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        opciones_panel.setVisible(false);
-		        
-		        String nombreGrupo = nombre_grupoField.getText().trim();
+		        nombreGrupo = nombre_grupoField.getText().trim();
 		        String turno = periodo_comboBox.getSelectedItem().toString();
 		        String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
 
@@ -1120,9 +1129,11 @@ public class GruposView {
 		                }
 
 		                nombre_grupoField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-		                String mensaje = "Grupo '" + nombreGrupo + "' creado exitosamente";
-		                mensaje += alumnosTemporales.isEmpty() ? "." : " con " + alumnosTemporales.size() + " alumnos.";
-		                JOptionPane.showMessageDialog(null, mensaje);
+//		                String mensaje = "Grupo '" + nombreGrupo + "' creado exitosamente";
+//		                mensaje += alumnosTemporales.isEmpty() ? "." : " con " + alumnosTemporales.size() + " alumnos.";
+//		                JOptionPane.showMessageDialog(null, mensaje);
+		                opciones_panel.setVisible(false);
+		                GruposView.this.confirmar_grupoCreado(addScaled);
 		                
 		                alumnosTemporales.clear();
 		                GruposView.this.panel_grupos(addScaled);
@@ -1452,7 +1463,6 @@ public class GruposView {
 	
 	
 	public void informacion_grupos(Consumer<JComponent> addScaled, int idGrupo) throws SQLException {
-
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1538,7 +1548,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -1731,16 +1741,16 @@ public class GruposView {
 	    addScaled.accept(turnoLabel);
 	    mipanel.add(turnoLabel);
 	    
-	    String[] titles = {"Apellido paterno", "Apellido materno", "Nombre", "No. Control"};
+	    String[] titles = {"No. Control", "Apellido paterno", "Apellido materno", "Nombres"};
 	    String[][] data = new String[alumnos.size()][4];
 	    
 
 	    for (int i = 0; i < alumnos.size(); i++) {
 	        Alumno alumno = alumnos.get(i);
-	        data[i][0] = alumno.getPrimer_apellido();
-	        data[i][1] = alumno.getSegundo_apellido() != null ? alumno.getSegundo_apellido() : "";
-	        data[i][2] = alumno.getNombre();
-	        data[i][3] = alumno.getNo_control() + "";
+	        data[i][1] = alumno.getPrimer_apellido();
+	        data[i][2] = alumno.getSegundo_apellido() != null ? alumno.getSegundo_apellido() : "";
+	        data[i][3] = alumno.getNombre();
+	        data[i][0] = alumno.getNo_control() + "";
 	    }
 	    
 		
@@ -1753,7 +1763,7 @@ public class GruposView {
 		
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.GRAY); 
-		header.setForeground(Color.BLACK);
+		header.setForeground(Color.WHITE);
 		header.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 		header.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		header.setPreferredSize(new Dimension(header.getWidth(), 50));
@@ -1779,18 +1789,17 @@ public class GruposView {
 		
 		JButton btn_descargar = new JButton();
 		btn_descargar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_btnDescargar(addScaled);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	opciones_panel.setVisible(false);
+//		    	GruposView.this.alerta_DescargarAsignatura(asignaturaSeleccionada, addScaled);
+		    }
 		});
-		btn_descargar.setText("Descargar");
+		btn_descargar.setText("Descargar Grupo");
 		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_descargar.setBackground(new Color(170, 196, 255));
-		btn_descargar.setBounds(1202, 616, 192, 40);
+		btn_descargar.setBounds(1230, 630, 238, 40);
 		addScaled.accept(btn_descargar);
 		mipanel.add(btn_descargar);
 		
@@ -1924,7 +1933,7 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void añadir_alumno(Consumer<JComponent> addScaled, String origen) {
+	public void añadir_alumno(Consumer<JComponent> addScaled, String origen, String nombreGrupoPrellenado) {
 		remover();
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
@@ -1936,6 +1945,13 @@ public class GruposView {
 		logo.setBounds(0, 10, 101, 85);
 		addScaled.accept(logo);
 		mipanel.add(logo);
+		
+		JLabel infoLabel = new JLabel("Haga clic para seleccionar solo a un alumno o mantenga presionado crtl al hacer clic para seleccionar a varios alumnos");
+		infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		infoLabel.setForeground(Color.WHITE);
+		infoLabel.setBounds(155, 180, 1221, 20);
+		addScaled.accept(infoLabel);
+		mipanel.add(infoLabel);
 		
 		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -1997,7 +2013,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupoPrellenado);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2123,7 +2139,7 @@ public class GruposView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				if ("crear_grupo".equals(origen)) {
-					GruposView.this.añadir_grupo(addScaled, null);					
+					GruposView.this.añadir_grupo(addScaled, null, nombreGrupoPrellenado);					
 				} else if ("editar_grupo".equals(origen)) {
 					try {
 						GruposView.this.editar_grupo(addScaled, idGrupo);
@@ -2181,10 +2197,32 @@ public class GruposView {
 		table.setGridColor(Color.BLACK);
 		table.setFillsViewportHeight(true);
 		
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		DefaultTableCellRenderer renderizador = new DefaultTableCellRenderer() {
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value,
+		            boolean isSelected, boolean hasFocus, int row, int column) {
+		        
+		        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        setHorizontalAlignment(JLabel.CENTER);
+
+		        if (row >= 0 && row < alumnos.size()) {
+		            Alumno alumno = alumnos.get(row);
+		            boolean estaSeleccionado = alumnosTemporales.contains(alumno.getIdAlumno());
+
+		            if (isSelected) {
+		                c.setBackground(new Color(150, 200, 255));
+		            } else if (estaSeleccionado) {
+		                c.setBackground(new Color(200, 255, 200)); 
+		            } else {
+		                c.setBackground(Color.WHITE);
+		            }
+		        }
+		        return c;
+		    }
+		};
+		
 		for (int i = 0; i < table.getColumnCount(); i++) {
-		    table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		    table.getColumnModel().getColumn(i).setCellRenderer(renderizador);
 		}
 		
 		JScrollPane scroll = new JScrollPane(table);
@@ -2205,7 +2243,9 @@ public class GruposView {
 		            int idAlumno = alumnos.get(row).getIdAlumno(); 
 		            alumnosTemporales.add(idAlumno);
 		        }
-		        JOptionPane.showMessageDialog(null, alumnosTemporales.size() + " alumnos seleccionados.");
+		        opciones_panel.setVisible(false);
+		        GruposView.this.alerta_añadirAlumnos(addScaled);
+		        table.repaint();
 		}
 		});
 		btn_añadir.setText("Añadir");
@@ -2221,362 +2261,361 @@ public class GruposView {
 	//===========================================================================================================================
 	
 	
-	public void eliminar_alumno(Consumer<JComponent> addScaled) {
-
-		remover();
-		addScaled.accept(opciones_panel);
-		mipanel.add(opciones_panel);
-		
-		JLabel logo = new JLabel();
-		logo.setBackground(Color.decode("#EEF1FF"));
-		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
-		logo.setOpaque(true);
-		logo.setBounds(0, 10, 101, 85);
-		addScaled.accept(logo);
-		mipanel.add(logo);
-		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
-		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
-		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
-		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
-		addScaled.accept(c_escolar_barraLabel);
-		mipanel.add(c_escolar_barraLabel);
-		
-		JButton grupos_barraLabel = new JButton("    Grupos");
-		grupos_barraLabel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				opciones_panel.setSize(266, 200);
-				opciones_panel.setLocation(376, 101);
-				
-				boolean visible = !opciones_panel.isVisible();
-				opciones_panel.setVisible(visible);
-				
-				if(visible) {
-					opciones_panel.removeAll();
-					JButton registros = new JButton("Registros");
-					registros.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							GruposView.this.detalles_grupos(addScaled);		
-						}
-						
-					});
-					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					registros.setBackground(Color.decode("#EEF1FF"));
-					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					registros.setBounds(0, 0, 266, 50);
-					opciones_panel.add(registros);
-					
-					JButton detalles = new JButton("Detalles");
-					detalles.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							GruposView.this.detalles_grupos(addScaled);
-						}
-					});
-					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					detalles.setBackground(Color.decode("#EEF1FF"));
-					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					detalles.setBounds(0, 50, 266, 50);
-					opciones_panel.add(detalles);
-					
-					JButton crear = new JButton("Crear");
-					crear.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
-						}
-					});
-					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					crear.setBackground(Color.decode("#EEF1FF"));
-					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					crear.setBounds(0, 100, 266, 50);
-					opciones_panel.add(crear);
-					
-					JButton editar = new JButton("Editar");
-					editar.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							opciones_panel.setVisible(false);
-							try {
-								GruposView.this.editar_grupo(addScaled, idGrupo);
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-					});
-					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-					editar.setBackground(Color.decode("#EEF1FF"));
-					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-					editar.setBounds(0, 150, 266, 50);
-					opciones_panel.add(editar);
-					
-					opciones_panel.revalidate();
-					opciones_panel.repaint();
-				}
-				
-			}
-		});
-		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
-		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		grupos_barraLabel.setBackground(Color.decode("#AAC4FF"));
-		grupos_barraLabel.setForeground(Color.BLACK);
-		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
-		grupos_barraLabel.setBounds(372, 0, 263, 102);
-		addScaled.accept(grupos_barraLabel);
-		mipanel.add(grupos_barraLabel);
-		
-		JButton alumnos_barraLabel = new JButton("    Alumnos");
-		alumnos_barraLabel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_IrAlumnos(addScaled);
-			}
-		});
-		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
-		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
-		alumnos_barraLabel.setBounds(633, 0, 263, 102);
-		addScaled.accept(alumnos_barraLabel);
-		mipanel.add(alumnos_barraLabel);
-		
-		JButton docentes_barraLabel = new JButton(" Docentes");
-		docentes_barraLabel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_IrDocentes(addScaled);	
-			}
-		});
-		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
-		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		docentes_barraLabel.setBackground(new Color(238, 241, 255));
-		docentes_barraLabel.setBounds(894, 0, 263, 102);
-		addScaled.accept(docentes_barraLabel);
-		mipanel.add(docentes_barraLabel);
-		
-		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
-		asignaturas_barraLabel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_IrAsignaturas(addScaled);	
-			}
-		});
-		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
-		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
-		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
-		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
-		addScaled.accept(asignaturas_barraLabel);
-		mipanel.add(asignaturas_barraLabel);
-		
-		JLabel fondo_barra = new JLabel("Ingrese los datos del alumno");
-		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
-		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
-		fondo_barra.setBackground(Color.decode("#27548A"));
-		fondo_barra.setForeground(Color.WHITE);
-		fondo_barra.setBounds(0, 105, 1540, 90);
-		fondo_barra.setOpaque(true);
-		addScaled.accept(fondo_barra);
-		mipanel.add(fondo_barra);
-		
-		JLabel fondo_barra2 = new JLabel();
-		fondo_barra2.setFont(new Font("SansSerif", Font.PLAIN, 32));
-		fondo_barra2.setHorizontalAlignment(JLabel.CENTER);
-		fondo_barra2.setBackground(Color.decode("#EEF1FF"));
-		fondo_barra2.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		fondo_barra2.setBounds(0, 0, 1540, 102);
-		fondo_barra2.setOpaque(true);
-		addScaled.accept(fondo_barra2);
-		mipanel.add(fondo_barra2);
-		
-		JButton btn_volver = new JButton("Volver");
-		btn_volver.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.añadir_alumno(addScaled, "editar_grupo");
-			}
-		});
-		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
-		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
-		btn_volver.setHorizontalAlignment(JLabel.LEFT);
-		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
-		btn_volver.setForeground(Color.WHITE);
-		btn_volver.setBackground(new Color(238, 241, 255));
-		btn_volver.setBounds(10, 716, 263, 58);
-		btn_volver.setOpaque(false);
-		addScaled.accept(btn_volver);
-		mipanel.add(btn_volver);
-		
-		JButton btn_guardar = new JButton();
-		btn_guardar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.alerta_añadirAlumnos(addScaled);
-			}
-		});
-		btn_guardar.setText("Guardar");
-		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_guardar.setBackground(new Color(170, 196, 255));
-		btn_guardar.setBounds(688, 716, 192, 40);
-		addScaled.accept(btn_guardar);
-		mipanel.add(btn_guardar);
-		
-		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "ID"};
-		
-		String data [][]= {
-							{"Diaz"       , "Barrera"   , "Zahir Fernando"    , "28"},
-							{"Grijalva"   , "Ochoa"     , "Keyra Yariely"     , "28"},
-							{"Nuñez"      , "Cota"      , "Diego Emiliano"    , "28"},
-							{" "   , " "  , " "  , " "},
-							{" "   , " "  , " "  , " "},
-		};
-		
-		DefaultTableModel model = new DefaultTableModel(data,titles) {
-		    @Override
-		    public boolean isCellEditable(int row, int column) {
-		        return false;
-		    }
-		};
-		
-		JTable table = new JTable(model);
-		
-		JTableHeader header = table.getTableHeader();
-		header.setBackground(Color.WHITE); 
-		header.setForeground(Color.BLACK);
-		header.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
-		header.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		header.setPreferredSize(new Dimension(header.getWidth(), 80));
-		
-		table.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		table.setRowHeight(80);
-		table.setShowGrid(true);
-		table.setBackground(Color.WHITE);
-		table.setGridColor(Color.BLACK);
-		table.setFillsViewportHeight(true);
-		
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		for (int i = 0; i < table.getColumnCount(); i++) {
-		    table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-		}
-		
-		JScrollPane scroll = new JScrollPane(table);
-		scroll.setFont(new Font("SansSerif", Font.PLAIN, 24));
-		scroll.setBounds(272, 205, 1221, 480);
-		addScaled.accept(scroll);
-		mipanel.add(scroll);
-		
-		JButton btn_eliminar1 = new JButton("Eliminar");
-		btn_eliminar1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        if(model.getRowCount() > 0) {
-		        	 model.removeRow(0);
-		        }
-			}
-		});
-		btn_eliminar1.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_eliminar1.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_eliminar1.setBackground(new Color(170, 196, 255));
-		btn_eliminar1.setBounds(28, 302, 192, 40);
-		addScaled.accept(btn_eliminar1);
-		mipanel.add(btn_eliminar1);
-		
-		JButton btn_eliminar2 = new JButton("Eliminar");
-		btn_eliminar2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        if(model.getRowCount() > 1) {
-		        	 model.removeRow(1);
-		        }
-			}
-		});
-		btn_eliminar2.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_eliminar2.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_eliminar2.setBackground(new Color(170, 196, 255));
-		btn_eliminar2.setBounds(28, 379, 192, 40);
-		addScaled.accept(btn_eliminar2);
-		mipanel.add(btn_eliminar2);
-		
-		JButton btn_eliminar3 = new JButton("Eliminar");
-		btn_eliminar3.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        if(model.getRowCount() > 2) {
-		        	 model.removeRow(2);
-		        }
-			}
-		});
-		btn_eliminar3.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_eliminar3.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_eliminar3.setBackground(new Color(170, 196, 255));
-		btn_eliminar3.setBounds(28, 463, 192, 40);
-		addScaled.accept(btn_eliminar3);
-		mipanel.add(btn_eliminar3);
-		
-		JButton btn_añadir4 = new JButton("Añadir");
-		btn_añadir4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.eliminar_alumno(addScaled);
-			}
-		});
-		btn_añadir4.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_añadir4.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_añadir4.setBackground(new Color(170, 196, 255));
-		btn_añadir4.setBounds(28, 546, 192, 40);
-		addScaled.accept(btn_añadir4);
-		mipanel.add(btn_añadir4);
-		
-		JButton btn_añadir5 = new JButton("Añadir");
-		btn_añadir5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				opciones_panel.setVisible(false);
-				GruposView.this.eliminar_alumno(addScaled);
-			}
-		});
-		btn_añadir5.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		btn_añadir5.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_añadir5.setBackground(new Color(170, 196, 255));
-		btn_añadir5.setBounds(28, 625, 192, 40);
-		addScaled.accept(btn_añadir5);
-		mipanel.add(btn_añadir5);
-	}
+//	public void eliminar_alumno(Consumer<JComponent> addScaled) {
+//		remover();
+//		addScaled.accept(opciones_panel);
+//		mipanel.add(opciones_panel);
+//		
+//		JLabel logo = new JLabel();
+//		logo.setBackground(Color.decode("#EEF1FF"));
+//		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
+//		logo.setOpaque(true);
+//		logo.setBounds(0, 10, 101, 85);
+//		addScaled.accept(logo);
+//		mipanel.add(logo);
+//		
+//		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+//		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+//		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+//		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+//		addScaled.accept(c_escolar_barraLabel);
+//		mipanel.add(c_escolar_barraLabel);
+//		
+//		JButton grupos_barraLabel = new JButton("    Grupos");
+//		grupos_barraLabel.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				opciones_panel.setSize(266, 200);
+//				opciones_panel.setLocation(376, 101);
+//				
+//				boolean visible = !opciones_panel.isVisible();
+//				opciones_panel.setVisible(visible);
+//				
+//				if(visible) {
+//					opciones_panel.removeAll();
+//					JButton registros = new JButton("Registros");
+//					registros.addActionListener(new ActionListener() {
+//
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//							opciones_panel.setVisible(false);
+//							GruposView.this.detalles_grupos(addScaled);		
+//						}
+//						
+//					});
+//					registros.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//					registros.setBackground(Color.decode("#EEF1FF"));
+//					registros.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//					registros.setBounds(0, 0, 266, 50);
+//					opciones_panel.add(registros);
+//					
+//					JButton detalles = new JButton("Detalles");
+//					detalles.addActionListener(new ActionListener() {
+//						
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//							opciones_panel.setVisible(false);
+//							GruposView.this.detalles_grupos(addScaled);
+//						}
+//					});
+//					detalles.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//					detalles.setBackground(Color.decode("#EEF1FF"));
+//					detalles.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//					detalles.setBounds(0, 50, 266, 50);
+//					opciones_panel.add(detalles);
+//					
+//					JButton crear = new JButton("Crear");
+//					crear.addActionListener(new ActionListener() {
+//						
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//							opciones_panel.setVisible(false);
+//							GruposView.this.añadir_grupo(addScaled, null);	
+//						}
+//					});
+//					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//					crear.setBackground(Color.decode("#EEF1FF"));
+//					crear.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//					crear.setBounds(0, 100, 266, 50);
+//					opciones_panel.add(crear);
+//					
+//					JButton editar = new JButton("Editar");
+//					editar.addActionListener(new ActionListener() {
+//						
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//							opciones_panel.setVisible(false);
+//							try {
+//								GruposView.this.editar_grupo(addScaled, idGrupo);
+//							} catch (SQLException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
+//						}
+//					});
+//					editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//					editar.setBackground(Color.decode("#EEF1FF"));
+//					editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//					editar.setBounds(0, 150, 266, 50);
+//					opciones_panel.add(editar);
+//					
+//					opciones_panel.revalidate();
+//					opciones_panel.repaint();
+//				}
+//				
+//			}
+//		});
+//		grupos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/grupos_barra.png")));
+//		grupos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+//		grupos_barraLabel.setBackground(Color.decode("#AAC4FF"));
+//		grupos_barraLabel.setForeground(Color.BLACK);
+//		grupos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		grupos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+//		grupos_barraLabel.setBounds(372, 0, 263, 102);
+//		addScaled.accept(grupos_barraLabel);
+//		mipanel.add(grupos_barraLabel);
+//		
+//		JButton alumnos_barraLabel = new JButton("    Alumnos");
+//		alumnos_barraLabel.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.alerta_IrAlumnos(addScaled);
+//			}
+//		});
+//		alumnos_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/alumnos_barra.png")));
+//		alumnos_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+//		alumnos_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		alumnos_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		alumnos_barraLabel.setBackground(new Color(238, 241, 255));
+//		alumnos_barraLabel.setBounds(633, 0, 263, 102);
+//		addScaled.accept(alumnos_barraLabel);
+//		mipanel.add(alumnos_barraLabel);
+//		
+//		JButton docentes_barraLabel = new JButton(" Docentes");
+//		docentes_barraLabel.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.alerta_IrDocentes(addScaled);	
+//			}
+//		});
+//		docentes_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/docentes_barra.png")));
+//		docentes_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
+//		docentes_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		docentes_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		docentes_barraLabel.setBackground(new Color(238, 241, 255));
+//		docentes_barraLabel.setBounds(894, 0, 263, 102);
+//		addScaled.accept(docentes_barraLabel);
+//		mipanel.add(docentes_barraLabel);
+//		
+//		JButton asignaturas_barraLabel = new JButton(" Asignaturas");
+//		asignaturas_barraLabel.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.alerta_IrAsignaturas(addScaled);	
+//			}
+//		});
+//		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
+//		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		asignaturas_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+//		asignaturas_barraLabel.setBackground(new Color(238, 241, 255));
+//		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
+//		addScaled.accept(asignaturas_barraLabel);
+//		mipanel.add(asignaturas_barraLabel);
+//		
+//		JLabel fondo_barra = new JLabel("Ingrese los datos del alumno");
+//		fondo_barra.setFont(new Font("SansSerif", Font.PLAIN, 32));
+//		fondo_barra.setHorizontalAlignment(JLabel.CENTER);
+//		fondo_barra.setBackground(Color.decode("#27548A"));
+//		fondo_barra.setForeground(Color.WHITE);
+//		fondo_barra.setBounds(0, 105, 1540, 90);
+//		fondo_barra.setOpaque(true);
+//		addScaled.accept(fondo_barra);
+//		mipanel.add(fondo_barra);
+//		
+//		JLabel fondo_barra2 = new JLabel();
+//		fondo_barra2.setFont(new Font("SansSerif", Font.PLAIN, 32));
+//		fondo_barra2.setHorizontalAlignment(JLabel.CENTER);
+//		fondo_barra2.setBackground(Color.decode("#EEF1FF"));
+//		fondo_barra2.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		fondo_barra2.setBounds(0, 0, 1540, 102);
+//		fondo_barra2.setOpaque(true);
+//		addScaled.accept(fondo_barra2);
+//		mipanel.add(fondo_barra2);
+//		
+//		JButton btn_volver = new JButton("Volver");
+//		btn_volver.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.añadir_alumno(addScaled, "editar_grupo");
+//			}
+//		});
+//		btn_volver.setIcon(new ImageIcon(getClass().getResource("/img/cerrar_sesion.png")));
+//		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 26));
+//		btn_volver.setHorizontalAlignment(JLabel.LEFT);
+//		btn_volver.setBorder(BorderFactory.createLineBorder(Color.decode("#27548A"),3));
+//		btn_volver.setForeground(Color.WHITE);
+//		btn_volver.setBackground(new Color(238, 241, 255));
+//		btn_volver.setBounds(10, 716, 263, 58);
+//		btn_volver.setOpaque(false);
+//		addScaled.accept(btn_volver);
+//		mipanel.add(btn_volver);
+//		
+//		JButton btn_guardar = new JButton();
+//		btn_guardar.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.alerta_añadirAlumnos(addScaled);
+//			}
+//		});
+//		btn_guardar.setText("Guardar");
+//		btn_guardar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_guardar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_guardar.setBackground(new Color(170, 196, 255));
+//		btn_guardar.setBounds(688, 716, 192, 40);
+//		addScaled.accept(btn_guardar);
+//		mipanel.add(btn_guardar);
+//		
+//		String titles []= {"Apellido paterno", "Apellido materno", "Nombres", "ID"};
+//		
+//		String data [][]= {
+//							{"Diaz"       , "Barrera"   , "Zahir Fernando"    , "28"},
+//							{"Grijalva"   , "Ochoa"     , "Keyra Yariely"     , "28"},
+//							{"Nuñez"      , "Cota"      , "Diego Emiliano"    , "28"},
+//							{" "   , " "  , " "  , " "},
+//							{" "   , " "  , " "  , " "},
+//		};
+//		
+//		DefaultTableModel model = new DefaultTableModel(data,titles) {
+//		    @Override
+//		    public boolean isCellEditable(int row, int column) {
+//		        return false;
+//		    }
+//		};
+//		
+//		JTable table = new JTable(model);
+//		
+//		JTableHeader header = table.getTableHeader();
+//		header.setBackground(Color.WHITE); 
+//		header.setForeground(Color.BLACK);
+//		header.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+//		header.setFont(new Font("SansSerif", Font.PLAIN, 18));
+//		header.setPreferredSize(new Dimension(header.getWidth(), 80));
+//		
+//		table.setFont(new Font("SansSerif", Font.PLAIN, 18));
+//		table.setRowHeight(80);
+//		table.setShowGrid(true);
+//		table.setBackground(Color.WHITE);
+//		table.setGridColor(Color.BLACK);
+//		table.setFillsViewportHeight(true);
+//		
+//		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+//		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+//		for (int i = 0; i < table.getColumnCount(); i++) {
+//		    table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+//		}
+//		
+//		JScrollPane scroll = new JScrollPane(table);
+//		scroll.setFont(new Font("SansSerif", Font.PLAIN, 24));
+//		scroll.setBounds(272, 205, 1221, 480);
+//		addScaled.accept(scroll);
+//		mipanel.add(scroll);
+//		
+//		JButton btn_eliminar1 = new JButton("Eliminar");
+//		btn_eliminar1.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//		        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//		        if(model.getRowCount() > 0) {
+//		        	 model.removeRow(0);
+//		        }
+//			}
+//		});
+//		btn_eliminar1.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_eliminar1.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_eliminar1.setBackground(new Color(170, 196, 255));
+//		btn_eliminar1.setBounds(28, 302, 192, 40);
+//		addScaled.accept(btn_eliminar1);
+//		mipanel.add(btn_eliminar1);
+//		
+//		JButton btn_eliminar2 = new JButton("Eliminar");
+//		btn_eliminar2.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//		        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//		        if(model.getRowCount() > 1) {
+//		        	 model.removeRow(1);
+//		        }
+//			}
+//		});
+//		btn_eliminar2.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_eliminar2.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_eliminar2.setBackground(new Color(170, 196, 255));
+//		btn_eliminar2.setBounds(28, 379, 192, 40);
+//		addScaled.accept(btn_eliminar2);
+//		mipanel.add(btn_eliminar2);
+//		
+//		JButton btn_eliminar3 = new JButton("Eliminar");
+//		btn_eliminar3.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//		        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//		        if(model.getRowCount() > 2) {
+//		        	 model.removeRow(2);
+//		        }
+//			}
+//		});
+//		btn_eliminar3.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_eliminar3.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_eliminar3.setBackground(new Color(170, 196, 255));
+//		btn_eliminar3.setBounds(28, 463, 192, 40);
+//		addScaled.accept(btn_eliminar3);
+//		mipanel.add(btn_eliminar3);
+//		
+//		JButton btn_añadir4 = new JButton("Añadir");
+//		btn_añadir4.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.eliminar_alumno(addScaled);
+//			}
+//		});
+//		btn_añadir4.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_añadir4.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_añadir4.setBackground(new Color(170, 196, 255));
+//		btn_añadir4.setBounds(28, 546, 192, 40);
+//		addScaled.accept(btn_añadir4);
+//		mipanel.add(btn_añadir4);
+//		
+//		JButton btn_añadir5 = new JButton("Añadir");
+//		btn_añadir5.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				opciones_panel.setVisible(false);
+//				GruposView.this.eliminar_alumno(addScaled);
+//			}
+//		});
+//		btn_añadir5.setFont(new Font("SansSerif", Font.PLAIN, 22));
+//		btn_añadir5.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+//		btn_añadir5.setBackground(new Color(170, 196, 255));
+//		btn_añadir5.setBounds(28, 625, 192, 40);
+//		addScaled.accept(btn_añadir5);
+//		mipanel.add(btn_añadir5);
+//	}
 	
 	
 	//===========================================================================================================================
@@ -2661,7 +2700,53 @@ public class GruposView {
 
 	
 	public void alerta_añadirAlumnos(Consumer<JComponent> addScaled) {
+	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡" + alumnosTemporales.size() + " alumnos añadidos con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(221, 10, 324, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_volver.setForeground(Color.BLACK);
+		btn_volver.setText("Aceptar");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#AAC4FF"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(334, 113, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	//===========================================================================================================================
 
+	
+	public void alerta_añadir_alumnos(Consumer<JComponent> addScaled) {
+		//ESTA ALERTA VA EN EDITAR ALUMNO
 
 	    JDialog dialogo = new JDialog(ventana, "Éxito", true);
 	    dialogo.setLayout(null);
@@ -2675,7 +2760,7 @@ public class GruposView {
 		alerta_panel.setOpaque(true);
 		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		
-		JLabel mensajeLabel = new JLabel("¡Alumnos añadidos con éxito!");
+		JLabel mensajeLabel = new JLabel("¡" + añadidos + " alumnos añadidos al grupo!");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		mensajeLabel.setBounds(221, 10, 324, 97);
 		alerta_panel.add(mensajeLabel);
@@ -2686,17 +2771,13 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				ventana.dispose();
-				opciones_panel.setVisible(false);
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
 			}
 		});
-		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Volver al administrador");
+		btn_volver.setForeground(Color.BLACK);
+		btn_volver.setText("Aceptar");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBackground(Color.decode("#AAC4FF"));
 		btn_volver.setBounds(245, 250, 248, 40);
 		alerta_panel.add(btn_volver);
 		
@@ -2718,6 +2799,9 @@ public class GruposView {
 		addScaled.accept(opciones_panel);
 		mipanel.add(opciones_panel);
 		
+	    alumnosTemporales.clear();
+	    alumnosParaEliminar.clear();
+		
 		Connection conn = new ConnectionModel().getConnection();
 	    GruposModel grupoModel = new GruposModel(conn);
 	    Grupo grupo = grupoModel.getGrupoById(idGrupo);
@@ -2728,7 +2812,6 @@ public class GruposView {
 	    alumno_has_grupoModel alumnoGrupoModel = new alumno_has_grupoModel(conn);
 	    List<Alumno> alumnos = alumnoGrupoModel.obtenerAlumnosPorGrupo(idGrupo);
 	   
-		
 		JLabel logo = new JLabel();
 		logo.setBackground(Color.decode("#EEF1FF"));
 		logo.setIcon(new ImageIcon(getClass().getResource("/img/logo.png")));
@@ -2807,7 +2890,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2922,6 +3005,8 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
+				alumnosTemporales.clear();
+		        alumnosParaEliminar.clear();
 				GruposView.this.panel_grupos(addScaled);
 			}
 		});
@@ -2963,6 +3048,22 @@ public class GruposView {
 		letra_img.setBounds(1276, 176, 101, 222);
 		addScaled.accept(letra_img);
 		mipanel.add(letra_img);
+		
+		JButton btn_descargar = new JButton();
+		btn_descargar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	opciones_panel.setVisible(false);
+//		    	GruposView.this.alerta_DescargarAsignatura(asignaturaSeleccionada, addScaled);
+		    }
+		});
+		btn_descargar.setText("Descargar Grupo");
+		btn_descargar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_descargar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_descargar.setBackground(new Color(170, 196, 255));
+		btn_descargar.setBounds(1215, 630, 238, 40);
+		addScaled.accept(btn_descargar);
+		mipanel.add(btn_descargar);
 		
 		JComboBox<String> docenteComboBox = new JComboBox<>();
 		docenteComboBox.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -3074,35 +3175,31 @@ public class GruposView {
 		JButton btn_guardar = new JButton();
 		btn_guardar.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        try {
-		            grupo.setNombreGrupo(nombre_grupoField.getText());
-		            
-		            Grupo.Turno turno = turno_comboBox.getSelectedItem().equals("Matutino") 
-		                ? Grupo.Turno.TM 
-		                : Grupo.Turno.TV;
-		            grupo.setTurno(turno);
-		            
-		            String docenteSeleccionado = (String) docenteComboBox.getSelectedItem();
-		            if(docenteSeleccionado != null && !docenteSeleccionado.equals("No hay docentes disponibles")) {
-		                int idDocente = Integer.parseInt(docenteSeleccionado.split(" - ")[0]);
-		                grupo.setIdDocente(idDocente);
+		        for (int idAlumno : alumnosTemporales) {
+		            if (!idsAlumnosEnGrupo.contains(idAlumno)) {
+		                try {
+							alumnoGrupoModel.agregarAlumnoAGrupo(idAlumno, idGrupo);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 		            }
-		            
-		            GruposModel grupoModel = new GruposModel(conn);
-		            boolean actualizado = grupoModel.update(grupo);
-		            
-		            if(actualizado) {
-		                JOptionPane.showMessageDialog(null, "Grupo actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-		                panel_grupos(addScaled); 
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Error al actualizar el grupo", "Error", JOptionPane.ERROR_MESSAGE);
-		            }
-		        } catch (SQLException ex) {
-		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(null, "Error de base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-		        } finally {
-		            try { if(conn != null) conn.close(); } catch(SQLException ex) {}
 		        }
+		        for (Alumno alumno : alumnosParaEliminar) {
+		            try {
+						alumnoGrupoModel.eliminarAlumnoDeGrupo(alumno.getIdAlumno(), idGrupo);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }
+
+		        // Limpieza final de las listas temporales
+		        alumnosTemporales.clear();
+		        alumnosParaEliminar.clear();
+//		        mostrarMensaje("Cambios guardados exitosamente.");
+		        opciones_panel.setVisible(false);
+		        GruposView.this.confirmar_grupoEditado(addScaled);
 		    }
 		});
 		btn_guardar.setText("Guardar");
@@ -3117,28 +3214,9 @@ public class GruposView {
 		btn_basura.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        int confirm = JOptionPane.showConfirmDialog(null, 
-		            "¿Está seguro de eliminar este grupo?", "Confirmar", 
-		            JOptionPane.YES_NO_OPTION);
-		        
-		        if(confirm == JOptionPane.YES_OPTION) {
-		            try {
-		                GruposModel grupoModel = new GruposModel(conn);
-		                boolean eliminado = grupoModel.delete(idGrupo);
-		                
-		                if(eliminado) {
-		                    JOptionPane.showMessageDialog(null, "Grupo eliminado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-		                    panel_grupos(addScaled);
-		                } else {
-		                    JOptionPane.showMessageDialog(null, "Error al eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-		                }
-		            } catch(SQLException ex) {
-		                ex.printStackTrace();
-		                JOptionPane.showMessageDialog(null, "Error de base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-		            } finally {
-		                try { if(conn != null) conn.close(); } catch(SQLException ex) {}
-		            }
-		        }
+		    	opciones_panel.setVisible(false);
+		    	grupoAEliminarId = grupo.getIdGrupo();
+		    	GruposView.this.alerta_eliminarGrupo(addScaled);
 		    }
 		});
 		btn_basura.setOpaque(false);
@@ -3157,7 +3235,7 @@ public class GruposView {
 	//===========================================================================================================================
 
 	
-	public void alerta_eliminar(Consumer<JComponent> addScaled) {
+	public void alerta_eliminarGrupo(Consumer<JComponent> addScaled) {
 
 	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
 	    dialogo.setLayout(null);
@@ -3181,10 +3259,27 @@ public class GruposView {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialogo.dispose();	
-				GruposView.this.confirmar_grupoEliminado(addScaled);
-			}
-		});
+			       dialogo.dispose();
+
+			        try {
+			            Connection conn = new ConnectionModel().getConnection();
+			            GruposModel gruposModel = new GruposModel(conn);
+
+			            boolean eliminado = gruposModel.delete(grupoAEliminarId); 
+
+			            if (eliminado) {
+			                opciones_panel.setVisible(false);
+			                GruposView.this.confirmar_grupoEliminado(addScaled);
+			            } else {
+			                JOptionPane.showMessageDialog(null, "No se pudo eliminar el grupo.");
+			            }
+
+			        } catch (SQLException ex) {
+			            JOptionPane.showMessageDialog(null, "Error SQL al eliminar grupo: " + ex.getMessage());
+			            ex.printStackTrace();
+			        }
+			    }
+			});
 		btn_si.setForeground(new Color(255, 255, 255));
 		btn_si.setText("Si");
 		btn_si.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3222,6 +3317,55 @@ public class GruposView {
 	//===========================================================================================================================
 
 	
+	public void confirmar_grupoEditado(Consumer<JComponent> addScaled) {
+
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡Grupo editado con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(241, 43, 324, 51);
+		alerta_panel.add(mensajeLabel);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(333, 133, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				opciones_panel.setVisible(false);
+				GruposView.this.panel_grupos(addScaled);
+			}
+		});
+		btn_volver.setForeground(new Color(255, 255, 255));
+		btn_volver.setText("Panel de Grupos");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(Color.decode("#02A115"));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	//===========================================================================================================================
+
+	
 	public void confirmar_grupoEliminado(Consumer<JComponent> addScaled) {
 
 	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
@@ -3238,7 +3382,7 @@ public class GruposView {
 		
 		JLabel mensajeLabel = new JLabel("¡Grupo eliminado con éxito!");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		mensajeLabel.setBounds(231, 43, 324, 51);
+		mensajeLabel.setBounds(241, 43, 324, 51);
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_volver = new JButton();
@@ -3247,23 +3391,26 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				opciones_panel.setVisible(false);
+				GruposView.this.panel_grupos(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel de administrador");
+		btn_volver.setText("Panel de Grupos");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
 		btn_volver.setBounds(245, 250, 248, 40);
 		alerta_panel.add(btn_volver);
 		
-		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
-		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		mensajeLabel_1.setBounds(256, 63, 230, 65);
-		alerta_panel.add(mensajeLabel_1);
+//		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
+//		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
+//		mensajeLabel_1.setBounds(256, 63, 230, 65);
+//		alerta_panel.add(mensajeLabel_1);
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(333, 133, 70, 84);
+		alerta_panel.add(alerta_img);
 		
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);
@@ -3287,9 +3434,9 @@ public class GruposView {
 		alerta_panel.setOpaque(true);
 		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		
-		JLabel mensajeLabel = new JLabel("¡Grupo editado con éxito!");
+		JLabel mensajeLabel = new JLabel("¡Grupo creado con éxito!");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		mensajeLabel.setBounds(245, 58, 259, 51);
+		mensajeLabel.setBounds(241, 58, 500, 51);
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_volver = new JButton();
@@ -3298,13 +3445,12 @@ public class GruposView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				opciones_panel.setVisible(false);
+				GruposView.this.panel_grupos(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel de administrador");
+		btn_volver.setText("Panel de Grupos");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));
@@ -3649,7 +3795,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, nombreGrupo);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3846,6 +3992,7 @@ public class GruposView {
 		
 		JLabel infoLabel = new JLabel("Alumnos en verde ya están en el grupo");
 		infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setBounds(155, 180, 1221, 20);
 		addScaled.accept(infoLabel);
 		mipanel.add(infoLabel);
@@ -3910,7 +4057,7 @@ public class GruposView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							opciones_panel.setVisible(false);
-							GruposView.this.añadir_grupo(addScaled, null);	
+							GruposView.this.añadir_grupo(addScaled, null, origen);	
 						}
 					});
 					crear.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -4067,7 +4214,7 @@ public class GruposView {
 		    data[i][0] = String.valueOf(a.getNo_control());
 		}
 
-		JTable table = new JTable(data, titles) {
+		table = new JTable(data, titles) {
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
 		        return false;
@@ -4075,7 +4222,6 @@ public class GruposView {
 		};
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		// Configura un renderizador personalizado
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 		    @Override
 		    public Component getTableCellRendererComponent(JTable table, Object value, 
@@ -4087,13 +4233,13 @@ public class GruposView {
 		            boolean enGrupo = idsAlumnosEnGrupo.contains(alumno.getIdAlumno());
 		            
 		            if (enGrupo) {
-		                c.setBackground(new Color(200, 255, 200)); // Verde claro para alumnos en el grupo
+		                c.setBackground(new Color(200, 255, 200)); 
 		            } else {
 		                c.setBackground(Color.WHITE);
 		            }
 		            
 		            if (isSelected) {
-		                c.setBackground(new Color(150, 200, 255)); // Azul claro para selección
+		                c.setBackground(new Color(150, 200, 255)); 
 		            }
 		        }
 		        
@@ -4115,39 +4261,34 @@ public class GruposView {
 		table.setGridColor(Color.BLACK);
 		table.setFillsViewportHeight(true);
 		
-		// Renderizador combinado
-		DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
+		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
 		    @Override
 		    public Component getTableCellRendererComponent(JTable table, Object value,
 		            boolean isSelected, boolean hasFocus, int row, int column) {
+
 		        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        Alumno alumno = alumnos.get(row);
+		        int idAlumno = alumno.getIdAlumno();
 
-		        // Centrar texto
-		        setHorizontalAlignment(JLabel.CENTER);
-
-		        // Colorear según si el alumno está en el grupo
-		        if (row >= 0 && row < alumnos.size()) {
-		            Alumno alumno = alumnos.get(row);
-		            boolean enGrupo = idsAlumnosEnGrupo.contains(alumno.getIdAlumno());
-
-		            if (isSelected) {
-		                c.setBackground(new Color(150, 200, 255)); // Azul claro
-		            } else if (enGrupo) {
-		                c.setBackground(new Color(200, 255, 200)); // Verde claro
-		            } else {
-		                c.setBackground(Color.WHITE); // Default
-		            }
+		        if (alumnosParaEliminar.contains(alumno)) {
+		            c.setBackground(Color.RED);
+		        } else if (alumnosTemporales.contains(idAlumno)) {
+		            c.setBackground(new Color(173, 255, 47));
+		        } else if (idsAlumnosEnGrupo.contains(idAlumno)) {
+		            c.setBackground(new Color(144, 238, 144));
+		        } else {
+		            c.setBackground(Color.WHITE);
 		        }
 
 		        return c;
 		    }
 		};
 
-		// Aplicar renderizador a todas las columnas
 		for (int i = 0; i < table.getColumnCount(); i++) {
-		    table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+		    table.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
 		}
-		
+		table.repaint();
+
 		JScrollPane scroll = new JScrollPane(table);
 		scroll.setFont(new Font("SansSerif", Font.PLAIN, 24));
 		scroll.setBounds(155, 206, 1221, 480);
@@ -4159,61 +4300,32 @@ public class GruposView {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        opciones_panel.setVisible(false);
-		        
-		        // Verificar que idGrupo sea válido
+
 		        if (idGrupo <= 0) {
 		            JOptionPane.showMessageDialog(null, "Error: No se ha seleccionado un grupo válido");
 		            return;
 		        }
-		        
+
 		        int[] selectedRows = table.getSelectedRows();
 		        if (selectedRows.length == 0) {
 		            JOptionPane.showMessageDialog(null, "Seleccione al menos un alumno");
 		            return;
 		        }
-		        
-		        Connection conn = null;
-		        try {
-		            conn = new ConnectionModel().getConnection();
-		            alumno_has_grupoModel alumnoGrupoModel = new alumno_has_grupoModel(conn);
-		            int añadidos = 0;
-		            StringBuilder errores = new StringBuilder();
-		            
-		            for (int row : selectedRows) {
-		                Alumno alumno = alumnos.get(row);
-		                System.out.println("Añadiendo alumno ID: " + alumno.getIdAlumno() + " a grupo ID: " + idGrupo);
-		                
-		                if (!idsAlumnosEnGrupo.contains(alumno.getIdAlumno())) {
-		                    if (alumnoGrupoModel.agregarAlumnoAGrupo(alumno.getIdAlumno(), idGrupo)) {
-		                        añadidos++;
-		                        idsAlumnosEnGrupo.add(alumno.getIdAlumno());
-		                    } else {
-		                        errores.append("Fallo al añadir alumno: ").append(alumno.getNo_control()).append("\n");
-		                    }
-		                } else {
-		                    errores.append("Alumno ya está en el grupo: ").append(alumno.getNo_control()).append("\n");
-		                }
-		            }
-		            
-		            if (errores.length() > 0) {
-		                JOptionPane.showMessageDialog(null, "Resultado:\n" + 
-		                    añadidos + " alumnos añadidos\nErrores:\n" + errores.toString());
-		            } else {
-		                JOptionPane.showMessageDialog(null, añadidos + " alumnos añadidos al grupo");
-		            }
-		       
-		            actualizarAlumnosEnGrupo();
-		            table.repaint();
-		        } catch (SQLException ex) {
-		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(null, "Error SQL: " + ex.getMessage());
-		        } finally {
-		            if (conn != null) {
-		                try { conn.close(); } catch (SQLException e1) { e1.printStackTrace(); }
+
+		        for (int row : selectedRows) {
+		            alumno = alumnos.get(row);
+		            int idAlumno = alumno.getIdAlumno();
+
+		            if (!idsAlumnosEnGrupo.contains(idAlumno) && !alumnosTemporales.contains(idAlumno)) {
+		                alumnosTemporales.add(idAlumno);
 		            }
 		        }
+		        opciones_panel.setVisible(false);
+		        GruposView.this.alerta_añadir_alumnos(addScaled);
+		        table.repaint();
 		    }
 		});
+
 		btn_añadir.setText("Añadir");
 		btn_añadir.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_añadir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -4228,44 +4340,17 @@ public class GruposView {
 		btn_eliminar.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        opciones_panel.setVisible(false);
 		        int[] selectedRows = table.getSelectedRows();
-		        
-		        if (selectedRows.length == 0) {
-		            JOptionPane.showMessageDialog(null, "Seleccione al menos un alumno");
-		            return;
-		        }
-		        
-		        try {
-		            Connection conn = new ConnectionModel().getConnection();
-		            alumno_has_grupoModel alumnoGrupoModel = new alumno_has_grupoModel(conn);
-		            int eliminados = 0;
-		            StringBuilder detalles = new StringBuilder();
-		            
-		            for (int row : selectedRows) {
-		                Alumno alumno = alumnos.get(row);
-		                System.out.println("Intentando eliminar alumno ID: " + alumno.getIdAlumno() + " de grupo ID: " + idGrupo); // Debug
-		                
-		                if (idsAlumnosEnGrupo.contains(alumno.getIdAlumno())) {
-		                    if (alumnoGrupoModel.eliminarAlumnoDeGrupo(alumno.getIdAlumno(), idGrupo)) {
-		                        eliminados++;
-		                        idsAlumnosEnGrupo.remove(Integer.valueOf(alumno.getIdAlumno()));
-		                        detalles.append("Eliminado: ").append(alumno.getNo_control()).append("\n");
-		                    } else {
-		                        detalles.append("No se pudo eliminar: ").append(alumno.getNo_control()).append("\n");
-		                    }
-		                } else {
-		                    detalles.append("No estaba en grupo: ").append(alumno.getNo_control()).append("\n");
-		                }
+		        for (int row : selectedRows) {
+		            Alumno alumno = alumnos.get(row);
+		            if (idsAlumnosEnGrupo.contains(alumno.getIdAlumno()) && !alumnosParaEliminar.contains(alumno)) {
+		                alumnosParaEliminar.add(alumno);
 		            }
-		            
-		            JOptionPane.showMessageDialog(null, eliminados + " alumnos eliminados del grupo\nDetalles:\n" + detalles.toString());
-		            actualizarAlumnosEnGrupo();
-		    		table.repaint();
-		        } catch (SQLException ex) {
-		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(null, "Error al eliminar alumnos: " + ex.getMessage());
 		        }
+		        table.repaint();
+//		        mostrarMensaje("Alumnos marcados para eliminar. Presiona Guardar para confirmar.");
+		        opciones_panel.setVisible(false);
+		        GruposView.this.confirmar_alumnoEliminado(addScaled);
 		    }
 		});
 		btn_eliminar.setText("Eliminar");
@@ -4278,6 +4363,140 @@ public class GruposView {
 	}
 	
 	
+	
+	//===========================================================================================================================
+
+	
+	public void alerta_eliminarAlumnos(Consumer<JComponent> addScaled) {
+
+	    JDialog dialogo = new JDialog(ventana, "Alerta", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea eliminar "+ eliminados +" alumnos de este grupo?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(180, 10, 490, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_si = new JButton();
+		btn_si.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        dialogo.dispose();
+
+		        try {
+		            Connection conn = new ConnectionModel().getConnection();
+		            alumno_has_grupoModel alumnoGrupoModel = new alumno_has_grupoModel(conn);
+
+		            StringBuilder detalles = new StringBuilder();
+		            int eliminadosExitosos = 0;
+
+		            for (Alumno alumno : alumnosParaEliminar) {
+		                if (alumnoGrupoModel.eliminarAlumnoDeGrupo(alumno.getIdAlumno(), idGrupo)) {
+		                    eliminadosExitosos++;
+		                    idsAlumnosEnGrupo.remove(Integer.valueOf(alumno.getIdAlumno()));
+		                    detalles.append("Eliminado: ").append(alumno.getNo_control()).append("\n");
+		                } else {
+		                    detalles.append("No se pudo eliminar: ").append(alumno.getNo_control()).append("\n");
+		                }
+		            }
+
+		            actualizarAlumnosEnGrupo();
+		            table.repaint();
+		            opciones_panel.setVisible(false);
+		            confirmar_alumnoEliminado(addScaled);
+
+		        } catch (SQLException ex) {
+		            ex.printStackTrace();
+		            JOptionPane.showMessageDialog(null, "Error SQL al eliminar: " + ex.getMessage());
+		        }
+		    }
+		});
+
+		btn_si.setForeground(new Color(255, 255, 255));
+		btn_si.setText("Si");
+		btn_si.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_si.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_si.setBackground(Color.decode("#02A115"));
+		btn_si.setBounds(410, 250, 123, 40);
+		alerta_panel.add(btn_si);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/alerta.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
+		alerta_panel.add(alerta_img);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();	
+			}
+		});
+		btn_no.setText("No");
+		btn_no.setForeground(Color.WHITE);
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(255, 0, 0));
+		btn_no.setBounds(215, 250, 123, 40);
+		alerta_panel.add(btn_no);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	public void confirmar_alumnoEliminado(Consumer<JComponent> addScaled) {
+
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¡" + eliminados + " Alumnos eliminados con éxito!");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(220, 43, 500, 51);
+		alerta_panel.add(mensajeLabel);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(334, 113, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		JButton btn_volver = new JButton();
+		btn_volver.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_volver.setForeground(Color.BLACK);
+		btn_volver.setText("Aceptar");
+		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_volver.setBackground(new Color(170, 196, 255));
+		btn_volver.setBounds(245, 250, 248, 40);
+		alerta_panel.add(btn_volver);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
 	
 	public void remover() {
 		mipanel.removeAll();
