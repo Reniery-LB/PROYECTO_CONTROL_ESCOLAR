@@ -19,7 +19,7 @@ public class GruposController {
 	}
 	
 	public void grupos_registros(Consumer<JComponent> addScaled) {
-		vista.grupos_registros(addScaled);
+		vista.detalles_grupos(addScaled);
 	}
 
 	

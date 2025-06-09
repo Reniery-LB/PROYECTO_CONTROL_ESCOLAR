@@ -2107,17 +2107,15 @@ public class DocentesView {
 		addScaled.accept(fecha_nacimiento);
 		mipanel.add(fecha_nacimiento);
 		
-		
-		
 		JLabel apellido_materno = new JLabel("Apellido materno: \r\n");
 		apellido_materno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		apellido_materno.setBounds(127, 338, 202, 29);
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel materia = new JLabel("Asignatura impartida: ");
+		JLabel materia = new JLabel("Materia impartida: ");
 		materia.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		materia.setBounds(119, 533, 210, 29);
+		materia.setBounds(115, 533, 220, 29);
 		addScaled.accept(materia);
 		mipanel.add(materia);
 		

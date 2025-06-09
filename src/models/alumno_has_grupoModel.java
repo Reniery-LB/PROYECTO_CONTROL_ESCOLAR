@@ -16,6 +16,10 @@ public class alumno_has_grupoModel {
     }
 
     public List<Alumno> obtenerAlumnosPorGrupo(int idGrupo) throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            throw new SQLException("Conexión cerrada antes de consultar alumnos.");
+        }
+
         List<Alumno> alumnos = new ArrayList<>();
         String sql = "SELECT a.* FROM Alumno a " +
                      "JOIN Alumno_has_Grupo ag ON a.idAlumno = ag.Alumno_idAlumno " +
@@ -41,6 +45,7 @@ public class alumno_has_grupoModel {
                 alumnos.add(alumno);
             }
         }
+
         return alumnos;
     }
 
