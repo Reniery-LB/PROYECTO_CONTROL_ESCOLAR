@@ -3476,24 +3476,32 @@ public class DocentesView {
 		asignaturaImpartir.setBackground(new Color(217, 217, 217));
 		asignaturaImpartir.setBounds(311, 530, 453, 40);
 
+
 		AsignaturasModel docenteModel = new AsignaturasModel();
-		List<Asignatura> asignatura = docenteModel.gettAll();
-		
-		docente.getMateria();
-		
+		List<Asignatura> asignaturas = docenteModel.gettAll();
+
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
-		for (Asignatura asignatura1 : asignatura) {
-		    comboModel.addElement(asignatura1.getIdAsignatura()+ " - " + asignatura1.getNombre());
+		for (Asignatura asignatura : asignaturas) {
+		    comboModel.addElement(asignatura.getIdAsignatura() + " - " + asignatura.getNombre());
 		}
 		asignaturaImpartir.setModel(comboModel);
-		
-		if (asignatura.isEmpty()) {
-			asignaturaImpartir.addItem("No hay docentes disponibles");
-		}
-		docente.getMateria();
+		System.out.println("Materia del docente: " + docente.getMateria());
 
-		
-		
+
+		String materiaDocente = docente.getMateria();
+		for (int i = 0; i < asignaturaImpartir.getItemCount(); i++) {
+		    String item = asignaturaImpartir.getItemAt(i);
+		    String nombreMateria = item.split(" - ")[1]; 
+		    if (nombreMateria.equalsIgnoreCase(docente.getMateria())) {
+		        asignaturaImpartir.setSelectedIndex(i);
+		        break;
+		    }
+		}
+
+		if (asignaturas.isEmpty()) {
+		    asignaturaImpartir.addItem("No hay asignaturas disponibles");
+		}
+
 		addScaled.accept(asignaturaImpartir);
 		mipanel.add(asignaturaImpartir);
 		

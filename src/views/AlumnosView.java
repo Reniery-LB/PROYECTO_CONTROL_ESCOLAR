@@ -3945,28 +3945,36 @@ public class AlumnosView {
 
 		
 	   	JComboBox<String> carreraCursar = new JComboBox<>();
-		carreraCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		carreraCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		carreraCursar.setBackground(new Color(217, 217, 217));
-		carreraCursar.setBounds(311, 527, 453, 40);
-		
+	   	carreraCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
+	   	carreraCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+	   	carreraCursar.setBackground(new Color(217, 217, 217));
+	   	carreraCursar.setBounds(311, 527, 453, 40);
 
-		
-		CarreraModel grupoModel = new CarreraModel(conn);
-		List<Carrera> grupo = grupoModel.getAll();
-		
-		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
-		for (Carrera asignatura1 : grupo) {
-		    comboModel.addElement(asignatura1.getIdCarrera()+ " - " + asignatura1.getNombre());
-		}
-		carreraCursar.setModel(comboModel);
-		
-		if (grupo.isEmpty()) {
-			carreraCursar.addItem("No hay docentes disponibles");
-		}
-		
-		addScaled.accept(carreraCursar);
-		mipanel.add(carreraCursar);
+	   	CarreraModel grupoModel = new CarreraModel(conn);
+	   	List<Carrera> grupo = grupoModel.getAll();
+
+	   	DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
+	   	for (Carrera asignatura1 : grupo) {
+	   	    comboModel.addElement(asignatura1.getIdCarrera() + " - " + asignatura1.getNombre());
+	   	}
+	   	carreraCursar.setModel(comboModel);
+
+	   	if (alumno != null && alumno.getCarrera() != null) {
+	   	    String carreraActual = alumno.getCarrera();
+	   	    for (int i = 0; i < carreraCursar.getItemCount(); i++) {
+	   	        if (carreraCursar.getItemAt(i).equals(carreraActual)) {
+	   	            carreraCursar.setSelectedIndex(i);
+	   	            break;
+	   	        }
+	   	    }
+	   	}
+
+	   	if (grupo.isEmpty()) {
+	   	    carreraCursar.addItem("No hay docentes disponibles");
+	   	}
+
+	   	addScaled.accept(carreraCursar);
+	   	mipanel.add(carreraCursar);
 		
 		JTextField correoField = new JTextField(alumno.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
