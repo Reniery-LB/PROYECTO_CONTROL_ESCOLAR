@@ -51,6 +51,8 @@ import controllers.GruposController;
 import models.Alumno;
 import models.AlumnoModel;
 import models.Asignatura;
+import models.Carrera;
+import models.CarreraModel;
 import models.ConnectionModel;
 import models.Grupo;
 import models.GruposModel;
@@ -1755,30 +1757,30 @@ public class AlumnosView {
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
-		JComboBox<String> grupoCursar = new JComboBox<>();
-		grupoCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		grupoCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		grupoCursar.setBackground(new Color(217, 217, 217));
-		grupoCursar.setBounds(311, 527, 453, 40);
+		JComboBox<String> carreraCursar = new JComboBox<>();
+		carreraCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		carreraCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		carreraCursar.setBackground(new Color(217, 217, 217));
+		carreraCursar.setBounds(311, 527, 453, 40);
 		
    	  Connection conn = new ConnectionModel().getConnection();
 
 		
-		GruposModel grupoModel = new GruposModel(conn);
-		List<Grupo> grupo = grupoModel.getAll();
+		CarreraModel grupoModel = new CarreraModel(conn);
+		List<Carrera> grupo = grupoModel.getAll();
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
-		for (Grupo asignatura1 : grupo) {
-		    comboModel.addElement(asignatura1.getIdGrupo()+ " - " + asignatura1.getNombreGrupo());
+		for (Carrera asignatura1 : grupo) {
+		    comboModel.addElement(asignatura1.getIdCarrera()+ " - " + asignatura1.getNombre());
 		}
-		grupoCursar.setModel(comboModel);
+		carreraCursar.setModel(comboModel);
 		
 		if (grupo.isEmpty()) {
-			grupoCursar.addItem("No hay docentes disponibles");
+			carreraCursar.addItem("No hay docentes disponibles");
 		}
 		
-		addScaled.accept(grupoCursar);
-		mipanel.add(grupoCursar);
+		addScaled.accept(carreraCursar);
+		mipanel.add(carreraCursar);
 
 		
 		
@@ -1895,7 +1897,7 @@ public class AlumnosView {
 		        int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
 		        
 		        
-		        String grupoSeleccionado = (String) grupoCursar.getSelectedItem();
+		        String grupoSeleccionado = (String) carreraCursar.getSelectedItem();
 
 		        if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {
 		            JOptionPane.showMessageDialog(ventana, "La fecha seleccionada no es válida", "Error", JOptionPane.ERROR_MESSAGE);
@@ -3841,7 +3843,7 @@ public class AlumnosView {
 		addScaled.accept(apellido_materno);
 		mipanel.add(apellido_materno);
 		
-		JLabel carrera = new JLabel("Grupo: " );
+		JLabel carrera = new JLabel("Carrera: " );
 		carrera.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		carrera.setBounds(216, 530, 113, 29);
 		addScaled.accept(carrera);
@@ -3937,30 +3939,34 @@ public class AlumnosView {
 		addScaled.accept(nombresField);
 		mipanel.add(nombresField);
 		
-		JComboBox<String> grupoCursar = new JComboBox<>();
-		grupoCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		grupoCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-		grupoCursar.setBackground(new Color(217, 217, 217));
-		grupoCursar.setBounds(311, 527, 453, 40);
+		
 		
 	   	 Connection conn = new ConnectionModel().getConnection();
 
 		
-		GruposModel grupoModel = new GruposModel(conn);
-		List<Grupo> grupo = grupoModel.getAll();
+	   	JComboBox<String> carreraCursar = new JComboBox<>();
+		carreraCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		carreraCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		carreraCursar.setBackground(new Color(217, 217, 217));
+		carreraCursar.setBounds(311, 527, 453, 40);
+		
+
+		
+		CarreraModel grupoModel = new CarreraModel(conn);
+		List<Carrera> grupo = grupoModel.getAll();
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
-		for (Grupo asignatura1 : grupo) {
-		    comboModel.addElement(asignatura1.getIdGrupo()+ " - " + asignatura1.getNombreGrupo());
+		for (Carrera asignatura1 : grupo) {
+		    comboModel.addElement(asignatura1.getIdCarrera()+ " - " + asignatura1.getNombre());
 		}
-		grupoCursar.setModel(comboModel);
+		carreraCursar.setModel(comboModel);
 		
 		if (grupo.isEmpty()) {
-			grupoCursar.addItem("No hay docentes disponibles");
+			carreraCursar.addItem("No hay docentes disponibles");
 		}
 		
-		addScaled.accept(grupoCursar);
-		mipanel.add(grupoCursar);
+		addScaled.accept(carreraCursar);
+		mipanel.add(carreraCursar);
 		
 		JTextField correoField = new JTextField(alumno.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -4042,7 +4048,7 @@ public class AlumnosView {
 					int mesSeleccionado = Integer.parseInt((String) mes.getSelectedItem());
 					int añoSeleccionado = Integer.parseInt((String) año.getSelectedItem());
 					
-			        String grupoSeleccionado = (String) grupoCursar.getSelectedItem();
+			        String grupoSeleccionado = (String) carreraCursar.getSelectedItem();
 
 
 					if (!validarFecha(diaSeleccionado, mesSeleccionado, añoSeleccionado)) {

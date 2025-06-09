@@ -61,15 +61,18 @@ public class GruposModel {
         return grupos;
     }
 
-    public Grupo getGrupoById(int id) throws SQLException {
+    public Grupo getGrupoById(int id) throws SQLException, IllegalArgumentException {
+       
+
         String sql = "SELECT * FROM Grupo WHERE idGrupo = ?";
+        Grupo grupo = null;
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Grupo(
+                    grupo = new Grupo(
                         rs.getInt("idGrupo"),
                         rs.getString("nombre_grupo"),
                         Grupo.Turno.fromString(rs.getString("turno")),
@@ -80,7 +83,8 @@ public class GruposModel {
                 }
             }
         }
-        return null;
+        
+        return grupo;
     }
     
     public boolean existeGrupo(String nombreGrupo, String turno) throws SQLException {
