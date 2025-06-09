@@ -3895,7 +3895,7 @@ public class AlumnosView {
 		addScaled.accept(img_alumno);
 		mipanel.add(img_alumno);
 		
-		int telefono = alumno.getNo_control();
+		Long telefono = alumno.getNo_control();
 		
 		JTextField numero_controlField = new JTextField(String.valueOf(telefono));
 		numero_controlField.setBackground(Color.GRAY);
@@ -4239,7 +4239,7 @@ public class AlumnosView {
 
 
 
-			            Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, null, origen);
+			            Alumno alumno = new Alumno(idAlumno, null, origen, origen, origen, null, origen, origen, null, origen);
 			            boolean eliminado = AlumnoModel.remove(idAlumno);
 						
 

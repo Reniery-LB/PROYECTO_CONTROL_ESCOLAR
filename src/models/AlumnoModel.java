@@ -33,7 +33,7 @@ public class AlumnoModel {
 	    ) {
 	        while (rs.next()) {
 	            Integer id = rs.getInt(1);
-	            Integer no_control = rs.getInt(2);
+	            Long no_control = rs.getLong(2);
 	            String nombre = rs.getString(3);
 	            String primer_apellido = rs.getString(4);
 	            String segundo_apellido = rs.getString(5);
@@ -139,7 +139,7 @@ public class AlumnoModel {
 		        stmt.setString(6, alumno.getGrado_alumno());
 		        stmt.setLong(7, alumno.getNo_telefono());
 		        stmt.setString(8, alumno.getCarrera());
-		        stmt.setInt(9, alumno.getNo_control()); 
+		        stmt.setLong(9, alumno.getNo_control()); 
 
 		        int rowsUpdated = stmt.executeUpdate();
 		        return rowsUpdated > 0;
@@ -195,7 +195,7 @@ public class AlumnoModel {
 		        if (rs.next()) {
 		            alumno = new Alumno(
 		                rs.getInt("idAlumno"),
-		                rs.getInt("no_control"),
+		                rs.getLong("no_control"),
 		                rs.getString("nombre"),
 		                rs.getString("primer_apellido"),
 		                rs.getString("segundo_apellido"),

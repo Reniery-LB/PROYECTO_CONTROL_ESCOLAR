@@ -9,7 +9,7 @@ public class Alumno {
 	
 		
 		public int idAlumno;
-		public int no_control;
+		public Long no_control;
 		public String nombre;
 		public String primer_apellido;
 		public String segundo_apellido;
@@ -21,7 +21,7 @@ public class Alumno {
 
 
 		
-		public Alumno( int idAlumno, int no_control, String nombre, String primer_apellido, String segundo_apellido, Date fecha_nacimiento, 
+		public Alumno( int idAlumno, Long no_control, String nombre, String primer_apellido, String segundo_apellido, Date fecha_nacimiento, 
 				String correo_electronico, String grado_alumno, Long no_telefono, String carrera) {
 			
 			this.idAlumno = idAlumno;
@@ -82,14 +82,14 @@ public class Alumno {
 
 
 
-		public int getNo_control() {
+		public Long getNo_control() {
 			return no_control;
 		}
 
 
 
-		public void setNo_control(int no_control) {
-			this.no_control = no_control;
+		public void setNo_control(long i) {
+			this.no_control = i;
 		}
 
 
