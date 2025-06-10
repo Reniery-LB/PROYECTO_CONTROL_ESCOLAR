@@ -3566,6 +3566,8 @@ public class DocentesView {
 		
 		
 		
+	
+		
 		JTextField correoField = new JTextField(docente.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		correoField.setColumns(10);

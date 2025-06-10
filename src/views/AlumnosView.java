@@ -3956,7 +3956,7 @@ public class AlumnosView {
 
 	   	DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 	   	for (Carrera carrera1 : carreras) {
-	   	    comboModel.addElement(carrera1.getIdCarrera()+ " - " + carrera1.getNombre());
+	   	    comboModel.addElement(carrera1.getIdCarrera() + " - " + carrera1.getNombre());
 	   	}
 	   	carreraCursar.setModel(comboModel);
 
@@ -3964,11 +3964,15 @@ public class AlumnosView {
 	   	    String carreraActual = alumno.getCarrera();
 	   	    for (int i = 0; i < carreraCursar.getItemCount(); i++) {
 	   	        String item = carreraCursar.getItemAt(i);
-	   	        String idCarrera = item.split(" - ")[1];
-	   	        if (idCarrera.equals(carreraActual)) {
+	   	        String nombreCarrera = item.split(" - ")[1]; 
+	   	        /*if (nombreCarrera.equalsIgnoreCase(carreraActual)) {
 	   	            carreraCursar.setSelectedIndex(i);
 	   	            break;
-	   	        }
+	   	        }*/
+	   	     if (item.equalsIgnoreCase(carreraActual)) {
+	   	      carreraCursar.setSelectedIndex(i);
+	   	      break;
+	   	  }
 	   	    }
 	   	}
 
@@ -3978,6 +3982,7 @@ public class AlumnosView {
 
 	   	addScaled.accept(carreraCursar);
 	   	mipanel.add(carreraCursar);
+	   	
 		JTextField correoField = new JTextField(alumno.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		correoField.setColumns(10);
