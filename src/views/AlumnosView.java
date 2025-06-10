@@ -3566,13 +3566,11 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
-				ventana.dispose();
-				AuthController ac = new AuthController();
-				ac.administrador(addScaled);
+				AlumnosView.this.panel_alumno(addScaled);
 			}
 		});
 		btn_volver.setForeground(new Color(255, 255, 255));
-		btn_volver.setText("Panel administrador\r\n");
+		btn_volver.setText("Panel de Alumnos");
 		btn_volver.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		btn_volver.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		btn_volver.setBackground(Color.decode("#02A115"));

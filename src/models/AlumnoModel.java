@@ -55,30 +55,37 @@ public class AlumnoModel {
 	}
 	
 	public static boolean remove(int id) {
-	    String query = "DELETE FROM Alumno WHERE idAlumno = ?";
 	    Connection conn = null;
-	    PreparedStatement stmt = null;
-
+	    PreparedStatement stmtRelaciones = null;
+	    PreparedStatement stmtAlumno = null;
+	    
 	    try {
-	    	 conn = new ConnectionModel().getConnection();
-	        stmt = conn.prepareStatement(query);
-	        stmt.setInt(1, id);
-
-	        int rowsAffected = stmt.executeUpdate();
+	        conn = new ConnectionModel().getConnection();
+	        
+	        String queryRelaciones = "DELETE FROM Alumno_has_Grupo WHERE Alumno_idAlumno = ?";
+	        stmtRelaciones = conn.prepareStatement(queryRelaciones);
+	        stmtRelaciones.setInt(1, id);
+	        stmtRelaciones.executeUpdate();
+	        
+	        String queryAlumno = "DELETE FROM Alumno WHERE idAlumno = ?";
+	        stmtAlumno = conn.prepareStatement(queryAlumno);
+	        stmtAlumno.setInt(1, id);
+	        
+	        int rowsAffected = stmtAlumno.executeUpdate();
 	        return rowsAffected > 0;
-
+	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        return false;
 	    } finally {
 	        try {
-	            if (stmt != null) stmt.close();
+	            if (stmtRelaciones != null) stmtRelaciones.close();
+	            if (stmtAlumno != null) stmtAlumno.close();
 	            if (conn != null) conn.close();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
 	    }
-
-	    return false;
 	}
 
 					
