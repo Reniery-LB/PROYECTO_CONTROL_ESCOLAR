@@ -257,12 +257,21 @@ public class AsignaturasView {
 		addScaled.accept(btn_registros_label);
 		mipanel.add(btn_registros_label);
 		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
@@ -508,12 +517,21 @@ public class AsignaturasView {
 		addScaled.accept(scrollGrupos);
 		mipanel.add(scrollGrupos);
 		 
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
@@ -654,7 +672,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
@@ -1065,12 +1083,21 @@ public class AsignaturasView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
@@ -1211,7 +1238,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
@@ -1471,12 +1498,21 @@ public class AsignaturasView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
@@ -1617,7 +1653,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
@@ -1925,12 +1961,21 @@ public class AsignaturasView {
 		addScaled.accept(fondo_barra_2);
 		mipanel.add(fondo_barra_2);
 		
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
 		mipanel.add(c_escolar_barraLabel);
 		
@@ -2071,7 +2116,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 //		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
@@ -2906,13 +2951,23 @@ public class AsignaturasView {
 		addScaled.accept(scrollGrupos);
 		mipanel.add(scrollGrupos);
 		 
-		JLabel c_escolar_barraLabel = new JLabel("Control Escolar");
+		JButton c_escolar_barraLabel = new JButton("Control Escolar");
 		c_escolar_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
+		c_escolar_barraLabel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				alerta_IrControl(addScaled);			
+				}
+		});
+		
 		addScaled.accept(c_escolar_barraLabel);
+		
 		mipanel.add(c_escolar_barraLabel);
 		
 		JButton grupos_barraLabel = new JButton("    Grupos");
@@ -3052,7 +3107,7 @@ public class AsignaturasView {
 		asignaturas_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/asignaturas_barra.png")));
 	//		asignaturas_barraLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		asignaturas_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE,3));
+		asignaturas_barraLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		asignaturas_barraLabel.setBackground(Color.decode("#AAC4FF"));
 		asignaturas_barraLabel.setBounds(1154, 0, 386, 102);
 		addScaled.accept(asignaturas_barraLabel);
@@ -3247,6 +3302,67 @@ public class AsignaturasView {
 		JLabel alerta_img = new JLabel();
 		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
 		alerta_img.setBounds(339, 97, 70, 84);
+		alerta_panel.add(alerta_img);
+		
+		dialogo.add(alerta_panel);
+		dialogo.setVisible(true);
+	}
+	
+	public void alerta_IrControl(Consumer<JComponent> addScaled) {
+
+	    JDialog dialogo = new JDialog(ventana, "Confirmar", true);
+	    dialogo.setLayout(null);
+	    dialogo.setSize(764, 353);
+	    dialogo.setLocationRelativeTo(ventana);
+	    
+		JPanel alerta_panel = new JPanel();
+		alerta_panel.setBounds(0, 0, 750, 316);
+		alerta_panel.setLayout(null);
+		alerta_panel.setBackground(Color.WHITE);
+		alerta_panel.setOpaque(true);
+		alerta_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		
+		JLabel mensajeLabel = new JLabel("¿Desea regresar al administrador?");
+		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		mensajeLabel.setBounds(167, 10, 414, 97);
+		alerta_panel.add(mensajeLabel);
+		
+		JButton btn_aceptar = new JButton();
+		btn_aceptar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+				ventana.dispose();
+				AuthController ac = new AuthController();
+				ac.administrador(addScaled);
+			}
+		});
+		btn_aceptar.setText("Aceptar");
+		btn_aceptar.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_aceptar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_aceptar.setBackground(new Color(170, 196, 255));
+		btn_aceptar.setBounds(435, 250, 192, 40);
+		alerta_panel.add(btn_aceptar);
+		
+		JButton btn_no = new JButton();
+		btn_no.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogo.dispose();
+			}
+		});
+		btn_no.setText("No, volver");
+		btn_no.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_no.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_no.setBackground(new Color(170, 196, 255));
+		btn_no.setBounds(125, 250, 192, 40);
+		alerta_panel.add(btn_no);
+		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
+		alerta_img.setBounds(339, 97, 95, 84);
 		alerta_panel.add(alerta_img);
 		
 		dialogo.add(alerta_panel);
