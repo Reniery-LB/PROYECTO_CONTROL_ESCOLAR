@@ -1312,6 +1312,71 @@ public class AlumnosView {
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
 		
+		JButton btn_pdf = new JButton("Información PDF");
+		btn_pdf.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Guardar credencial como PDF");
+		        
+		        String defaultFileName = "Información Alumno" + alumno.getNo_control() + ".pdf";
+		        fileChooser.setSelectedFile(new File(defaultFileName));
+		        
+		        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+		            @Override
+		            public boolean accept(File f) {
+		                return f.getName().toLowerCase().endsWith(".pdf") || f.isDirectory();
+		            }
+		            
+		            @Override
+		            public String getDescription() {
+		                return "Archivos PDF (*.pdf)";
+		            }
+		        });
+		        
+		        int userSelection = fileChooser.showSaveDialog(ventana);
+		        
+		        if (userSelection == JFileChooser.APPROVE_OPTION) {
+		            File fileToSave = fileChooser.getSelectedFile();
+		            String filePath = fileToSave.getAbsolutePath();
+		           
+		            if (!filePath.toLowerCase().endsWith(".pdf")) {
+		                filePath += ".pdf";
+		                fileToSave = new File(filePath);
+		            }
+		            
+		            if (fileToSave.exists()) {
+		                int confirm = JOptionPane.showConfirmDialog(ventana,
+		                    "El archivo ya existe. ¿Desea reemplazarlo?",
+		                    "Confirmar sobrescritura",
+		                    JOptionPane.YES_NO_OPTION,
+		                    JOptionPane.WARNING_MESSAGE);
+		                
+		                if (confirm != JOptionPane.YES_OPTION) {
+		                    return;
+		                }
+		            }
+		            
+		            PDFGenerator pdfGenerator = new PDFGenerator();
+		            pdfGenerator.generarInformacionPDF(alumno, filePath);
+		            		
+		        }
+			}
+		
+
+				
+
+		});
+		btn_pdf.setText("Información PDF");
+		btn_pdf.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_pdf.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_pdf.setBackground(new Color(170, 196, 255));
+		btn_pdf.setBounds(1220, 595, 192, 40);
+		addScaled.accept(btn_pdf);
+		mipanel.add(btn_pdf);
+		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: "+ alumno.getFecha_nacimiento());
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		fecha_nacimiento.setBounds(90, 401, 700, 29);

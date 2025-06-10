@@ -1,5 +1,6 @@
 package PDF;
 
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -23,8 +24,10 @@ import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class PDFGenerator {
 
@@ -188,6 +191,8 @@ public class PDFGenerator {
 	        Paragraph telefonoVal = new Paragraph(String.valueOf(docente.getNo_telefono()), normalFont);
 	        telefonoVal.setIndentationLeft(infoX);
 	        document.add(telefonoVal);
+	        
+	        
 
 	        document.close();
 	    } catch (DocumentException | IOException e) {
@@ -249,11 +254,93 @@ public class PDFGenerator {
         document.close();
     }
     
+    
+    public void generarInformacionPDF(Alumno alumno, String rutaDestino) {
+        Rectangle pageSize = new Rectangle(400f, 600f);
+        Document document = new Document(pageSize, 20f, 20f, 20f, 20f); 
+        
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(rutaDestino));
+            document.open();
+            
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+            
+            try {
+                Image logo = Image.getInstance(getClass().getResource("/img/logo.png"));
+                logo.scaleToFit(60, 60);
+                logo.setAbsolutePosition(pageSize.getWidth() - 70, pageSize.getHeight() - 70);
+                document.add(logo);
+            } catch (Exception e) {
+                System.err.println("No se pudo cargar el logo: " + e.getMessage());
+            }
+            
+            Paragraph title = new Paragraph("INFORMACIÓN DE ESTUDIANTE", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+            
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(90);
+            table.setSpacingBefore(20f);
+            
+            PdfPCell leftCell = new PdfPCell();
+            leftCell.setBorder(Rectangle.NO_BORDER);
+            
+            try {
+                Image foto = Image.getInstance(getClass().getResource("/img/img_credencial.png"));
+                foto.scaleToFit(100, 120);
+                leftCell.addElement(new Paragraph(" ")); 
+                leftCell.addElement(foto);
+                leftCell.addElement(new Paragraph(" ")); 
+            } catch (Exception e) {
+                System.err.println("No se pudo cargar la foto: " + e.getMessage());
+            }
+            
+            leftCell.addElement(createLabelValue("ID:", String.valueOf(alumno.getIdAlumno()), headerFont, normalFont));
+            leftCell.addElement(createLabelValue("No. Control:", String.valueOf(alumno.getNo_control()), headerFont, normalFont));
+            
+            table.addCell(leftCell);
+            
+            PdfPCell rightCell = new PdfPCell();
+            rightCell.setBorder(Rectangle.NO_BORDER);
+            
+            String nombreCompleto = alumno.getNombre() + " " + alumno.getPrimer_apellido() + 
+                                  (alumno.getSegundo_apellido() != null ? " " + alumno.getSegundo_apellido() : "");
+            rightCell.addElement(createLabelValue("Nombre Completo:", nombreCompleto, headerFont, normalFont));
+            
+            rightCell.addElement(createLabelValue("Carrera:", alumno.getCarrera(), headerFont, normalFont));
+            rightCell.addElement(createLabelValue("Grado:", alumno.getGrado_alumno() + " Semestre", headerFont, normalFont));
+            rightCell.addElement(createLabelValue("Correo:", alumno.getCorreo_electronico(), headerFont, normalFont));
+            rightCell.addElement(createLabelValue("No. Teléfono:", String.valueOf(alumno.getNo_telefono()), headerFont, normalFont));
+            rightCell.addElement(createLabelValue("Fecha Nacimiento:", String.valueOf(alumno.getFecha_nacimiento()), headerFont, normalFont));
+            
+            table.addCell(rightCell);
+            
+            document.add(table);
+            
+            document.close();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private PdfPCell createCell(String text, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setBorder(Rectangle.NO_BORDER);
         cell.setPadding(5);
         return cell;
     }
+
+    private Paragraph createLabelValue(String label, String value, Font labelFont, Font valueFont) {
+        Paragraph p = new Paragraph();
+        p.add(new Chunk(label, labelFont));
+        p.add(new Chunk("\n" + value + "\n", valueFont));
+        p.setSpacingAfter(10f);
+        return p;
+    }
+
 
 }

@@ -3071,17 +3071,17 @@ public class GruposView {
 		docenteComboBox.setBackground(new Color(217, 217, 217));
 		docenteComboBox.setBounds(313, 297, 386, 40);
 
-		//Connection conn = new ConnectionModel().getConnection();
-
 		DocentesModel docenteModel1 = new DocentesModel();
 		List<Docente> docentes = docenteModel1.getAll();
-		
+
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Docente docente1 : docentes) {
 		    comboModel.addElement(docente1.getIdDocente() + " - " + docente1.getNombre());
 		}
 		docenteComboBox.setModel(comboModel);
+
 		
+
 		if (docentes.isEmpty()) {
 		    docenteComboBox.addItem("No hay docentes disponibles");
 		}
@@ -3194,10 +3194,8 @@ public class GruposView {
 					}
 		        }
 
-		        // Limpieza final de las listas temporales
 		        alumnosTemporales.clear();
 		        alumnosParaEliminar.clear();
-//		        mostrarMensaje("Cambios guardados exitosamente.");
 		        opciones_panel.setVisible(false);
 		        GruposView.this.confirmar_grupoEditado(addScaled);
 		    }
@@ -4348,7 +4346,6 @@ public class GruposView {
 		            }
 		        }
 		        table.repaint();
-//		        mostrarMensaje("Alumnos marcados para eliminar. Presiona Guardar para confirmar.");
 		        opciones_panel.setVisible(false);
 		        GruposView.this.confirmar_alumnoEliminado(addScaled);
 		    }
