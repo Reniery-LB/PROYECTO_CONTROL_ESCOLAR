@@ -1,5 +1,6 @@
 package PDF;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -17,16 +18,20 @@ import com.itextpdf.text.pdf.PdfWriter;
 import models.Alumno;
 import models.Asignatura;
 import models.Docente;
+import models.DocentesModel;
+import models.Grupo;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class PDFGenerator {
@@ -461,8 +466,103 @@ public class PDFGenerator {
             JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public void generarGrupoPDF(Grupo grupo, List<Alumno> alumnos, String rutaDestino) {        
+    	try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(rutaDestino));
+            document.open();
+  
+            PdfPTable headerTable = new PdfPTable(3);
+            headerTable.setWidthPercentage(100);
+            float[] columnWidths = {1f, 3f, 1f};
+            headerTable.setWidths(columnWidths);
 
-   
+            try {
+                Image logo = Image.getInstance(getClass().getResource("/img/logo.png"));
+                logo.scaleToFit(80, 80);
+                PdfPCell logoCell = new PdfPCell(logo);
+                logoCell.setBorder(Rectangle.NO_BORDER);
+                logoCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headerTable.addCell(logoCell);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            PdfPCell titleCell = new PdfPCell(new Phrase("INFORMACIÓN DEL GRUPO", new Font(Font.FontFamily.HELVETICA, 20)));
+            titleCell.setBorder(Rectangle.NO_BORDER);
+            titleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            titleCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            headerTable.addCell(titleCell);
+
+            try {
+                Image letraGrupo = Image.getInstance(getClass().getResource("/img/icono_letraA.png"));
+                letraGrupo.scaleToFit(80, 80);
+                PdfPCell letraCell = new PdfPCell(letraGrupo);
+                letraCell.setBorder(Rectangle.NO_BORDER);
+                letraCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headerTable.addCell(letraCell);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            document.add(headerTable);
+            document.add(new Paragraph(" ")); 
+
+            Font labelFont = new Font(Font.FontFamily.HELVETICA, 14);
+            Font valueFont = new Font(Font.FontFamily.HELVETICA, 14);
+
+            document.add(new Paragraph("Nombre del grupo: " + grupo.getNombreGrupo(), labelFont));
+            document.add(new Paragraph("Turno: " + grupo.getTurno().getDescripcion(), labelFont));
+            document.add(new Paragraph("Periodo: " + grupo.getPeriodo(), labelFont));
+
+            Docente docente = DocentesModel.busca_docente(grupo.getIdDocente());
+            document.add(new Paragraph("Docente a cargo: " + docente.getNombre() + " " + docente.getPrimer_apellido() +
+                    (docente.getSegundo_apellido() != null ? " " + docente.getSegundo_apellido() : ""), labelFont));
+
+            document.add(new Paragraph("ID del docente: " + docente.getIdDocente(), labelFont));
+            document.add(new Paragraph(" ")); 
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10);
+
+            PdfPCell header1 = new PdfPCell(new Phrase("No. Control", new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.WHITE)));
+            PdfPCell header2 = new PdfPCell(new Phrase("Apellido Paterno", new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.WHITE)));
+            PdfPCell header3 = new PdfPCell(new Phrase("Apellido Materno", new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.WHITE)));
+            PdfPCell header4 = new PdfPCell(new Phrase("Nombre", new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.WHITE)));
+
+            PdfPCell[] headers = {header1, header2, header3, header4};
+            for (PdfPCell header : headers) {
+                header.setBackgroundColor(new BaseColor(128, 128, 128)); 
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header.setPadding(8);
+                header.setBorderWidth(2);
+                header.setBorderColor(BaseColor.BLACK);
+                table.addCell(header);
+            }
+
+            for (Alumno alumno : alumnos) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(alumno.getNo_control()), new Font(Font.FontFamily.HELVETICA, 14))));
+                table.addCell(new PdfPCell(new Phrase(alumno.getPrimer_apellido(), new Font(Font.FontFamily.HELVETICA, 14))));
+                table.addCell(new PdfPCell(new Phrase(alumno.getSegundo_apellido() != null ? alumno.getSegundo_apellido() : "", new Font(Font.FontFamily.HELVETICA, 14))));
+                table.addCell(new PdfPCell(new Phrase(alumno.getNombre(), new Font(Font.FontFamily.HELVETICA, 14))));
+            }
+
+            document.add(table);
+
+            document.add(new Paragraph(" "));
+            Font footerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC);
+            Paragraph footer = new Paragraph("Documento generado el: " + new Date(), footerFont);
+            footer.setAlignment(Element.ALIGN_RIGHT);
+            document.add(footer);
+
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage());
+        }
+    }
 
     private PdfPCell createCell(String text, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));

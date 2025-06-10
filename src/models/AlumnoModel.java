@@ -214,7 +214,38 @@ public class AlumnoModel {
 		    return alumno;
 		}
 
-		
+		public Alumno getAlumnoById(int idAlumno) {
+		    String query = "SELECT * FROM Alumno WHERE idAlumno = ?";
+		    Alumno alumno = null;
+
+		    try (Connection conn = new ConnectionModel().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+		        stmt.setInt(1, idAlumno);
+		        ResultSet rs = stmt.executeQuery();
+
+		        if (rs.next()) {
+		            alumno = new Alumno(
+		                rs.getInt("idAlumno"),
+		                rs.getLong("no_control"),
+		                rs.getString("nombre"),
+		                rs.getString("primer_apellido"),
+		                rs.getString("segundo_apellido"),
+		                rs.getDate("fecha_nacimiento"),
+		                rs.getString("correo_electronico"),
+		                rs.getString("grado_alumno"),
+		                rs.getLong("no_telefono"),
+		                rs.getString("carrera")
+		            );
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+
+		    return alumno;
+		}
+
 		
 
 

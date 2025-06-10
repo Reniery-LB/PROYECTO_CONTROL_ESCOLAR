@@ -4370,7 +4370,7 @@ public class DocentesView {
 		
 		JLabel mensajeLabel = new JLabel("¿Desea regresar al administrador?");
 		mensajeLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
-		mensajeLabel.setBounds(167, 10, 414, 97);
+		mensajeLabel.setBounds(200, 10, 414, 97);
 		alerta_panel.add(mensajeLabel);
 		
 		JButton btn_aceptar = new JButton();
