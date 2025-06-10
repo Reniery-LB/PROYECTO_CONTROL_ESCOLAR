@@ -279,6 +279,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -507,6 +508,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -811,6 +813,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -1107,6 +1110,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -1524,6 +1528,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -2219,6 +2224,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -2655,6 +2661,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -3171,6 +3178,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -3618,6 +3626,7 @@ public class AlumnosView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -4367,6 +4376,11 @@ public class AlumnosView {
 		mensajeLabel.setBounds(231, 43, 324, 51);
 		alerta_panel.add(mensajeLabel);
 		
+		JLabel alerta_img = new JLabel();
+		alerta_img.setIcon(new ImageIcon(getClass().getResource("/img/like.png")));
+		alerta_img.setBounds(334, 113, 70, 84);
+		alerta_panel.add(alerta_img);
+		
 		JButton btn_volver = new JButton();
 		btn_volver.addActionListener(new ActionListener() {
 			
@@ -4384,11 +4398,6 @@ public class AlumnosView {
 		btn_volver.setBackground(Color.decode("#02A115"));
 		btn_volver.setBounds(245, 250, 248, 40);
 		alerta_panel.add(btn_volver);
-		
-		JLabel mensajeLabel_1 = new JLabel("¿Qué opción desea hacer?");
-		mensajeLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		mensajeLabel_1.setBounds(256, 63, 230, 65);
-		alerta_panel.add(mensajeLabel_1);
 		
 		dialogo.add(alerta_panel);
 		dialogo.setVisible(true);

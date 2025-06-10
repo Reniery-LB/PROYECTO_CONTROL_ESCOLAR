@@ -269,6 +269,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -491,6 +492,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -793,6 +795,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -1086,6 +1089,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -1492,6 +1496,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -1970,6 +1975,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -2444,6 +2450,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -2830,6 +2837,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
@@ -3224,6 +3232,7 @@ public class DocentesView {
 		c_escolar_barraLabel.setIcon(new ImageIcon(getClass().getResource("/img/control_escolar.png")));
 		c_escolar_barraLabel.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		c_escolar_barraLabel.setBounds(111, 0, 263, 102);
+		c_escolar_barraLabel.setBackground((Color.decode("#EEF1FF")));
 		c_escolar_barraLabel.setHorizontalAlignment(JLabel.CENTER);
 		c_escolar_barraLabel.addActionListener(new ActionListener() {
 			
