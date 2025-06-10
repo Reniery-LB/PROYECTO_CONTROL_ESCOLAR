@@ -84,26 +84,25 @@ public class AsignaturasModel {
 
     public boolean asignarDocente(int idDocente, int idAsignatura) throws SQLException {
         try {
-            conn.setAutoCommit(false); // Iniciar transacción
+            conn.setAutoCommit(false); 
             
-            // Eliminar
             String deleteSql = "DELETE FROM Docente_has_Asignatura WHERE Asignatura_idAsignatura = ?";
             try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                 deleteStmt.setInt(1, idAsignatura);
                 deleteStmt.executeUpdate();
             }
             
-            // Insertar
+            
             String insertSql = "INSERT INTO Docente_has_Asignatura (Docente_idDocente, Asignatura_idAsignatura) VALUES (?, ?)";
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                 insertStmt.setInt(1, idDocente);
                 insertStmt.setInt(2, idAsignatura);
                 boolean success = insertStmt.executeUpdate() > 0;
-                conn.commit(); // Confirmar cambios
+                conn.commit(); 
                 return success;
             }
         } catch (SQLException e) {
-            conn.rollback(); // Revertir en caso de error
+            conn.rollback(); 
             throw e;
         } finally {
             conn.setAutoCommit(true);

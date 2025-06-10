@@ -151,40 +151,12 @@ public class AlumnoModel {
 		}
 
 		
-//		public boolean update(Alumno alumno) {
-//		    String sql = "UPDATE Alumno SET nombre = ?, primer_apellido = ?, segundo_apellido = ?, fecha_nacimiento = ?, correo_electronico = ?, grado_alumno = ?, no_telefono = ?, carrera = ? WHERE idAlumno = ?";
-//		    
-//			Connection conn = null;
-//
-//		    try 
-//		     {
-//		    	conn = new ConnectionModel().getConnection();		
-//			   	PreparedStatement stmt = conn.prepareStatement(sql);
-//			    	
-//		        stmt.setString(1, alumno.getNombre());
-//		        stmt.setString(2, alumno.getPrimer_apellido());
-//		        stmt.setString(3, alumno.getSegundo_apellido());
-//		        stmt.setDate(4, new java.sql.Date(alumno.getFecha_nacimiento().getTime()));
-//		        stmt.setString(5, alumno.getCorreo_electronico());
-//		        stmt.setString(6, alumno.getGrado_alumno());
-//		        stmt.setLong(7, alumno.getNo_telefono());
-//		        stmt.setString(8, alumno.getCarrera());
-//		        stmt.setInt(9, alumno.getIdAlumno());
-//
-//		        int rowsUpdated = stmt.executeUpdate();
-//		        return rowsUpdated > 0;
-//
-//		    } catch (Exception e) {
-//		        e.printStackTrace();
-//		        return false;
-//		    }
-//		}	
-		
+
 		public static Alumno busca_alumno(int noControl) {
 		    String query = "SELECT * FROM Alumno WHERE no_control = ?";
 		    Alumno alumno = null;
 
-		    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+		    try (Connection conn = new ConnectionModel().getConnection();
 		         PreparedStatement stmt = conn.prepareStatement(query)) {
 
 		        stmt.setInt(1, noControl);
@@ -214,7 +186,7 @@ public class AlumnoModel {
 		    return alumno;
 		}
 
-		public Alumno getAlumnoById(int idAlumno) {
+		public Alumno alumno_por_id(int idAlumno) {
 		    String query = "SELECT * FROM Alumno WHERE idAlumno = ?";
 		    Alumno alumno = null;
 

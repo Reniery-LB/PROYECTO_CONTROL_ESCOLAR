@@ -32,7 +32,7 @@ public class alumno_has_grupoModel {
             while (resultSet.next()) {
                 Alumno alumno = new Alumno();
                 alumno.setIdAlumno(resultSet.getInt("idAlumno"));
-                alumno.setNo_control(resultSet.getInt("no_control"));
+                alumno.setNo_control(resultSet.getLong("no_control")); 
                 alumno.setNombre(resultSet.getString("nombre"));
                 alumno.setPrimer_apellido(resultSet.getString("primer_apellido"));
                 alumno.setSegundo_apellido(resultSet.getString("segundo_apellido"));

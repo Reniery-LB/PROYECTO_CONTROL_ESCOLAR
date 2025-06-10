@@ -153,41 +153,37 @@ public class AuthView {
 				
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				String usuario = usuario_field.getText().trim();
-//		        String contrasena = new String(contra_field.getPassword());
-//		        
-//
-//
-//		        if (usuario.isEmpty() || contrasena.isEmpty()) {
-//		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-//		            showTimedMessage(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE, 2000);
-//		            return;
-//		        }
-//		        
-////				JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
-//
-//		        String contrasenaEncriptada = hashPassword(contrasena);
-//
-//		        Usuario user = new Usuario(0, usuario, contrasenaEncriptada, contrasenaEncriptada);
-//
-//		        AuthModel am = new AuthModel();
-//		        boolean esValido = am.validarUsuario(user);
-//
-//		        if (esValido) {
-//		        	usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
-//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
-//		            showTimedMessage(null, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
-//		            AuthView.this.administrador(addScaled);  
-//		        } else {
-//		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-//		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
-//		            showTimedMessage(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE, 2000);
-//		        }
-//		    }
+				String usuario = usuario_field.getText().trim();
+		        String contrasena = new String(contra_field.getPassword());
+		        
+
+
+		        if (usuario.isEmpty() || contrasena.isEmpty()) {
+		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            showTimedMessage(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE, 2000);
+		            return;
+		        }
+
+		        String contrasenaEncriptada = hashPassword(contrasena);
+		        Usuario user = new Usuario(0, usuario, contrasenaEncriptada, contrasenaEncriptada);
+
+		        AuthModel am = new AuthModel();
+		        boolean esValido = am.validarUsuario(user);
+
+		        if (esValido) {
+		        	usuario_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+		            showTimedMessage(null, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE, 2000);
+	            AuthView.this.administrador(addScaled);  
+		        } else {
+		            usuario_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            contra_field.setBorder(BorderFactory.createLineBorder(Color.RED,3));
+		            showTimedMessage(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE, 2000);
+		        }
+		    }
 			
-			       AuthView.this.administrador(addScaled); 
-			}}
+			}
 		);	
 		acceder_btn.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		acceder_btn.setBounds(277, 591, 299, 56);
@@ -422,30 +418,7 @@ public class AuthView {
 		    		remover();
 		    		AuthView.this.login(addScaled);
 		    	}
-//					String usuario = usuario_field.getText().trim();
-//			        String contrasena = new String(contra_field.getPassword());
-//			        
-//
-//			        if (usuario.isEmpty() || contrasena.isEmpty()) {
-//			            JOptionPane.showMessageDialog(null, "Por favor llena todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-//			            return;
-//			        }
-//					
-//			        JOptionPane.showMessageDialog(null, "Accediendo a la base de datos", "Conectando", JOptionPane.INFORMATION_MESSAGE);
-//
-//
-//			        Usuario user = new Usuario(0, usuario, contrasena, contrasena);
-//
-//			        AuthModel am = new AuthModel();
-//			        boolean esValido = am.validarUsuario(user);
-//
-//			        if (esValido) {
-//			            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-//			            AuthView.this.administrador(addScaled);  
-//			        } else {
-//			            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio", JOptionPane.ERROR_MESSAGE);
-//			        }
-//			    }
+
 		});
 
 		iniciar_sesion_btn.setOpaque(true);

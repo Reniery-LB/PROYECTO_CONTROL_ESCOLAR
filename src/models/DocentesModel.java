@@ -122,7 +122,7 @@ public class DocentesModel {
 	        stmt.setString(5, docente.getCorreo_electronico());
 	        stmt.setLong(6, docente.getNo_telefono());
 	        stmt.setString(7, docente.getMateria());
-	        stmt.setInt(8, docente.getIdDocente()); // ¡Este es el parámetro faltante!
+	        stmt.setInt(8, docente.getIdDocente()); 
 
 	        int rowsUpdated = stmt.executeUpdate();
 	        return rowsUpdated > 0;
@@ -140,7 +140,7 @@ public class DocentesModel {
 	    String query = "SELECT * FROM Docente WHERE idDocente = ?";
 	    Docente docente = null;
 
-	    try (Connection conn = DriverManager.getConnection("jdbc:mysql://pro.freedb.tech:3306/CONTROLESCOLAR", "Reniery", "E#uVey8R!e5&zpp");
+	    try (Connection conn = new ConnectionModel().getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 
 	        stmt.setInt(1, idDocente);

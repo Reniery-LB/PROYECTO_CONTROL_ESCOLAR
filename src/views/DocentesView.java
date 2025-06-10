@@ -1726,20 +1726,7 @@ public class DocentesView {
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
 		
-//		JButton btn_editar = new JButton();
-//		btn_editar.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				DocentesView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_editar.setText("Editar");
-//		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_editar.setBackground(new Color(170, 196, 255));
-//		btn_editar.setBounds(678, 716, 192, 40);
-//		addScaled.accept(btn_editar);
-//		mipanel.add(btn_editar);
+
 		
 		JLabel ID = new JLabel("ID: " + docente.getIdDocente());
 		ID.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2198,23 +2185,7 @@ public class DocentesView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-//		JButton btn_AñadirCredencial = new JButton();
-//		btn_AñadirCredencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				origen = "añadir";
-//				opciones_panel.setVisible(false);
-//				DocentesView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_AñadirCredencial.setText("Añadir credenciales");
-//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-//		addScaled.accept(btn_AñadirCredencial);
-//		mipanel.add(btn_AñadirCredencial);
+
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2339,9 +2310,7 @@ public class DocentesView {
 		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
 		
 		 
-	//	dia.setSelectedItem("01");
-		//mes.setSelectedItem("01");
-		//año.setSelectedItem("2000");
+
 		 
 		JComboBox<String> asignaturaImpartir = new JComboBox<>();
 		asignaturaImpartir.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -2393,14 +2362,16 @@ public class DocentesView {
 		            return;
 		        }
 		        
-		        if (!validarCorreo(correoField.getText())) {
-		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-		            JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
-		            return;
-		        }
+		        
 		        
 		        if (!validarCampos(idField, apField, nombresField, correoField, telefonoField)) {
 		            JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+		        
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
 		        
@@ -2411,7 +2382,6 @@ public class DocentesView {
 		        boolean exito = dm.insert(
 		        	nombresField.getText(), 
 		        	apField.getText(),           
-//				    idField.getText(),  
 				    amField.getText(),
 				    fechaNacimiento,
 				    correoField.getText(),
@@ -2432,38 +2402,7 @@ public class DocentesView {
 		addScaled.accept(btn_crear);
 		mipanel.add(btn_crear);
 		
-//		JButton btn_DescargarCredencial = new JButton();
-//		btn_DescargarCredencial.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				DocentesView.this.alerta_DescargarCredencial(addScaled);
-//			}
-//		});
-//		btn_DescargarCredencial.setText("Descargar credenciales");
-//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-//		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
-//		addScaled.accept(btn_DescargarCredencial);
-//		mipanel.add(btn_DescargarCredencial);
-		
-//		JButton btn_credencial = new JButton();
-//		btn_credencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				JOptionPane.showMessageDialog(null, "Primero necesita crear al docente.", "Alerta",JOptionPane.WARNING_MESSAGE);
-//			}
-//		});
-//		btn_credencial.setText("Credencial");
-//		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_credencial.setBackground(new Color(170, 196, 255));
-//		btn_credencial.setBounds(1220, 534, 192, 40);
-//		addScaled.accept(btn_credencial);
-//		mipanel.add(btn_credencial);
-		
+
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
 		fondo_grupo.setOpaque(true);
@@ -3504,23 +3443,7 @@ public class DocentesView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-//		JButton btn_AñadirCredencial = new JButton();
-//		btn_AñadirCredencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				origen = "editar";
-//				opciones_panel.setVisible(false);
-//				DocentesView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_AñadirCredencial.setText("Añadir credenciales");
-//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-//		addScaled.accept(btn_AñadirCredencial);
-//		mipanel.add(btn_AñadirCredencial);
+
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -3706,21 +3629,7 @@ public class DocentesView {
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
-//		JButton btn_DescargarCredencial = new JButton();
-//		btn_DescargarCredencial.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				DocentesView.this.alerta_DescargarCredencial(addScaled);
-//			}
-//		});
-//		btn_DescargarCredencial.setText("Descargar credenciales");
-//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-//		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
-//		addScaled.accept(btn_DescargarCredencial);
-//		mipanel.add(btn_DescargarCredencial);
-		
+
 		JButton btn_guardar = new JButton();
 		btn_guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -3948,11 +3857,7 @@ public class DocentesView {
 				
 			}
 			
-			/*@Override
-			public void actionPerformed(ActionEvent e) {
-				dialogo.dispose();	
-				DocentesView.this.confirmar_eliminarDocente(addScaled);
-			}*/
+			
 		});
 		btn_si.setForeground(new Color(255, 255, 255));
 		btn_si.setText("Si");

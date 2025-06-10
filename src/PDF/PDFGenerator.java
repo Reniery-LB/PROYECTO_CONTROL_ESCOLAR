@@ -243,12 +243,13 @@ public class PDFGenerator {
         table.addCell(createCell("ID Asignatura:", headerFont));
         table.addCell(createCell(String.valueOf(asignatura.getIdAsignatura()), dataFont));
         
+        
+        
+        
+        
         document.add(table);
         
-        Font smallFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
-        Paragraph footer = new Paragraph("Generado el: " + new Date(), smallFont);
-        footer.setAlignment(Element.ALIGN_RIGHT);
-        document.add(footer);
+    
         
         document.close();
     }
@@ -551,11 +552,7 @@ public class PDFGenerator {
 
             document.add(table);
 
-            document.add(new Paragraph(" "));
-            Font footerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC);
-            Paragraph footer = new Paragraph("Documento generado el: " + new Date(), footerFont);
-            footer.setAlignment(Element.ALIGN_RIGHT);
-            document.add(footer);
+            
 
             document.close();
         } catch (Exception e) {

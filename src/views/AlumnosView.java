@@ -1472,7 +1472,6 @@ public class AlumnosView {
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
-//		img_alumno.setText("SIN FOTO");
 		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
 		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		img_alumno.setHorizontalAlignment(JLabel.CENTER);
@@ -1743,24 +1742,7 @@ public class AlumnosView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-//		JButton btn_AñadirCredencial = new JButton();
-//		btn_AñadirCredencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				origen = "añadir";
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_AñadirCredencial.setText("Añadir credenciales");
-//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-//		addScaled.accept(btn_AñadirCredencial);
-//		mipanel.add(btn_AñadirCredencial);
-		
+
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: ");
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		fecha_nacimiento.setBounds(90, 434, 800, 29);
@@ -1798,23 +1780,8 @@ public class AlumnosView {
 		addScaled.accept(perfil_alumno);
 		mipanel.add(perfil_alumno);
 		
-//		JButton btn_imagen = new JButton();
-//		btn_imagen.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.selecciona_img(addScaled);
-//			}
-//		});
-//		btn_imagen.setText("Imagen");
-//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_imagen.setBackground(new Color(170, 196, 255));
-//		btn_imagen.setBounds(1236, 237, 157, 40);
-//		addScaled.accept(btn_imagen);
-//		mipanel.add(btn_imagen);
-//		
+
+		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
@@ -1931,9 +1898,7 @@ public class AlumnosView {
 
 		Date fechaNacimiento1 = Date.valueOf(fechaNacimientoStr);
 		
-//		dia.setSelectedItem("01");
-//		mes.setSelectedItem("01");
-//		año.setSelectedItem("2000");
+
 		
 		JTextField gradoField = new JTextField();
 		gradoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
@@ -1955,37 +1920,7 @@ public class AlumnosView {
 		addScaled.accept(telefonoField);
 		mipanel.add(telefonoField);
 		
-//		JButton btn_DescargarCredencial = new JButton();
-//		btn_DescargarCredencial.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
-//			}
-//		});
-//		btn_DescargarCredencial.setText("Descargar credenciales");
-//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-//		btn_DescargarCredencial.setBounds(1191, 530, 249, 40);
-//		addScaled.accept(btn_DescargarCredencial);
-//		mipanel.add(btn_DescargarCredencial);
-		
-//		JButton btn_credencial = new JButton();
-//		btn_credencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				JOptionPane.showMessageDialog(null, "Primero necesita crear al alumno.", "Alerta",JOptionPane.WARNING_MESSAGE);
-//			}
-//		});
-//		btn_credencial.setText("Credencial");
-//		btn_credencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_credencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_credencial.setBackground(new Color(170, 196, 255));
-//		btn_credencial.setBounds(1220, 534, 192, 40);
-//		addScaled.accept(btn_credencial);
-//		mipanel.add(btn_credencial);
+
 		
 		JLabel fondo_grupo = new JLabel();
 		fondo_grupo.setBackground(new Color(255, 255, 255));
@@ -2012,14 +1947,15 @@ public class AlumnosView {
 		            return;
 		        }
 		        
-		        if (!validarCorreo(correoField.getText())) {
-		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-		            JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
+		       
+		        if (!validarCampos(numero_controlField, apField, nombresField, correoField, gradoField, telefonoField)) {
+		            JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
 		        
-		        if (!validarCampos(numero_controlField, apField, nombresField, correoField, gradoField, telefonoField)) {
-		            JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
+		        if (!validarCorreo(correoField.getText())) {
+		            correoField.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		            JOptionPane.showMessageDialog(ventana, "Correo electrónico inválido", "Error", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
 		        
@@ -2482,20 +2418,7 @@ public class AlumnosView {
 		addScaled.accept(btn_volver);
 		mipanel.add(btn_volver);
 		
-//		JButton btn_añadir = new JButton();
-//		btn_añadir.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.confirmar_imgColocada(addScaled);
-//			}
-//		});
-//		btn_añadir.setText("Añadir");
-//		btn_añadir.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_añadir.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_añadir.setBackground(new Color(170, 196, 255));
-//		btn_añadir.setBounds(677, 641, 192, 40);
-//		addScaled.accept(btn_añadir);
-//		mipanel.add(btn_añadir);
+
 		
 		JLabel mensaje = new JLabel("¡Seleccione una imagen!");
 		mensaje.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -2968,38 +2891,7 @@ public class AlumnosView {
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
 		
-//		JButton btn_editar = new JButton();
-//		btn_editar.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_editar.setText("Editar");
-//		btn_editar.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_editar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_editar.setBackground(new Color(170, 196, 255));
-//		btn_editar.setBounds(678, 716, 192, 40);
-//		addScaled.accept(btn_editar);
-//		mipanel.add(btn_editar);
-		
-//		JButton btn_imagen = new JButton();
-//		btn_imagen.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.selecciona_img(addScaled);
-//			}
-//		});
-//		btn_imagen.setText("Imagen");
-//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_imagen.setBackground(new Color(170, 196, 255));
-//		btn_imagen.setBounds(116, 273, 157, 40);
-//		addScaled.accept(btn_imagen);
-//		mipanel.add(btn_imagen);
-		
+
 		JLabel numero_control = new JLabel("Número de control: " + alumno.getNo_control());
 		numero_control.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		numero_control.setBounds(705, 370, 800, 29);
@@ -3033,7 +2925,6 @@ public class AlumnosView {
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
 		img_alumno.setBackground(new Color(192, 192, 192));
-//		img_alumno.setText("SIN FOTO");
 		img_alumno.setIcon(new ImageIcon(getClass().getResource("/img/img_credencial.png")));
 		img_alumno.setFont(new Font("SansSerif", Font.PLAIN, 22));
 		img_alumno.setHorizontalAlignment(JLabel.CENTER);
@@ -3952,23 +3843,7 @@ public class AlumnosView {
 		addScaled.accept(correo_electronico);
 		mipanel.add(correo_electronico);
 		
-//		JButton btn_AñadirCredencial = new JButton();
-//		btn_AñadirCredencial.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				origen = "editar";
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.añadir_credencial(addScaled);
-//			}
-//		});
-//		btn_AñadirCredencial.setText("Editar credenciales");
-//		btn_AñadirCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_AñadirCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_AñadirCredencial.setBackground(new Color(170, 196, 255));
-//		btn_AñadirCredencial.setBounds(1191, 530, 249, 40);
-//		addScaled.accept(btn_AñadirCredencial);
-//		mipanel.add(btn_AñadirCredencial);
+
 		
 		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento: " );
 		fecha_nacimiento.setFont(new Font("SansSerif", Font.PLAIN, 22));
@@ -4007,22 +3882,7 @@ public class AlumnosView {
 		addScaled.accept(perfil_alumno);
 		mipanel.add(perfil_alumno);
 		
-//		JButton btn_imagen = new JButton();
-//		btn_imagen.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.selecciona_img(addScaled);
-//			}
-//		});
-//		btn_imagen.setText("Imagen");
-//		btn_imagen.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_imagen.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_imagen.setBackground(new Color(170, 196, 255));
-//		btn_imagen.setBounds(1236, 237, 157, 40);
-//		addScaled.accept(btn_imagen);
-//		mipanel.add(btn_imagen);
+
 		
 		JLabel img_alumno = new JLabel();
 		img_alumno.setOpaque(true);
@@ -4254,20 +4114,7 @@ public class AlumnosView {
 		mipanel.add(btn_guardar);
 		
 		
-//		JButton btn_DescargarCredencial = new JButton();
-//		btn_DescargarCredencial.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				opciones_panel.setVisible(false);
-//				AlumnosView.this.alerta_DescargarCredencial(addScaled);
-//			}
-//		});
-//		btn_DescargarCredencial.setText("Descargar credenciales");
-//		btn_DescargarCredencial.setFont(new Font("SansSerif", Font.PLAIN, 22));
-//		btn_DescargarCredencial.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-//		btn_DescargarCredencial.setBackground(new Color(170, 196, 255));
-//		btn_DescargarCredencial.setBounds(894, 530, 249, 40);
-//		addScaled.accept(btn_DescargarCredencial);
-//		mipanel.add(btn_DescargarCredencial);
+
 		
 		JButton btn_credencial = new JButton();
 		btn_credencial.addActionListener(new ActionListener() {
@@ -4358,21 +4205,11 @@ public class AlumnosView {
 			public void actionPerformed(ActionEvent e) {
 				opciones_panel.setVisible(false);
 				 
-			           // int idAlumno = alumno.getIdAlumno(); 
 
 			            AlumnosView.this.alerta_eliminar(alumno, addScaled);
 
 
-			          //  Alumno alumno = new Alumno(idAlumno, idAlumno, origen, origen, origen, null, origen, origen, numero, origen);
-			          //  boolean eliminado = AlumnoModel.remove(idAlumno);
-						
-
-
-			          /*  if (eliminado) {
-			            	} else {
-			                JOptionPane.showMessageDialog(null, "Error al eliminar el alumno.");
-			            }
-			        */
+			        
 			    
 				
 			}
@@ -4470,11 +4307,7 @@ public class AlumnosView {
 				
 			}
 			
-		/*	@Override
-			public void actionPerformed(ActionEvent e) {
-				dialogo.dispose();	
-				AlumnosView.this.confirmar_eliminarAlumno(addScaled);
-			}*/
+	
 		});
 		btn_si.setForeground(new Color(255, 255, 255));
 		btn_si.setText("Si");

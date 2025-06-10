@@ -8,7 +8,7 @@ public class LetterDocumentFilter extends DocumentFilter {
     private int maxLength;
 
     public LetterDocumentFilter() {
-        this.maxLength = Integer.MAX_VALUE; // Sin límite por defecto
+        this.maxLength = Integer.MAX_VALUE; 
     }
 
     public LetterDocumentFilter(int maxLength) {
