@@ -1879,7 +1879,7 @@ public class AlumnosView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Carrera asignatura1 : grupo) {
-		    comboModel.addElement(asignatura1.getNombre());
+		    comboModel.addElement(asignatura1.getIdCarrera()+ " - " + asignatura1.getNombre());
 		}
 		carreraCursar.setModel(comboModel);
 		

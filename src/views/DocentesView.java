@@ -2354,7 +2354,7 @@ public class DocentesView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Asignatura asignatura1 : asignatura) {
-		    comboModel.addElement(asignatura1.getNombre());
+		    comboModel.addElement(asignatura1.getIdAsignatura() + " - " + asignatura1.getNombre());
 		}
 		asignaturaImpartir.setModel(comboModel);
 		
@@ -3615,23 +3615,20 @@ public class DocentesView {
 		asignaturaImpartir.setBackground(new Color(217, 217, 217));
 		asignaturaImpartir.setBounds(311, 530, 453, 40);
 
-
 		AsignaturasModel docenteModel = new AsignaturasModel();
 		List<Asignatura> asignaturas = docenteModel.gettAll();
 
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Asignatura asignatura : asignaturas) {
-		    comboModel.addElement(asignatura.getIdAsignatura()+ " - " + asignatura.getNombre());
+		    comboModel.addElement(asignatura.getIdAsignatura() + " - " + asignatura.getNombre());
 		}
 		asignaturaImpartir.setModel(comboModel);
-		System.out.println("Materia del docente: " + docente.getMateria());
-
 
 		String materiaDocente = docente.getMateria();
 		for (int i = 0; i < asignaturaImpartir.getItemCount(); i++) {
 		    String item = asignaturaImpartir.getItemAt(i);
 		    String nombreMateria = item.split(" - ")[1]; 
-		    if (nombreMateria.equalsIgnoreCase(docente.getMateria())) {
+		    if (nombreMateria.equalsIgnoreCase(materiaDocente)) {
 		        asignaturaImpartir.setSelectedIndex(i);
 		        break;
 		    }
@@ -3814,7 +3811,7 @@ public class DocentesView {
 				JFileChooser fileChooser = new JFileChooser();
 		        fileChooser.setDialogTitle("Guardar Información como PDF");
 		        
-		        String defaultFileName = "Información Alumno" + docente.getIdDocente() + ".pdf";
+		        String defaultFileName = "Información Docente" + docente.getIdDocente() + ".pdf";
 		        fileChooser.setSelectedFile(new File(defaultFileName));
 		        
 		        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
@@ -3931,12 +3928,12 @@ public class DocentesView {
 				dialogo.dispose();
 				opciones_panel.setVisible(false);
 				 
-			            int idDocente = docente.getIdDocente(); 
+			            int id = docente.getIdDocente(); 
 
 
 
-			            Docente docente = new Docente(idDocente, origen, origen, origen, null, origen, origen, null);
-			            boolean eliminado = DocentesModel.remove(idDocente);
+			            Docente docente = new Docente(id, origen, origen, origen, null, origen, origen, null);
+			            boolean eliminado = DocentesModel.remove(id);
 						
 
 

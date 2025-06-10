@@ -47,30 +47,23 @@ public class DocentesModel {
 	
 	
 	public static boolean remove(int id) {
-	    String query = "DELETE FROM Docente WHERE idDocente = ?";
-	    Connection conn = null;
-	    PreparedStatement stmt = null;
-
-	    try {
-	    	 conn = new ConnectionModel().getConnection();
-	        stmt = conn.prepareStatement(query);
-	        stmt.setInt(1, id);
-
-	        int rowsAffected = stmt.executeUpdate();
-	        return rowsAffected > 0;
-
-	    } catch (Exception e) {
+	    String sqlDeleteRelaciones = "DELETE FROM Docente_has_Asignatura WHERE Docente_idDocente = ?";
+	    String sqlDeleteDocente = "DELETE FROM Docente WHERE idDocente = ?";
+	    
+	    try ( Connection conn = new ConnectionModel().getConnection();
+	         PreparedStatement pstmtRelaciones = conn.prepareStatement(sqlDeleteRelaciones);
+	         PreparedStatement pstmtDocente = conn.prepareStatement(sqlDeleteDocente)) {
+	        
+	        pstmtRelaciones.setInt(1, id);
+	        pstmtRelaciones.executeUpdate();
+	        
+	        pstmtDocente.setInt(1, id);
+	        return pstmtDocente.executeUpdate() > 0;
+	        
+	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (stmt != null) stmt.close();
-	            if (conn != null) conn.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+	        return false;
 	    }
-
-	    return false;
 	}
 	
 	
