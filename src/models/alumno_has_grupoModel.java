@@ -79,5 +79,25 @@ public class alumno_has_grupoModel {
             return resultSet.next();
         }
     }
+    
+    public List<Integer> getAlumnosEnGrupo(int idGrupo) {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT Alumno_idAlumno FROM Alumno_has_Grupo WHERE Grupo_idGrupo = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idGrupo);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ids.add(rs.getInt("Alumno_idAlumno"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ids;
+    }
+
 
 }
