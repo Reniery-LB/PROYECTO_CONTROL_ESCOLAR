@@ -1295,7 +1295,7 @@ public class AsignaturasView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Docente docente : docentes) {
-		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		    comboModel.addElement(docente.getNombre());
 		}
 		docenteComboBox.setModel(comboModel);
 		
@@ -1699,7 +1699,7 @@ public class AsignaturasView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Docente docente : docentes) {
-		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		    comboModel.addElement(docente.getNombre());
 		}
 		docenteComboBox.setModel(comboModel);
 		

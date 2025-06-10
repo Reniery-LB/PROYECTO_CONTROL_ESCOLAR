@@ -209,20 +209,17 @@ public class PDFGenerator {
         
         document.open();
         
-        // Título
         Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
         Paragraph title = new Paragraph("Información de Asignatura", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(20);
         document.add(title);
         
-        // Logo (opcional)
         Image logo = Image.getInstance(getClass().getResource("/img/logo.png"));
         logo.scaleToFit(100, 100);
         logo.setAlignment(Image.ALIGN_CENTER);
         document.add(logo);
         
-        // Datos de la asignatura
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
         Font dataFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
         
@@ -231,21 +228,18 @@ public class PDFGenerator {
         table.setSpacingBefore(20);
         table.setSpacingAfter(20);
         
-        // Nombre
         table.addCell(createCell("Nombre:", headerFont));
         table.addCell(createCell(asignatura.getNombre(), dataFont));
         
-        // Descripción
+        
         table.addCell(createCell("Descripción:", headerFont));
         table.addCell(createCell(asignatura.getDescripcion(), dataFont));
         
-        // ID
         table.addCell(createCell("ID Asignatura:", headerFont));
         table.addCell(createCell(String.valueOf(asignatura.getIdAsignatura()), dataFont));
         
         document.add(table);
         
-        // Fecha generación
         Font smallFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
         Paragraph footer = new Paragraph("Generado el: " + new Date(), smallFont);
         footer.setAlignment(Element.ALIGN_RIGHT);
@@ -281,44 +275,86 @@ public class PDFGenerator {
             title.setSpacingAfter(20f);
             document.add(title);
             
-            PdfPTable table = new PdfPTable(2);
-            table.setWidthPercentage(90);
-            table.setSpacingBefore(20f);
-            
-            PdfPCell leftCell = new PdfPCell();
-            leftCell.setBorder(Rectangle.NO_BORDER);
-            
             try {
                 Image foto = Image.getInstance(getClass().getResource("/img/img_credencial.png"));
-                foto.scaleToFit(100, 120);
-                leftCell.addElement(new Paragraph(" ")); 
-                leftCell.addElement(foto);
-                leftCell.addElement(new Paragraph(" ")); 
+                foto.scaleToFit(80, 100);
+                foto.setAbsolutePosition(30, pageSize.getHeight() - 180); 
+                document.add(foto);
             } catch (Exception e) {
                 System.err.println("No se pudo cargar la foto: " + e.getMessage());
             }
             
-            leftCell.addElement(createLabelValue("ID:", String.valueOf(alumno.getIdAlumno()), headerFont, normalFont));
-            leftCell.addElement(createLabelValue("No. Control:", String.valueOf(alumno.getNo_control()), headerFont, normalFont));
+            float infoX = 120f;
+            float infoY = pageSize.getHeight() - 180f; 
             
-            table.addCell(leftCell);
+            Paragraph id = new Paragraph("ID:", headerFont);
+            id.setIndentationLeft(infoX);
+            document.add(id);
             
-            PdfPCell rightCell = new PdfPCell();
-            rightCell.setBorder(Rectangle.NO_BORDER);
+            Paragraph id1 = new Paragraph(String.valueOf(alumno.getIdAlumno()), normalFont);
+            id1.setIndentationLeft(infoX);
+            document.add(id1);
             
-            String nombreCompleto = alumno.getNombre() + " " + alumno.getPrimer_apellido() + 
-                                  (alumno.getSegundo_apellido() != null ? " " + alumno.getSegundo_apellido() : "");
-            rightCell.addElement(createLabelValue("Nombre Completo:", nombreCompleto, headerFont, normalFont));
+            Paragraph nombre = new Paragraph("Nombre Completo:", headerFont);
+            nombre.setIndentationLeft(infoX);
+            document.add(nombre);
             
-            rightCell.addElement(createLabelValue("Carrera:", alumno.getCarrera(), headerFont, normalFont));
-            rightCell.addElement(createLabelValue("Grado:", alumno.getGrado_alumno() + " Semestre", headerFont, normalFont));
-            rightCell.addElement(createLabelValue("Correo:", alumno.getCorreo_electronico(), headerFont, normalFont));
-            rightCell.addElement(createLabelValue("No. Teléfono:", String.valueOf(alumno.getNo_telefono()), headerFont, normalFont));
-            rightCell.addElement(createLabelValue("Fecha Nacimiento:", String.valueOf(alumno.getFecha_nacimiento()), headerFont, normalFont));
+            String nombreCompleto = alumno.getNombre() + " " + alumno.getPrimer_apellido();
+            if (alumno.getSegundo_apellido() != null) {
+                nombreCompleto += " " + alumno.getSegundo_apellido();
+            }
             
-            table.addCell(rightCell);
+            Paragraph nombreVal = new Paragraph(nombreCompleto, normalFont);
+            nombreVal.setIndentationLeft(infoX);
+            document.add(nombreVal);
             
-            document.add(table);
+            Paragraph control = new Paragraph("No. Control:", headerFont);
+            control.setIndentationLeft(infoX);
+            document.add(control);
+            
+            Paragraph controlVal = new Paragraph(String.valueOf(alumno.getNo_control()), normalFont);
+            controlVal.setIndentationLeft(infoX);
+            document.add(controlVal);
+            
+            Paragraph carrera = new Paragraph("Carrera:", headerFont);
+            carrera.setIndentationLeft(infoX);
+            document.add(carrera);
+            
+            Paragraph carreraVal = new Paragraph(alumno.getCarrera(), normalFont);
+            carreraVal.setIndentationLeft(infoX);
+            document.add(carreraVal);
+            
+            Paragraph grado = new Paragraph("Grado:", headerFont);
+            grado.setIndentationLeft(infoX);
+            document.add(grado);
+            
+            Paragraph gradoVal = new Paragraph(alumno.getGrado_alumno() + " Semestre", normalFont);
+            gradoVal.setIndentationLeft(infoX);
+            document.add(gradoVal);
+            
+            Paragraph correo = new Paragraph("Correo:", headerFont);
+            correo.setIndentationLeft(infoX);
+            document.add(correo);
+            
+            Paragraph correoAlumno = new Paragraph(alumno.getCorreo_electronico(), normalFont);
+            correoAlumno.setIndentationLeft(infoX);
+            document.add(correoAlumno);
+            
+            Paragraph noTelefono = new Paragraph("No. Teléfono:", headerFont);
+            noTelefono.setIndentationLeft(infoX);
+            document.add(noTelefono);
+            
+            Paragraph telAlumno = new Paragraph(String.valueOf(alumno.getNo_telefono()), normalFont);
+            telAlumno.setIndentationLeft(infoX);
+            document.add(telAlumno);
+            
+            Paragraph fecha = new Paragraph("Fecha Nacimiento:", headerFont);
+            fecha.setIndentationLeft(infoX);
+            document.add(fecha);
+            
+            Paragraph fecha1 = new Paragraph(String.valueOf(alumno.getFecha_nacimiento()), normalFont);
+            fecha1.setIndentationLeft(infoX);
+            document.add(fecha1);
             
             document.close();
         } catch (DocumentException | IOException e) {
@@ -327,20 +363,115 @@ public class PDFGenerator {
         }
     }
 
+    
+    public void generarInformacionPDF(Docente docente, String rutaDestino) {
+        Rectangle pageSize = new Rectangle(400f, 600f);
+        Document document = new Document(pageSize, 20f, 20f, 20f, 20f); 
+        
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(rutaDestino));
+            document.open();
+            
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+            
+            try {
+                Image logo = Image.getInstance(getClass().getResource("/img/logo.png"));
+                logo.scaleToFit(60, 60);
+                logo.setAbsolutePosition(pageSize.getWidth() - 70, pageSize.getHeight() - 70);
+                document.add(logo);
+            } catch (Exception e) {
+                System.err.println("No se pudo cargar el logo: " + e.getMessage());
+            }
+            
+            Paragraph title = new Paragraph("INFORMACIÓN DE DOCENTE", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+            
+            try {
+                Image foto = Image.getInstance(getClass().getResource("/img/img_credencial.png"));
+                foto.scaleToFit(80, 100);
+                foto.setAbsolutePosition(30, pageSize.getHeight() - 180); 
+                document.add(foto);
+            } catch (Exception e) {
+                System.err.println("No se pudo cargar la foto: " + e.getMessage());
+            }
+            
+            float infoX = 120f;
+            float infoY = pageSize.getHeight() - 180f; 
+            
+            Paragraph id = new Paragraph("ID:", headerFont);
+            id.setIndentationLeft(infoX);
+            document.add(id);
+            
+            Paragraph id1 = new Paragraph(String.valueOf(docente.getIdDocente()), normalFont);
+            id1.setIndentationLeft(infoX);
+            document.add(id1);
+            
+            Paragraph nombre = new Paragraph("Nombre Completo:", headerFont);
+            nombre.setIndentationLeft(infoX);
+            document.add(nombre);
+            
+            String nombreCompleto = docente.getNombre() + " " + docente.getPrimer_apellido();
+            if (docente.getSegundo_apellido() != null) {
+                nombreCompleto += " " + docente.getSegundo_apellido();
+            }
+            
+            Paragraph nombreVal = new Paragraph(nombreCompleto, normalFont);
+            nombreVal.setIndentationLeft(infoX);
+            document.add(nombreVal);
+            
+            Paragraph carrera = new Paragraph("Materia:", headerFont);
+            carrera.setIndentationLeft(infoX);
+            document.add(carrera);
+            
+            Paragraph carreraVal = new Paragraph(docente.getMateria(), normalFont);
+            carreraVal.setIndentationLeft(infoX);
+            document.add(carreraVal);
+            
+            Paragraph correo = new Paragraph("Correo:", headerFont);
+            correo.setIndentationLeft(infoX);
+            document.add(correo);
+            
+            Paragraph correoAlumno = new Paragraph(docente.getCorreo_electronico(), normalFont);
+            correoAlumno.setIndentationLeft(infoX);
+            document.add(correoAlumno);
+            
+            Paragraph noTelefono = new Paragraph("No. Teléfono:", headerFont);
+            noTelefono.setIndentationLeft(infoX);
+            document.add(noTelefono);
+            
+            Paragraph telAlumno = new Paragraph(String.valueOf(docente.getNo_telefono()), normalFont);
+            telAlumno.setIndentationLeft(infoX);
+            document.add(telAlumno);
+            
+            Paragraph fecha = new Paragraph("Fecha Nacimiento:", headerFont);
+            fecha.setIndentationLeft(infoX);
+            document.add(fecha);
+            
+            Paragraph fecha1 = new Paragraph(String.valueOf(docente.getFecha_nacimiento()), normalFont);
+            fecha1.setIndentationLeft(infoX);
+            document.add(fecha1);
+            
+            document.close();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+   
+
     private PdfPCell createCell(String text, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setBorder(Rectangle.NO_BORDER);
         cell.setPadding(5);
         return cell;
     }
-
-    private Paragraph createLabelValue(String label, String value, Font labelFont, Font valueFont) {
-        Paragraph p = new Paragraph();
-        p.add(new Chunk(label, labelFont));
-        p.add(new Chunk("\n" + value + "\n", valueFont));
-        p.setSpacingAfter(10f);
-        return p;
-    }
+    
+    
 
 
 }

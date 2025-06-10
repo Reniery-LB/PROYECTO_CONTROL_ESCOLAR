@@ -1836,7 +1836,7 @@ public class AlumnosView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Carrera asignatura1 : grupo) {
-		    comboModel.addElement(asignatura1.getIdCarrera()+ " - " + asignatura1.getNombre());
+		    comboModel.addElement(asignatura1.getNombre());
 		}
 		carreraCursar.setModel(comboModel);
 		
@@ -4009,38 +4009,40 @@ public class AlumnosView {
 	   	 Connection conn = new ConnectionModel().getConnection();
 
 		
+
 	   	JComboBox<String> carreraCursar = new JComboBox<>();
 	   	carreraCursar.setFont(new Font("SansSerif", Font.PLAIN, 18));
 	   	carreraCursar.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 	   	carreraCursar.setBackground(new Color(217, 217, 217));
 	   	carreraCursar.setBounds(311, 527, 453, 40);
 
-	   	CarreraModel grupoModel = new CarreraModel(conn);
-	   	List<Carrera> grupo = grupoModel.getAll();
+	   	CarreraModel carreraModel = new CarreraModel(conn);
+	   	List<Carrera> carreras = carreraModel.getAll();
 
 	   	DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
-	   	for (Carrera asignatura1 : grupo) {
-	   	    comboModel.addElement(asignatura1.getIdCarrera() + " - " + asignatura1.getNombre());
+	   	for (Carrera carrera1 : carreras) {
+	   	    comboModel.addElement(carrera1.getIdCarrera()+ " - " + carrera1.getNombre());
 	   	}
 	   	carreraCursar.setModel(comboModel);
 
 	   	if (alumno != null && alumno.getCarrera() != null) {
 	   	    String carreraActual = alumno.getCarrera();
 	   	    for (int i = 0; i < carreraCursar.getItemCount(); i++) {
-	   	        if (carreraCursar.getItemAt(i).equals(carreraActual)) {
+	   	        String item = carreraCursar.getItemAt(i);
+	   	        String idCarrera = item.split(" - ")[1];
+	   	        if (idCarrera.equals(carreraActual)) {
 	   	            carreraCursar.setSelectedIndex(i);
 	   	            break;
 	   	        }
 	   	    }
 	   	}
 
-	   	if (grupo.isEmpty()) {
-	   	    carreraCursar.addItem("No hay docentes disponibles");
+	   	if (carreras.isEmpty()) {
+	   	    carreraCursar.addItem("No hay carreras disponibles");
 	   	}
 
 	   	addScaled.accept(carreraCursar);
 	   	mipanel.add(carreraCursar);
-		
 		JTextField correoField = new JTextField(alumno.getCorreo_electronico());
 		correoField.setFont(new Font("SansSerif", Font.PLAIN, 18));
 		correoField.setColumns(10);
@@ -4208,6 +4210,71 @@ public class AlumnosView {
 		btn_credencial.setBounds(1220, 534, 192, 40);
 		addScaled.accept(btn_credencial);
 		mipanel.add(btn_credencial);
+		
+		JButton btn_pdf = new JButton("Información PDF");
+		btn_pdf.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				opciones_panel.setVisible(false);
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Guardar credencial como PDF");
+		        
+		        String defaultFileName = "Información Alumno" + alumno.getNo_control() + ".pdf";
+		        fileChooser.setSelectedFile(new File(defaultFileName));
+		        
+		        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+		            @Override
+		            public boolean accept(File f) {
+		                return f.getName().toLowerCase().endsWith(".pdf") || f.isDirectory();
+		            }
+		            
+		            @Override
+		            public String getDescription() {
+		                return "Archivos PDF (*.pdf)";
+		            }
+		        });
+		        
+		        int userSelection = fileChooser.showSaveDialog(ventana);
+		        
+		        if (userSelection == JFileChooser.APPROVE_OPTION) {
+		            File fileToSave = fileChooser.getSelectedFile();
+		            String filePath = fileToSave.getAbsolutePath();
+		           
+		            if (!filePath.toLowerCase().endsWith(".pdf")) {
+		                filePath += ".pdf";
+		                fileToSave = new File(filePath);
+		            }
+		            
+		            if (fileToSave.exists()) {
+		                int confirm = JOptionPane.showConfirmDialog(ventana,
+		                    "El archivo ya existe. ¿Desea reemplazarlo?",
+		                    "Confirmar sobrescritura",
+		                    JOptionPane.YES_NO_OPTION,
+		                    JOptionPane.WARNING_MESSAGE);
+		                
+		                if (confirm != JOptionPane.YES_OPTION) {
+		                    return;
+		                }
+		            }
+		            
+		            PDFGenerator pdfGenerator = new PDFGenerator();
+		            pdfGenerator.generarInformacionPDF(alumno, filePath);
+		            		
+		        }
+			}
+		
+
+				
+
+		});
+		btn_pdf.setText("Información PDF");
+		btn_pdf.setFont(new Font("SansSerif", Font.PLAIN, 22));
+		btn_pdf.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+		btn_pdf.setBackground(new Color(170, 196, 255));
+		btn_pdf.setBounds(1220, 595, 192, 40);
+		addScaled.accept(btn_pdf);
+		mipanel.add(btn_pdf);
 		
 		JButton btn_basura = new JButton();
 		btn_basura.addActionListener(new ActionListener() {

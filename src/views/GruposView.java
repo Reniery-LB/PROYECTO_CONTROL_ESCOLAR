@@ -989,7 +989,7 @@ public class GruposView {
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Docente docente : docentes) {
-		    comboModel.addElement(docente.getIdDocente() + " - " + docente.getNombre());
+		    comboModel.addElement(docente.getNombre());
 		}
 		docenteComboBox.setModel(comboModel);
 		
@@ -3076,7 +3076,7 @@ public class GruposView {
 
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<>();
 		for (Docente docente1 : docentes) {
-		    comboModel.addElement(docente1.getIdDocente() + " - " + docente1.getNombre());
+		    comboModel.addElement(docente1.getNombre());
 		}
 		docenteComboBox.setModel(comboModel);
 
